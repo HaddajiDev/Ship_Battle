@@ -6,7 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public class Data
 {
-    public int firstSave;
     public float MaxForce;
     public int Health;
     public List<int> playerBullets;
@@ -29,8 +28,6 @@ public class Data
 
     public Data(GameManager manager)
     {
-        firstSave = manager.firstSave;
-
         MaxForce = manager.player_1.maxForce;
         Health = manager.Ships[0].GetComponent<Ship>().Health;
 

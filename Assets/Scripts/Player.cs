@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Vector2 startDragPos;
     private LineRenderer trajectoryLineRenderer;
     private float maxPullDistance;
-    public float maxForce = 20f;
+    public float maxForce = 50f;
     public GameObject BulletPrefab;
 
     [Header("Line Renderer")]

@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     public UI_Controller uI_Controller;
     public Upgrades upgrades;
 
-    public int firstSave = 0;
+    int first;
     public int current_level
     {
         get { return Current_Level; }
@@ -51,11 +51,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        if(firstSave == 0)
-        {
-            firstSave = 1;            
-        }
-        
+        first = PlayerPrefs.GetInt("First", first);
         Load_Data();
     }
 
@@ -279,9 +275,7 @@ public class GameManager : MonoBehaviour
     {
         Data data = SaveSysteme.Load_Data();
 
-        firstSave = data.firstSave;
-
-        player_1.maxForce = data.Health;
+        player_1.maxForce = data.MaxForce;
         Ships[0].GetComponent<Ship>().Health = data.Health;
 
         shop.bullets.data = data.playerBullets;
