@@ -230,6 +230,7 @@ public class Player : MonoBehaviour
     {
         GetBullet(index);
         _selectedBullet = index;
+        Debug.Log(_selectedBullet);
     }
 
     private void setLimit()
@@ -247,8 +248,8 @@ public class Player : MonoBehaviour
                     _bulletsLimit[i] = newValue;
                 }
             }
-        }
-               
+            Set_Limit_UI();
+        }              
     }
 
     private int getLimit()
@@ -266,5 +267,51 @@ public class Player : MonoBehaviour
         }
         return 0;
     }
-}
 
+    public void Set_Limit_UI()
+    {        
+        List<int> itemsToRemove = new List<int>();
+
+        foreach (var el in _bulletsLimit)
+        {
+            if (UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index == el.Item1)
+            {
+                UI_Controller.instance.Bullet_Limit_1.text = el.Item2.ToString();
+                if (el.Item2 == 0)
+                {
+                    UI_Controller.instance.Select_Bullet_1.gameObject.SetActive(false);
+                    UI_Controller.instance.ResetChecks();
+                    UI_Controller.instance.Checks[0].SetActive(true);
+                    itemsToRemove.Add(el.Item1);
+                }
+            }
+            if (UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().index == el.Item1)
+            {
+                UI_Controller.instance.Bullet_Limit_2.text = el.Item2.ToString();
+                if (el.Item2 == 0)
+                {
+                    UI_Controller.instance.Select_Bullet_2.gameObject.SetActive(false);
+                    UI_Controller.instance.ResetChecks();
+                    UI_Controller.instance.Checks[0].SetActive(true);
+                    itemsToRemove.Add(el.Item1);
+                }
+            }
+            if (UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().index == el.Item1)
+            {
+                UI_Controller.instance.Bullet_Limit_Extra.text = el.Item2.ToString();
+                if (el.Item2 == 0)
+                {
+                    UI_Controller.instance.Select_Bullet_Extra.gameObject.SetActive(false);
+                    UI_Controller.instance.ResetChecks();
+                    UI_Controller.instance.Checks[0].SetActive(true);
+                    itemsToRemove.Add(el.Item1);
+                }
+            }
+        }
+
+        foreach (int itemToRemove in itemsToRemove)
+        {
+            _bulletsLimit.RemoveAll(tuple => tuple.Item1 == itemToRemove);
+        }
+    }
+}

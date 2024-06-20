@@ -29,5 +29,5 @@ MonoBehaviour:
     sr: {fileID: 21300000, guid: cbc5b53bed97ac240824a4cd25328a65, type: 3}
     Bullet_Prefab: {fileID: 6481193929099902243, guid: 126697ec1229dcd4a8fe7aa0c6e73d7a, type: 3}
     Damage: 3
-    Limit: 3
+    Limit: 7
     Price: 4500

@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
         turn = 2;
 
         Set_Player();
-
+        
         CrazySDK.Game.GameplayStart();
     }
 

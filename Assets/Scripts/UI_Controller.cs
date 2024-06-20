@@ -36,6 +36,9 @@ public class UI_Controller : MonoBehaviour
     public TMP_Text Coins_text;
     public TMP_Text State_Win;
     public TMP_Text Level_Counter;
+    public TMP_Text Bullet_Limit_1;
+    public TMP_Text Bullet_Limit_2;
+    public TMP_Text Bullet_Limit_Extra;
 
     [Header("Bullets Slots")]
     public Image bullet_slot_1;

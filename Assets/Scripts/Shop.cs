@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Shop : MonoBehaviour
 {
     public static Shop Instance;
-    public Player_Bullets bullets = new Player_Bullets();
+    [HideInInspector] public Player_Bullets bullets = new Player_Bullets();
 
     public Transform Container;
     public GameObject Bullet_UI_Prefab;

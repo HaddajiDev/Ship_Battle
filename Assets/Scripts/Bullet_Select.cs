@@ -15,6 +15,7 @@ public class Bullet_Select : MonoBehaviour
         Image img = GetComponentsInChildren<Image>()[1];
         Name.text = currentBullet.Name;
         img.sprite = currentBullet.sr;
+        GetComponentsInChildren<Image>()[3].GetComponentInChildren<TMPro.TMP_Text>().text = currentBullet.Limit.ToString();
     }
 
     public void CheckForSelcted()
