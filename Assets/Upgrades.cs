@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Upgrades : MonoBehaviour
 {
     //Max : 7
-    private int lvl_health = 1;
+    public int lvl_health = 1; //save
     public Image[] levels_health;
     private int Health_Level
     {
@@ -15,7 +15,7 @@ public class Upgrades : MonoBehaviour
     }
 
     //Max : 10
-    private int lvl_force = 1;
+    public int lvl_force = 1; //save
     public Image[] levels_force;
     private int Force_Level
     {
@@ -23,13 +23,14 @@ public class Upgrades : MonoBehaviour
         set { lvl_force = value; }
     }
 
-    private void Awake()
+    private void Start()
     {
         Load_Data();        
     }
     public void Load_Data()
     {
-        //load
+        addLevels(levels_force, lvl_force - 1);
+        addLevels(levels_health, lvl_health - 1);
     }
 
     public void Upgrade_Health()
@@ -41,12 +42,13 @@ public class Upgrades : MonoBehaviour
             {
                 Ship ship = GameManager.Instance.player_1.GetComponentInParent<Ship>();
                 ship.Health += 10;
-                addlevels(levels_health, Health_Level);
+                addLevels(levels_health, Health_Level);
                 GameManager.Instance.Coins -= cost.Coins;
                 GameManager.Instance.Diamond -= cost.Diamond;
                 Health_Level++;
+                GameManager.Instance.SaveData();
             }
-            //Save
+            
         }
         Debug.Log(cost.Coins);
     }
@@ -59,16 +61,17 @@ public class Upgrades : MonoBehaviour
             if(Force_Level <= 10)
             {
                 GameManager.Instance.player_1.maxForce += 5;
-                addlevels(levels_force, Force_Level);
+                addLevels(levels_force, Force_Level);
                 GameManager.Instance.Coins -= cost.Coins;
                 GameManager.Instance.Diamond -= cost.Diamond;
                 Force_Level++;
-            }            
-            //Save Force
+                GameManager.Instance.SaveData();
+            }
+            
         }
     }
     
-    private void addlevels(Image[] imgs, int index)
+    private void addLevels(Image[] imgs, int index)
     {
         for (int i = 0; i < index; i++)
         {

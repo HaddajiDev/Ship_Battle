@@ -13,18 +13,20 @@ public class Bullet_Slot : MonoBehaviour
     private void Start()
     {
         img = GetComponent<Image>();
+        if(index != 0)
+            Get_Bullet();
     }
 
-    private void Get_Bullet()
+    public void Get_Bullet()
     {
         for (int i = 0; i < GameManager.Instance.player_1.bulletsData.Get_Lenght; i++)
         {
             if(index == i)
             {
                 bullet = GameManager.Instance.player_1.bulletsData.Get_Bullet(i);
+                img.sprite = bullet.sr;                
                 return;
             }
-        }
-        img.sprite = bullet.sr;
+        }        
     }
 }

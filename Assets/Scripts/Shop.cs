@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Shop : MonoBehaviour
 {
     public static Shop Instance;
-    Player_Bullets bullets = new Player_Bullets();
+    public Player_Bullets bullets = new Player_Bullets();
 
     public Transform Container;
     public GameObject Bullet_UI_Prefab;
@@ -17,6 +17,15 @@ public class Shop : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        if(Got_Extra_Slot == 1)
+        {
+            UI_Controller.instance.bullet_slot_Extra.transform.parent.gameObject.SetActive(true);
+            UI_Controller.instance.Extra_Bullet_Buy_Button.SetActive(false);
+        }
     }
 
     public void Buy_Bullet(int index)
@@ -29,6 +38,7 @@ public class Shop : MonoBehaviour
             GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
             Button clickedButton = selectedObject.GetComponent<Button>();
             clickedButton.interactable = false;
+            GameManager.Instance.SaveData();
         }        
     }
 
@@ -72,6 +82,7 @@ public class Shop : MonoBehaviour
                 }
             }            
         }
+        CheckForSelctedBullets();
     }
 
     private void PopulateBulletUI()
@@ -117,6 +128,7 @@ public class Shop : MonoBehaviour
         UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index = index;
         UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().bullet = bullet;
         CheckForSelctedBullets();
+        GameManager.Instance.SaveData();
     }
     public void Select_Bullet_From_list_2(int index)
     {
@@ -125,6 +137,7 @@ public class Shop : MonoBehaviour
         UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().index = index;
         UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().bullet = bullet;
         CheckForSelctedBullets();
+        GameManager.Instance.SaveData();
     }
     public void Select_Bullet_From_list_Extra(int index)
     {
@@ -133,10 +146,11 @@ public class Shop : MonoBehaviour
         UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().index = index;
         UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().bullet = bullet;
         CheckForSelctedBullets();
+        GameManager.Instance.SaveData();
     }
 
 
-    void CheckForSelctedBullets()
+    public void CheckForSelctedBullets()
     {
         for (int i = 1; i < Container.childCount; i++)
         {
@@ -168,6 +182,7 @@ public class Shop : MonoBehaviour
 
             UI_Controller.instance.Shop_Buy_Extra_Bullet.interactable = false;
             Got_Extra_Slot = 1;
+            GameManager.Instance.SaveData();
         }
     }
 

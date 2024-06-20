@@ -6388,6 +6388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1425e6e1f454e499221ffde79f53eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvl_health: 1
   levels_health:
   - {fileID: 196415534}
   - {fileID: 150069770}
@@ -6396,6 +6397,7 @@ MonoBehaviour:
   - {fileID: 1004995593}
   - {fileID: 286948528}
   - {fileID: 1589977448}
+  lvl_force: 1
   levels_force:
   - {fileID: 1139952633}
   - {fileID: 1892078152}
@@ -11093,6 +11095,10 @@ MonoBehaviour:
   Ships:
   - {fileID: 2113512333}
   - {fileID: 2015778922}
+  shop: {fileID: 1126127881}
+  uI_Controller: {fileID: 1126127880}
+  upgrades: {fileID: 729849946}
+  firstSave: 0
 --- !u!4 &1126127879
 Transform:
   m_ObjectHideFlags: 0
@@ -11161,6 +11167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e98e6ffb4c511347b8b03ad2254bc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullets:
+    data: 
   Container: {fileID: 1082598582}
   Bullet_UI_Prefab: {fileID: 2460731480505532394, guid: e051a8af4212a2341b0b9504852ba4f7, type: 3}
   Got_Extra_Slot: 0
@@ -50346,6 +50354,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet_Buy_UI (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3898086891607814095, guid: e051a8af4212a2341b0b9504852ba4f7, type: 3}
+      propertyPath: index
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e051a8af4212a2341b0b9504852ba4f7, type: 3}
 --- !u!224 &1678332995 stripped
@@ -53562,7 +53574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels: {fileID: 11400000, guid: f3ff783ae01d0cc44a76850a2792519d, type: 2}
-  BulletPrefab: {fileID: 6019814541299898752, guid: c028e666350cb85429e882a29b55e92d, type: 3}
   shootPoint: {fileID: 398273142}
   Fire: 0
   Canon: {fileID: 1687155673}
@@ -55032,6 +55043,10 @@ PrefabInstance:
     - target: {fileID: 2460731480505532394, guid: e051a8af4212a2341b0b9504852ba4f7, type: 3}
       propertyPath: m_Name
       value: Bullet_Buy_UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 3898086891607814095, guid: e051a8af4212a2341b0b9504852ba4f7, type: 3}
+      propertyPath: index
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e051a8af4212a2341b0b9504852ba4f7, type: 3}

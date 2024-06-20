@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using DG.Tweening;
+using CrazyGames;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     public int Coins_Start;
 
     [Header("Abilites Cost")]
-    public int Fire_Cost = 60;
+    public int Fire_Cost = 60; 
     public int Burst_Cost = 120;
 
     [Header("Current level")]
@@ -37,6 +38,11 @@ public class GameManager : MonoBehaviour
     [Header("Ships")]
     public GameObject[] Ships;
 
+    public Shop shop;
+    public UI_Controller uI_Controller;
+    public Upgrades upgrades;
+
+    public int firstSave = 0;
     public int current_level
     {
         get { return Current_Level; }
@@ -45,9 +51,22 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        Application.targetFrameRate = 120;        
+        if(firstSave == 0)
+        {
+            firstSave = 1;            
+        }
+        
+        Load_Data();
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SaveSysteme.Reset();
+        }
+    }
+
     public void Play()
     {
         UI_Controller.instance.Menu_BG.interactable = true;
@@ -85,6 +104,8 @@ public class GameManager : MonoBehaviour
         turn = 2;
 
         Set_Player();
+
+        CrazySDK.Game.GameplayStart();
     }
 
     public void Check_Turn()
@@ -248,6 +269,41 @@ public class GameManager : MonoBehaviour
 
         player_1._bulletsLimit.Clear();
     }
+
+
+    public void SaveData()
+    {
+        SaveSysteme.SaveData(this);
+    }
+    public void Load_Data()
+    {
+        Data data = SaveSysteme.Load_Data();
+
+        firstSave = data.firstSave;
+
+        player_1.maxForce = data.Health;
+        Ships[0].GetComponent<Ship>().Health = data.Health;
+
+        shop.bullets.data = data.playerBullets;
+
+        shop.Got_Extra_Slot = data.ExtraSlot;
+
+        uI_Controller.bullet_slot_1.GetComponent<Bullet_Slot>().index = data.Slot_1_index;
+        uI_Controller.bullet_slot_2.GetComponent<Bullet_Slot>().index = data.Slot_2_index;
+        uI_Controller.bullet_slot_Extra.GetComponent<Bullet_Slot>().index = data.Slot_Extra_index;
+
+        Current_Level = data.Current_Level;
+
+        Coins = data.Coins;
+        Diamond = data.Diamond;
+
+        Fire_Uses = data.Fire_Count;
+        Burst_Uses = data.Burst_Count;
+
+        upgrades.lvl_health = data.up_lvl_Health;
+        upgrades.lvl_force = data.up_lvl_Force;
+    }
+    
 }
 
 

@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
-
+using CrazyGames;
 public class Ship : MonoBehaviour
 {
     public static Ship Instance;
@@ -83,7 +83,7 @@ public class Ship : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Bullet")
+        if(collision.gameObject.CompareTag("Bullet"))
         {
             collision.gameObject.tag = "Untagged";
             Instantiate(Explode_Effect, collision.transform.position, Quaternion.identity);
@@ -153,11 +153,14 @@ public class Ship : MonoBehaviour
         UI_Controller.instance.Win_Tigger(1, "You Win");
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         GameManager.Instance.current_level++;
+        CrazySDK.Game.HappyTime();
+        CrazySDK.Game.GameplayStop();
     }
     void Win_Obj_Lose()
     {
         UI_Controller.instance.Win_Tigger(1, "You Lost");        
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
+        CrazySDK.Game.GameplayStop();
     }
 
     void Fade_Out_Ready_Obj()
