@@ -13,5 +13,6 @@ public class Bullets
 
     public int Limit;
 
-    public int Price;
+    [SerializeField]
+    public Cost cost = new Cost(0, 0);
 }

@@ -37,7 +37,7 @@ public class Enemy_AI : MonoBehaviour
 
     void Shoot()
     {
-        getRandomBullet(GameManager.Instance.current_level);
+        getRandomBullet(GameManager.Instance.Current_Level);
         if (Can_Fire)
         {            
             Fire = Random.Range(0, 2) == 0 ? true : false;

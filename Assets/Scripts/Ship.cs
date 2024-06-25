@@ -136,7 +136,8 @@ public class Ship : MonoBehaviour
             {
                 Invoke("Win_Obj_Lose", 3);
                 Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
-                //Invoke("Fade_Out_Ready_Obj", 1.01f);
+                UI_Controller.instance.Getting_Ready_Object.interactable = false;
+                UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
             }
             else
             {
@@ -152,14 +153,20 @@ public class Ship : MonoBehaviour
     {
         UI_Controller.instance.Win_Tigger(1, "You Win");
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
-        GameManager.Instance.current_level++;
-        CrazySDK.Game.HappyTime();
+        if(GameManager.Instance.Current_Level < GameManager.Instance.player_2.levels.Get_Lenght - 1)
+            GameManager.Instance.Current_Level++;
+        UI_Controller.instance.SetCurrencyUI();
+        GameManager.Instance.SaveData();
+
         CrazySDK.Game.GameplayStop();
+        CrazySDK.Game.HappyTime();
     }
     void Win_Obj_Lose()
     {
         UI_Controller.instance.Win_Tigger(1, "You Lost");        
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
+        UI_Controller.instance.SetCurrencyUI();
+        GameManager.Instance.SaveData();
         CrazySDK.Game.GameplayStop();
     }
 

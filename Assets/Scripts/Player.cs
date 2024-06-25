@@ -229,8 +229,7 @@ public class Player : MonoBehaviour
     public void SelectBullet(int index)
     {
         GetBullet(index);
-        _selectedBullet = index;
-        Debug.Log(_selectedBullet);
+        _selectedBullet = index;        
     }
 
     private void setLimit()

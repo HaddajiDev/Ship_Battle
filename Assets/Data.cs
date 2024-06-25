@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
 
 [System.Serializable]
 public class Data
@@ -26,6 +23,10 @@ public class Data
     public int up_lvl_Health;
     public int up_lvl_Force;
 
+    public string username;
+    public string imgURL;
+    public string token;
+
     public Data(GameManager manager)
     {
         MaxForce = manager.player_1.maxForce;
@@ -48,5 +49,9 @@ public class Data
 
         up_lvl_Health = manager.upgrades.lvl_health;
         up_lvl_Force = manager.upgrades.lvl_force;
+
+        username = manager.username;
+        imgURL = manager.imgURL;
+        token = manager.token;
     }
 }

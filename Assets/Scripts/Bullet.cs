@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Cinemachine;
 using DG.Tweening;
+using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
@@ -20,7 +18,8 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         cam = GameObject.FindWithTag("GameController").GetComponent<CinemachineVirtualCamera>();
-        cam.Follow = this.transform;       
+        //GameManager.Instance.cam_.GetComponent<CameraFollow>().SetTarget(transform);
+        cam.Follow = this.transform;
 
         Invoke("Destroy_bullet", 10);
         Physics2D.IgnoreLayerCollision(6, 7);
@@ -40,7 +39,7 @@ public class Bullet : MonoBehaviour
 
     void Destroy_bullet()
     {
-        if(this != null)
+        if (this != null)
         {
             transform.DOScale(0, 1.5f).OnComplete(() =>
             {
@@ -55,16 +54,15 @@ public class Bullet : MonoBehaviour
         Bomb
     }
 
-    
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Water"))
+        if (collision.gameObject.CompareTag("Water"))
         {
             if (type == BulletType.Bomb)
             {
                 anim.SetTrigger("off");
             }
-                
         }
     }
 }

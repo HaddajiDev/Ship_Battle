@@ -7,7 +7,7 @@ public class Bullet_Select : MonoBehaviour
 {
     public Bullets currentBullet;
     public int index;
-    public GameObject Check;   
+    public GameObject Check;
 
     public void Get_Bullet_Stuff()
     {

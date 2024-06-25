@@ -33,7 +33,7 @@ public class DataModuleDemo : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("Failed to parse int " + intKeyName.text);
+            Debug.LogError("Failed to parse int " + intKeyName.text + e);
         }
     }
 
@@ -50,7 +50,7 @@ public class DataModuleDemo : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("Failed to parse float " + floatKeyName.text);
+            Debug.LogError("Failed to parse float " + floatKeyName.text + e);
         }
     }
 

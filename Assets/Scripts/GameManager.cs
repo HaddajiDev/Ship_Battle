@@ -1,10 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Cinemachine;
-using DG.Tweening;
 using CrazyGames;
+using DG.Tweening;
+using UnityEngine;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
+using System.Collections;
 
+///<summary>
+///
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -14,6 +18,7 @@ public class GameManager : MonoBehaviour
     public Enemy_AI player_2;
     int turn = 0;
     public CinemachineVirtualCamera cam;
+    public Camera cam_;
     [SerializeField] private Transform End_Point;
     public Transform Main_Point;
 
@@ -24,12 +29,12 @@ public class GameManager : MonoBehaviour
     public int Burst_Uses;
 
     [Header("Currency")]
-    public int Coins = 0;
-    public int Diamond = 0;
+    public int Coins = 50000;
+    public int Diamond = 1000;
     public int Coins_Start;
 
     [Header("Abilites Cost")]
-    public int Fire_Cost = 60; 
+    public int Fire_Cost = 60;
     public int Burst_Cost = 120;
 
     [Header("Current level")]
@@ -43,16 +48,38 @@ public class GameManager : MonoBehaviour
     public Upgrades upgrades;
 
     int first;
-    public int current_level
-    {
-        get { return Current_Level; }
-        set { Current_Level = Mathf.Min(value, player_2.levels.Get_Lenght - 1); }
-    }
+
+    [HideInInspector]
+    public string username;
+    public string imgURL;
+    public string token;
+
+    bool isAvailable;
+
     private void Awake()
     {
         Instance = this;
         first = PlayerPrefs.GetInt("First", first);
+        if(PlayerPrefs.GetInt("First") == 0)
+        {
+            PlayerPrefs.SetInt("First", 1);
+            SaveData();
+        }
         Load_Data();
+        isAvailable = CrazySDK.User.IsUserAccountAvailable;
+        if (!isAvailable)
+            UI_Controller.instance.SignInButton.SetActive(false);
+    }
+
+    private async void Start()
+    {
+        PortalUser user = await GetCurrentUser();
+        if(user != null)
+            UI_Controller.instance.username.text = user.username;
+            StartCoroutine(DownloadImage(user.profilePictureUrl));
+
+        //if (isAvailable && username != null)
+        //LoadUser();
     }
 
     private void Update()
@@ -68,7 +95,7 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Menu_BG.interactable = true;
         UI_Controller.instance.Menu_BG.blocksRaycasts = true;
         UI_Controller.instance.Menu_BG.DOFade(1, 0.5f);
-        UI_Controller.instance.Level_Counter.text = current_level.ToString();
+        UI_Controller.instance.Level_Counter.text = Current_Level.ToString();
     }
 
     public void Start_Game()
@@ -80,13 +107,19 @@ public class GameManager : MonoBehaviour
 
         //get abilites if exited
         Check_Abilites();
-        UI_Controller.instance.Menu_BG.DOFade(0, 0.3f).OnComplete(() => {
-            cam.transform.DOMove(End_Point.localPosition, 5).OnComplete(() => {
+        UI_Controller.instance.Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
+        {
+            cam_.GetComponent<CameraFollow>().SetTarget(null);
+            cam_.transform.DOMove(End_Point.localPosition, 5).OnComplete(() =>
+            {
                 Get_Ready_UI(1);
                 player_1.enabled = true;
                 player_1.GetComponent<Rotate_Object>().enabled = true;
                 player_2.enabled = false;
+                cam_.GetComponent<CinemachineBrain>().enabled = true;
+                cam.gameObject.SetActive(true);
                 cam.Follow = player_1.transform.parent.transform;
+                //cam_.GetComponent<CameraFollow>().SetTarget(player_1.transform.parent.transform);
             });
         });
         UI_Controller.instance.Menu_BG.interactable = false;
@@ -95,24 +128,26 @@ public class GameManager : MonoBehaviour
         Coins_Start = Coins;
         Reset_Ships();
 
-        player_2.Get_Stats(current_level);
+
+        player_2.Get_Stats(Current_Level);
 
         turn = 2;
 
         Set_Player();
-        
+
         CrazySDK.Game.GameplayStart();
     }
 
     public void Check_Turn()
     {
         turn++;
-        if(turn % 2 == 0)
+        if (turn % 2 == 0)
         {
             player_1.enabled = true;
             player_1.GetComponent<Rotate_Object>().enabled = true;
             player_2.enabled = false;
             cam.Follow = player_1.transform.parent.transform;
+            //cam_.GetComponent<CameraFollow>().SetTarget(player_1.transform.parent.transform);
             Check_Abilites();
             Get_Ready_UI(1);
         }
@@ -122,14 +157,15 @@ public class GameManager : MonoBehaviour
             player_1.GetComponent<Rotate_Object>().enabled = false;
             player_2.enabled = true;
             player_2.Shoot_Invoked(2);
-            cam.Follow = player_2.transform.GetChild(1).GetChild(1).transform;            
-        }        
+            cam.Follow = player_2.transform.GetChild(1).GetChild(1).transform;
+            //cam_.GetComponent<CameraFollow>().SetTarget(player_2.transform.GetChild(1).GetChild(1).transform);
+        }
     }
-    
+
 
     public void Get_Ready_UI(float fade, float duration = 0.5f)
     {
-        if(fade == 1)
+        if (fade == 1)
         {
             UI_Controller.instance.Getting_Ready_Object.DOFade(fade, duration);
             UI_Controller.instance.Getting_Ready_Object.interactable = true;
@@ -137,46 +173,52 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            UI_Controller.instance.Getting_Ready_Object.DOFade(fade, duration).OnComplete(() => {
+            UI_Controller.instance.Getting_Ready_Object.DOFade(fade, duration).OnComplete(() =>
+            {
                 UI_Controller.instance.Getting_Ready_Object.interactable = false;
                 UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
             });
         }
-            
+
     }
 
     void Check_Abilites()
-    {       
+    {
         if (Fire_Uses == 0)
             UI_Controller.instance.Fire_Object.SetActive(false);
         if (Burst_Uses == 0)
             UI_Controller.instance.Burst_Object.SetActive(false);
     }
-
     public void Get_Fire()
-    {        
-        if(Coins >= Fire_Cost)
+    {
+        if (Coins >= Fire_Cost)
         {
             Fire_Uses++;
             Coins -= Fire_Cost;
+            UI_Controller.instance.SetAbilitesCount();
+            UI_Controller.instance.SetCurrencyUI();
+            SaveData();
         }
-    }
-    public void Dump_Fire()
+    }    public void Dump_Fire()
     {
-        if(Fire_Uses != 0)
+        if (Fire_Uses != 0)
         {
             Fire_Uses--;
             Coins += Fire_Cost;
-        }        
+            UI_Controller.instance.SetAbilitesCount();
+            UI_Controller.instance.SetCurrencyUI();
+            SaveData();
+        }
     }
-
-
     public void Get_Burst()
-    {        
+    {
         if (Coins >= Burst_Cost)
         {
             Burst_Uses++;
             Coins -= Burst_Cost;
+            UI_Controller.instance.SetAbilitesCount();
+            UI_Controller.instance.SetCurrencyUI();
+            SaveData();
         }
     }
     public void Dump_Burst()
@@ -185,14 +227,17 @@ public class GameManager : MonoBehaviour
         {
             Burst_Uses--;
             Coins += Burst_Cost;
+            UI_Controller.instance.SetAbilitesCount();
+            UI_Controller.instance.SetCurrencyUI();
+            SaveData();
         }
     }
 
     public void Reset_play()
-    {        
+    {
         player_1.enabled = false;
         player_2.enabled = false;
-        player_2.StopAllCoroutines();        
+        player_2.StopAllCoroutines();
     }
 
     private void Reset_Ships()
@@ -210,17 +255,25 @@ public class GameManager : MonoBehaviour
         Ships[0].GetComponentInChildren<Player>().transform.localRotation = Quaternion.Euler(0, 0, 0);
         Ships[1].GetComponentInChildren<Enemy_AI>().Canon.localRotation = Quaternion.Euler(0, 0, 0);
 
-        //Remove Fire if existed
+        //|---------------------------------------|//
+        //|                                       |//
+        //|                                       |//
+        //|                                       |//
+        //|       Remove fire if existed          |//
+        //|                                       |//
+        //|                                       |//
+        //|                                       |//
+        //|---------------------------------------|//
     }
 
     public void Set_Player()
     {
-        if(UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index == 0)
+        if (UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index == 0)
             UI_Controller.instance.Select_Bullet_1.gameObject.SetActive(false);
 
         if (UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().index == 0)
             UI_Controller.instance.Select_Bullet_2.gameObject.SetActive(false);
-        if(Shop.Instance.Got_Extra_Slot == 1)
+        if (Shop.Instance.Got_Extra_Slot == 1)
         {
             if (UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().index != 0)
                 UI_Controller.instance.Select_Bullet_Extra.gameObject.SetActive(true);
@@ -262,7 +315,7 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.ResetChecks();
         UI_Controller.instance.Checks[0].SetActive(true);
         player_1.SelectBullet(0);
-
+        player_1.ready = false;
         player_1._bulletsLimit.Clear();
     }
 
@@ -270,11 +323,90 @@ public class GameManager : MonoBehaviour
     public void SaveData()
     {
         SaveSysteme.SaveData(this);
+        CrazySDK.User.SyncUnityGameData();
     }
+
+    public async void SignIn()
+    {
+        if (isAvailable && username != null)
+        {
+            UserInfo userInfo = await Show_Prompt();
+            UI_Controller.instance.username.text = userInfo.User.username;
+            StartCoroutine(DownloadImage(userInfo.User.profilePictureUrl));
+            username = userInfo.User.username;
+            imgURL = userInfo.User.profilePictureUrl;
+            token = userInfo.Token;
+            SaveData();
+        }        
+    }
+
+    void LoadUser()
+    {        
+        if(username != null && imgURL != null)
+        {
+            UI_Controller.instance.username.text = username;
+            StartCoroutine(DownloadImage(imgURL));
+        }        
+    }
+
+    public async Task<UserInfo> Show_Prompt()
+    {
+        TaskCompletionSource<UserInfo> taskCompletionSource = new TaskCompletionSource<UserInfo>();
+
+        CrazySDK.User.ShowAuthPrompt((error, user) =>
+        {
+            if (error != null)
+            {                
+                taskCompletionSource.SetResult(null);
+                return;
+            }
+
+            CrazySDK.User.GetUserToken((tokenError, token) =>
+            {
+                if (tokenError != null)
+                {                    
+                    taskCompletionSource.SetResult(null);
+                    return;
+                }
+
+                UserInfo userInfo = new UserInfo
+                {
+                    User = user,
+                    Token = token
+                };
+
+                taskCompletionSource.SetResult(userInfo);
+            });
+        });
+
+        return await taskCompletionSource.Task;
+    }
+
+    public async Task<PortalUser> GetCurrentUser()
+    {
+        TaskCompletionSource<PortalUser> taskCompletionSource = new TaskCompletionSource<PortalUser>();
+
+        CrazySDK.User.GetUser(user =>
+        {
+            if (user != null)
+            {
+                Debug.Log("Get user result: " + user);
+                taskCompletionSource.SetResult(user);
+            }
+            else
+            {
+                Debug.Log("User is not logged in");
+                taskCompletionSource.SetResult(null);
+            }
+        });
+
+        return await taskCompletionSource.Task;
+    }
+
     public void Load_Data()
     {
         Data data = SaveSysteme.Load_Data();
-
+        
         player_1.maxForce = data.MaxForce;
         Ships[0].GetComponent<Ship>().Health = data.Health;
 
@@ -287,7 +419,6 @@ public class GameManager : MonoBehaviour
         uI_Controller.bullet_slot_Extra.GetComponent<Bullet_Slot>().index = data.Slot_Extra_index;
 
         Current_Level = data.Current_Level;
-
         Coins = data.Coins;
         Diamond = data.Diamond;
 
@@ -296,8 +427,39 @@ public class GameManager : MonoBehaviour
 
         upgrades.lvl_health = data.up_lvl_Health;
         upgrades.lvl_force = data.up_lvl_Force;
+
+        username = data.username;
+        imgURL = data.imgURL;
+        token = data.token;
     }
-    
+
+    IEnumerator DownloadImage(string imageUrl)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(imageUrl);
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+        }
+        else
+        {
+            Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            Sprite sprite = SpriteFromTexture2D(texture);
+            UI_Controller.instance.userImg.sprite = sprite;
+        }
+    }
+
+    private Sprite SpriteFromTexture2D(Texture2D texture)
+    {
+        return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+    }
+
 }
 
-
+[System.Serializable]
+public class UserInfo
+{
+    public string Token { get; set; }
+    public PortalUser User { get; set; }
+}

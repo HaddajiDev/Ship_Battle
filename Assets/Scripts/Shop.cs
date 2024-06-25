@@ -31,13 +31,16 @@ public class Shop : MonoBehaviour
     public void Buy_Bullet(int index)
     {        
         Bullets bullet = GameManager.Instance.player_1.bulletsData.Get_Bullet(index);
-        if(GameManager.Instance.Coins >= bullet.Price)
+        Cost cost = bullet.cost;
+        if(GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
         {
-            GameManager.Instance.Coins -= bullet.Price;
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
             bullets.Add_Bullet(index);
             GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
             Button clickedButton = selectedObject.GetComponent<Button>();
             clickedButton.interactable = false;
+            UI_Controller.instance.SetCurrencyUI();
             GameManager.Instance.SaveData();
         }        
     }
@@ -58,7 +61,7 @@ public class Shop : MonoBehaviour
             {
                 if (bullets.data[i] == j)
                 {
-                    Button select = Container.GetChild(i + 1).transform.GetChild(2).GetComponent<Button>();
+                    Button select = Container.GetChild(i + 1).transform.GetChild(6).GetComponent<Button>();
                     var selected = j;
                     GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
                     Button clickedButton = selectedObject.GetComponent<Button>();
@@ -116,9 +119,9 @@ public class Shop : MonoBehaviour
     private void InstantiateBulletUI(int j)
     {
         GameObject prefab = Instantiate(Bullet_UI_Prefab, Container);
-        prefab.transform.GetChild(0).GetComponent<Image>().sprite = GameManager.Instance.player_1.bulletsData.Get_Bullet(j).sr;
-        prefab.transform.GetChild(1).GetComponent<TMPro.TMP_Text>().text = GameManager.Instance.player_1.bulletsData.Get_Bullet(j).Name;
-        prefab.transform.GetChild(2).GetComponentInChildren<TMPro.TMP_Text>().text = "Select";        
+        prefab.transform.GetChild(4).GetComponent<Image>().sprite = GameManager.Instance.player_1.bulletsData.Get_Bullet(j).sr;
+        prefab.transform.GetChild(5).GetComponent<TMPro.TMP_Text>().text = GameManager.Instance.player_1.bulletsData.Get_Bullet(j).Name;
+        prefab.transform.GetChild(6).GetComponentInChildren<TMPro.TMP_Text>().text = "Select";        
     }
 
     public void Select_Bullet_From_list_1(int index)
@@ -155,17 +158,17 @@ public class Shop : MonoBehaviour
         for (int i = 1; i < Container.childCount; i++)
         {
             GameObject Bullet = Container.GetChild(i).gameObject;
-            string Name = Bullet.transform.GetChild(1).GetComponent<TMPro.TMP_Text>().text;
+            string Name = Bullet.transform.GetChild(5).GetComponent<TMPro.TMP_Text>().text;
             
             if(Name == UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().bullet.Name || Name == UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().bullet.Name || Name == UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().bullet.Name)
             {
-                Bullet.transform.GetChild(2).GetComponent<Button>().interactable = false;
-                Bullet.transform.GetChild(2).GetComponentInChildren<TMPro.TMP_Text>().text = "Selected";
+                Bullet.transform.GetChild(6).GetComponent<Button>().interactable = false;
+                Bullet.transform.GetChild(6).GetComponentInChildren<TMPro.TMP_Text>().text = "Selected";
             }
             else
             {
-                Bullet.transform.GetChild(2).GetComponent<Button>().interactable = true;
-                Bullet.transform.GetChild(2).GetComponentInChildren<TMPro.TMP_Text>().text = "Select";
+                Bullet.transform.GetChild(6).GetComponent<Button>().interactable = true;
+                Bullet.transform.GetChild(6).GetComponentInChildren<TMPro.TMP_Text>().text = "Select";
             }
         }
     }
@@ -182,6 +185,7 @@ public class Shop : MonoBehaviour
 
             UI_Controller.instance.Shop_Buy_Extra_Bullet.interactable = false;
             Got_Extra_Slot = 1;
+            UI_Controller.instance.SetCurrencyUI();
             GameManager.Instance.SaveData();
         }
     }
@@ -204,10 +208,11 @@ public class Shop : MonoBehaviour
     //}
 }
 
+[System.Serializable]
 public class Cost
 {
-    public int Coins { get; set; }
-    public int Diamond { get; set; }    
+    public int Coins;
+    public int Diamond;
     public Cost(int coins, int diamond = 0)
     {
         Coins = coins;

@@ -14,7 +14,7 @@ public class Cave_Collider : MonoBehaviour
             hit++;
             if (hit == 1)
             {                
-                Invoke("Check_Turns", 3);
+                Invoke("Check_Turns", 2);
             }
                 
         }

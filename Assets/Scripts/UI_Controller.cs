@@ -33,12 +33,22 @@ public class UI_Controller : MonoBehaviour
     public GameObject Burst_Object;
 
     [Header("Texts")]
+    public TMP_Text Coins_Main_Text;
+    public TMP_Text Diamond_Text;
     public TMP_Text Coins_text;
     public TMP_Text State_Win;
+    public TMP_Text Fire_Shot_Price;
+    public TMP_Text Busrt_Shot_Price;
     public TMP_Text Level_Counter;
     public TMP_Text Bullet_Limit_1;
     public TMP_Text Bullet_Limit_2;
     public TMP_Text Bullet_Limit_Extra;
+    public TMP_Text Total_Fire;
+    public TMP_Text Total_Busrt;
+    public TMP_Text Health_Cost_Upgrade_Coins;
+    public TMP_Text Health_Cost_Upgrade_Diamond;
+    public TMP_Text Force_Cost_Upgrade_Coins;    
+    public TMP_Text Force_Cost_Upgrade__Diamond;
 
     [Header("Bullets Slots")]
     public Image bullet_slot_1;
@@ -48,11 +58,24 @@ public class UI_Controller : MonoBehaviour
     public Button Shop_Buy_Extra_Bullet;
     public Button Clear_Button_Bullet;
 
-
+    [Header("Account Stuff")]
+    public CanvasGroup account;
+    public Image userImg;
+    public TMP_Text username;
+    public GameObject SignInButton;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    private void Start()
+    {
+        Fire_Shot_Price.text = GameManager.Instance.Fire_Cost.ToString();
+        Busrt_Shot_Price.text = GameManager.Instance.Burst_Cost.ToString();
+
+        SetAbilitesCount();
+        SetCurrencyUI();
     }
     public void Check_Fire()
     {
@@ -136,12 +159,15 @@ public class UI_Controller : MonoBehaviour
             Win_Obj.blocksRaycasts = true;
             Win_Obj.DOFade(1, 0.3f);
             State_Win.text = state;
+            Getting_Ready_Object.DOFade(0, 0.1f);
+            Getting_Ready_Object.interactable = false;
+            Getting_Ready_Object.blocksRaycasts = false;
         }
         else
         {            
             Win_Obj.DOFade(0, 0.3f).OnComplete(() => {
                 Win_Obj.interactable = false;
-                Win_Obj.blocksRaycasts = false;
+                Win_Obj.blocksRaycasts = false;                
             });
         }
         
@@ -151,10 +177,13 @@ public class UI_Controller : MonoBehaviour
     {
         Win_Tigger(0);
         GameManager.Instance.cam.Follow = null;
-        GameManager.Instance.cam.transform.DOMove(GameManager.Instance.Main_Point.localPosition, 3).OnComplete(() => {
+        GameManager.Instance.cam.gameObject.SetActive(false);
+        GameManager.Instance.cam_.GetComponent<Cinemachine.CinemachineBrain>().enabled = false;
+        GameManager.Instance.cam_.GetComponent<CameraFollow>().SetTarget(null);
+        GameManager.Instance.cam_.transform.DOMove(GameManager.Instance.Main_Point.localPosition, 3).OnComplete(() => {
             Main_Menu.DOFade(1, 0.3f);
             Main_Menu.interactable = true;
-            Main_Menu.blocksRaycasts = true;
+            Main_Menu.blocksRaycasts = true;            
         });
     }
 
@@ -225,6 +254,22 @@ public class UI_Controller : MonoBehaviour
             });
         }
     }
+    public void Open_Account(int index)
+    {
+        if (index == 1)
+        {
+            account.interactable = true;
+            account.blocksRaycasts = true;
+            account.DOFade(1, 0.3f);
+        }
+        else
+        {
+            account.DOFade(0, 0.3f).OnComplete(() => {
+                account.interactable = false;
+                account.blocksRaycasts = false;
+            });
+        }
+    }
     public void Close_Start_Menu()
     {
         Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
@@ -240,5 +285,16 @@ public class UI_Controller : MonoBehaviour
         {
             Checks[i].SetActive(false);
         }
+    }
+
+    public void SetCurrencyUI()
+    {
+        Coins_Main_Text.text = GameManager.Instance.Coins.ToString();
+        Diamond_Text.text = GameManager.Instance.Diamond.ToString();
+    }
+    public void SetAbilitesCount()
+    {
+        Total_Fire.text = GameManager.Instance.Fire_Uses.ToString();
+        Total_Busrt.text = GameManager.Instance.Burst_Uses.ToString();
     }
 }
