@@ -154,9 +154,13 @@ public class Ship : MonoBehaviour
         UI_Controller.instance.Win_Tigger(1, "You Win");
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         if(GameManager.Instance.Current_Level < GameManager.Instance.player_2.levels.Get_Lenght - 1)
+        {
             GameManager.Instance.Current_Level++;
+            GameManager.Instance.SaveData("level", GameManager.Instance.Current_Level);
+        }
+            
         UI_Controller.instance.SetCurrencyUI();
-        GameManager.Instance.SaveData();
+        GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
 
         CrazySDK.Game.GameplayStop();
         CrazySDK.Game.HappyTime();
@@ -166,7 +170,7 @@ public class Ship : MonoBehaviour
         UI_Controller.instance.Win_Tigger(1, "You Lost");        
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         UI_Controller.instance.SetCurrencyUI();
-        GameManager.Instance.SaveData();
+        GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
         CrazySDK.Game.GameplayStop();
     }
 

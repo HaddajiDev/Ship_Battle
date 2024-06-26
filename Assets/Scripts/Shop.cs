@@ -41,7 +41,9 @@ public class Shop : MonoBehaviour
             Button clickedButton = selectedObject.GetComponent<Button>();
             clickedButton.interactable = false;
             UI_Controller.instance.SetCurrencyUI();
-            GameManager.Instance.SaveData();
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            GameManager.Instance.SaveData("bullets", bullets.data);
         }        
     }
 
@@ -131,7 +133,7 @@ public class Shop : MonoBehaviour
         UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index = index;
         UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().bullet = bullet;
         CheckForSelctedBullets();
-        GameManager.Instance.SaveData();
+        GameManager.Instance.SaveData("slot1", index);
     }
     public void Select_Bullet_From_list_2(int index)
     {
@@ -140,7 +142,7 @@ public class Shop : MonoBehaviour
         UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().index = index;
         UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().bullet = bullet;
         CheckForSelctedBullets();
-        GameManager.Instance.SaveData();
+        GameManager.Instance.SaveData("slot2", index);
     }
     public void Select_Bullet_From_list_Extra(int index)
     {
@@ -149,7 +151,7 @@ public class Shop : MonoBehaviour
         UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().index = index;
         UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().bullet = bullet;
         CheckForSelctedBullets();
-        GameManager.Instance.SaveData();
+        GameManager.Instance.SaveData("slotExtra", index);
     }
 
 
@@ -186,7 +188,9 @@ public class Shop : MonoBehaviour
             UI_Controller.instance.Shop_Buy_Extra_Bullet.interactable = false;
             Got_Extra_Slot = 1;
             UI_Controller.instance.SetCurrencyUI();
-            GameManager.Instance.SaveData();
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            GameManager.Instance.SaveData("extraSlot", 1);
         }
     }
 

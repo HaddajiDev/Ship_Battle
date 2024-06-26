@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
-using System.Collections;
+using System.Collections.Generic;
 
 ///<summary>
 ///
@@ -59,34 +59,31 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        
         first = PlayerPrefs.GetInt("First", first);
         if(PlayerPrefs.GetInt("First") == 0)
         {
             PlayerPrefs.SetInt("First", 1);
-            SaveData();
-        }
-        Load_Data();
-        isAvailable = CrazySDK.User.IsUserAccountAvailable;
-        if (!isAvailable)
-            UI_Controller.instance.SignInButton.SetActive(false);
+            setDefaultData();            
+        }        
+        LoadData();
+        CrazySDK.User.SyncUnityGameData();
     }
 
     private async void Start()
     {
+        var isAvailable = CrazySDK.User.IsUserAccountAvailable;
+        if (isAvailable == false)
+            UI_Controller.instance.AccountButton.SetActive(false);
+
         PortalUser user = await GetCurrentUser();
         if(user != null)
-            UI_Controller.instance.username.text = user.username;
-            StartCoroutine(DownloadImage(user.profilePictureUrl));
-
-        //if (isAvailable && username != null)
-        //LoadUser();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
         {
-            SaveSysteme.Reset();
+            await DownloadImageAsync(user.profilePictureUrl);
+            UI_Controller.instance.username.text = user.username;            
+            username = user.username;
+            imgURL = user.profilePictureUrl;
+            UI_Controller.instance.SignInButton.SetActive(false);
         }
     }
 
@@ -197,7 +194,7 @@ public class GameManager : MonoBehaviour
             Coins -= Fire_Cost;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
-            SaveData();
+            SaveData("fireUses", Fire_Uses);
         }
     }    public void Dump_Fire()
     {
@@ -207,7 +204,7 @@ public class GameManager : MonoBehaviour
             Coins += Fire_Cost;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
-            SaveData();
+            SaveData("fireUses", Fire_Uses);
         }
     }
     public void Get_Burst()
@@ -218,7 +215,7 @@ public class GameManager : MonoBehaviour
             Coins -= Burst_Cost;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
-            SaveData();
+            SaveData("burstUses", Burst_Uses);
         }
     }
     public void Dump_Burst()
@@ -229,7 +226,7 @@ public class GameManager : MonoBehaviour
             Coins += Burst_Cost;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
-            SaveData();
+            SaveData("burstUses", Burst_Uses);
         }
     }
 
@@ -320,32 +317,38 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void SaveData()
-    {
-        SaveSysteme.SaveData(this);
-        CrazySDK.User.SyncUnityGameData();
+    public void SaveData(string key, int value)
+    {        
+        CrazySDK.Data.SetInt(key, value);
     }
+    public void SaveData(string key, float value)
+    {        
+        CrazySDK.Data.SetFloat(key, value);
+    }
+    public void SaveData(string key, string value)
+    {        
+        CrazySDK.Data.SetString(key, value);
+    }
+    public void SaveData(string key, List<int> value)
+    {        
+        string bulletList = string.Join(",", value.ConvertAll(i => i.ToString()).ToArray());
+        CrazySDK.Data.SetString("bullets", bulletList);        
+    }
+
 
     public async void SignIn()
     {
         if (isAvailable && username != null)
         {
             UserInfo userInfo = await Show_Prompt();
-            UI_Controller.instance.username.text = userInfo.User.username;
-            StartCoroutine(DownloadImage(userInfo.User.profilePictureUrl));
+            await DownloadImageAsync(userInfo.User.profilePictureUrl);
+            UI_Controller.instance.username.text = userInfo.User.username;            
             username = userInfo.User.username;
             imgURL = userInfo.User.profilePictureUrl;
             token = userInfo.Token;
-            SaveData();
-        }        
-    }
-
-    void LoadUser()
-    {        
-        if(username != null && imgURL != null)
-        {
-            UI_Controller.instance.username.text = username;
-            StartCoroutine(DownloadImage(imgURL));
+            SaveData("username", username);
+            SaveData("imgUrl", imgURL);
+            SaveData("token", token);
         }        
     }
 
@@ -401,60 +404,111 @@ public class GameManager : MonoBehaviour
         });
 
         return await taskCompletionSource.Task;
-    }
-
-    public void Load_Data()
+    }    
+    void setDefaultData()
     {
-        Data data = SaveSysteme.Load_Data();
+        CrazySDK.Data.SetFloat("force", player_1.maxForce);
+        CrazySDK.Data.SetInt("health", Ships[0].GetComponent<Ship>().Health);
         
-        player_1.maxForce = data.MaxForce;
-        Ships[0].GetComponent<Ship>().Health = data.Health;
+        CrazySDK.Data.SetInt("extraSlot", shop.Got_Extra_Slot);
 
-        shop.bullets.data = data.playerBullets;
+        CrazySDK.Data.SetInt("slot1", uI_Controller.bullet_slot_1.GetComponent<Bullet_Slot>().index);
+        CrazySDK.Data.SetInt("slot2", uI_Controller.bullet_slot_2.GetComponent<Bullet_Slot>().index);
+        CrazySDK.Data.SetInt("slotExtra", uI_Controller.bullet_slot_Extra.GetComponent<Bullet_Slot>().index);
 
-        shop.Got_Extra_Slot = data.ExtraSlot;
+        CrazySDK.Data.SetInt("level", Current_Level);
 
-        uI_Controller.bullet_slot_1.GetComponent<Bullet_Slot>().index = data.Slot_1_index;
-        uI_Controller.bullet_slot_2.GetComponent<Bullet_Slot>().index = data.Slot_2_index;
-        uI_Controller.bullet_slot_Extra.GetComponent<Bullet_Slot>().index = data.Slot_Extra_index;
+        CrazySDK.Data.SetInt("coins", Coins);
+        CrazySDK.Data.SetInt("diamond", Diamond);
 
-        Current_Level = data.Current_Level;
-        Coins = data.Coins;
-        Diamond = data.Diamond;
+        CrazySDK.Data.SetInt("fireUses", Fire_Uses);
+        CrazySDK.Data.SetInt("burstUses", Burst_Uses);
 
-        Fire_Uses = data.Fire_Count;
-        Burst_Uses = data.Burst_Count;
+        CrazySDK.Data.SetInt("levelHealth", upgrades.lvl_health);
+        CrazySDK.Data.SetInt("levelForce", upgrades.lvl_force);
 
-        upgrades.lvl_health = data.up_lvl_Health;
-        upgrades.lvl_force = data.up_lvl_Force;
+        CrazySDK.Data.SetString("username", "");
+        CrazySDK.Data.SetString("imgUrl", "");
+        CrazySDK.Data.SetString("token", "");
 
-        username = data.username;
-        imgURL = data.imgURL;
-        token = data.token;
+        //Player Bullets
+        string bulletList = string.Join(",", shop.bullets.data.ConvertAll(i => i.ToString()).ToArray());
+        CrazySDK.Data.SetString("bullets", bulletList);
     }
 
-    IEnumerator DownloadImage(string imageUrl)
+    void LoadData()
     {
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(imageUrl);
-        yield return request.SendWebRequest();
+        player_1.maxForce = CrazySDK.Data.GetFloat("force");
+        Ships[0].GetComponent<Ship>().Health = CrazySDK.Data.GetInt("health");
+        
+        shop.Got_Extra_Slot = CrazySDK.Data.GetInt("extraSlot");
 
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError(request.error);
+        uI_Controller.bullet_slot_1.GetComponent<Bullet_Slot>().index = CrazySDK.Data.GetInt("slot1");
+        uI_Controller.bullet_slot_2.GetComponent<Bullet_Slot>().index = CrazySDK.Data.GetInt("slot2");
+        uI_Controller.bullet_slot_Extra.GetComponent<Bullet_Slot>().index = CrazySDK.Data.GetInt("slotExtra");
+
+        Current_Level = CrazySDK.Data.GetInt("level");
+
+        Coins = CrazySDK.Data.GetInt("coins");
+        Diamond = CrazySDK.Data.GetInt("diamond");
+
+        Fire_Uses = CrazySDK.Data.GetInt("fireUses");
+        Burst_Uses = CrazySDK.Data.GetInt("burstUses");
+
+        upgrades.lvl_health = CrazySDK.Data.GetInt("levelHealth");
+        upgrades.lvl_force = CrazySDK.Data.GetInt("levelForce");
+
+        username = CrazySDK.Data.GetString("username");
+        imgURL = CrazySDK.Data.GetString("imgUrl");
+        token = CrazySDK.Data.GetString("token");
+
+        //Player Bullets
+        string intListString = CrazySDK.Data.GetString("bullets");
+        
+        if (!string.IsNullOrEmpty(intListString))
+        {            
+            string[] stringArray = intListString.Split(',');            
+            shop.bullets.data = new List<int>();
+            
+            foreach (string str in stringArray)
+            {
+                int value;
+                if (int.TryParse(str, out value))
+                {                    
+                    shop.bullets.data.Add(value);
+                }                
+            }
         }
-        else
+    }
+
+    public async Task DownloadImageAsync(string imageUrl)
+    {
+        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(imageUrl))
         {
-            Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            Sprite sprite = SpriteFromTexture2D(texture);
-            UI_Controller.instance.userImg.sprite = sprite;
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(request.error);
+            }
+            else
+            {
+                Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+                Sprite sprite = SpriteFromTexture2D(texture);
+                UI_Controller.instance.userImg.sprite = sprite;
+            }
         }
     }
 
     private Sprite SpriteFromTexture2D(Texture2D texture)
     {
         return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
+    }  
 }
 
 [System.Serializable]

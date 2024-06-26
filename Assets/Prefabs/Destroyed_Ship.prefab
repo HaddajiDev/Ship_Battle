@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066850007e533344bb63b6fe03aee141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Wait: 5
+  Wait: 6
   Ship: 1
 --- !u!1 &7397052980397622180
 GameObject:

@@ -63,6 +63,7 @@ public class UI_Controller : MonoBehaviour
     public Image userImg;
     public TMP_Text username;
     public GameObject SignInButton;
+    public GameObject AccountButton;
 
     private void Awake()
     {

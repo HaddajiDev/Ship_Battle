@@ -54,8 +54,11 @@ public class Upgrades : MonoBehaviour
                 Health_Level++;                
                 UpdateUI_Health();
                 UI_Controller.instance.SetCurrencyUI();
-                GameManager.Instance.SaveData();
-            }            
+                GameManager.Instance.SaveData("levelHealth", Health_Level);
+                GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+                GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+                GameManager.Instance.SaveData("health", ship.Health);
+            }
         }        
     }
 
@@ -70,10 +73,13 @@ public class Upgrades : MonoBehaviour
                 addLevels(levels_force, Force_Level);
                 GameManager.Instance.Coins -= cost.Coins;
                 GameManager.Instance.Diamond -= cost.Diamond;
-                Force_Level++;                
+                Force_Level++;
                 UpdateUI_Force();
                 UI_Controller.instance.SetCurrencyUI();
-                GameManager.Instance.SaveData();
+                GameManager.Instance.SaveData("levelForce", Force_Level);
+                GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+                GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+                GameManager.Instance.SaveData("force", GameManager.Instance.player_1.maxForce);
             }            
         }
     }
