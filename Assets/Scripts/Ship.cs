@@ -16,6 +16,7 @@ public class Ship : MonoBehaviour
 
     public bool player;
     public Animator Sail_Anim;
+    public Animator Ship_helm;
     int hit = 0;
 
     Animator anim;
@@ -223,6 +224,7 @@ public class Ship : MonoBehaviour
     public void Move()
     {
         Sail_Anim.SetTrigger("toWind");
+        Ship_helm.SetTrigger("move");
         transform.DOMove(new Vector3(Start_Pos.x, Start_Pos.y, 0), 2).OnComplete(() =>
         {
             Sail_Anim.SetTrigger("toNoWind");

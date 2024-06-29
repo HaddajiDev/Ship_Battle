@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour
     public void SaveData(string key, List<int> value)
     {        
         string bulletList = string.Join(",", value.ConvertAll(i => i.ToString()).ToArray());
-        CrazySDK.Data.SetString("bullets", bulletList);        
+        CrazySDK.Data.SetString(key, bulletList);
     }
 
 
