@@ -431,9 +431,13 @@ public class GameManager : MonoBehaviour
         CrazySDK.Data.SetString("imgUrl", "");
         CrazySDK.Data.SetString("token", "");
 
-        //Player Bullets
-        string bulletList = string.Join(",", shop.bullets.data.ConvertAll(i => i.ToString()).ToArray());
-        CrazySDK.Data.SetString("bullets", bulletList);
+        SetList("bullets", shop.bullets.data);
+
+        SetList("ship_skins", shop.skins.Ships_Skins);
+        SetList("sail_skins", shop.skins.Sail_Skins);
+        SetList("flag_skins", shop.skins.Flag_Skins);
+        SetList("cannon_skins", shop.skins.Cannon_Skins);
+        SetList("anchor_skins", shop.skins.Anchors_Skins);
     }
 
     void LoadData()
@@ -463,20 +467,37 @@ public class GameManager : MonoBehaviour
         token = CrazySDK.Data.GetString("token");
 
         //Player Bullets
-        string intListString = CrazySDK.Data.GetString("bullets");
-        
+        LoadList("bullets", shop.bullets.data);
+
+        LoadList("ship_skins", shop.skins.Ships_Skins);
+        LoadList("sail_skins", shop.skins.Sail_Skins);
+        LoadList("flag_skins", shop.skins.Flag_Skins);
+        LoadList("cannon_skins", shop.skins.Cannon_Skins);
+        LoadList("anchor_skins", shop.skins.Anchors_Skins);
+    }
+
+    public void SetList(string key, List<int> list)
+    {
+        string _list = string.Join(",", list.ConvertAll(i => i.ToString()).ToArray());
+        CrazySDK.Data.SetString(key, _list);
+    }
+
+    private void LoadList(string key, List<int> list)
+    {
+        string intListString = CrazySDK.Data.GetString(key);
+
         if (!string.IsNullOrEmpty(intListString))
-        {            
-            string[] stringArray = intListString.Split(',');            
-            shop.bullets.data = new List<int>();
-            
+        {
+            string[] stringArray = intListString.Split(',');
+            list = new List<int>();
+
             foreach (string str in stringArray)
             {
                 int value;
                 if (int.TryParse(str, out value))
-                {                    
-                    shop.bullets.data.Add(value);
-                }                
+                {
+                    list.Add(value);
+                }
             }
         }
     }

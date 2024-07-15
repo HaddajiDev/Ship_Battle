@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class AnchorCosmaticData : ScriptableObject
 {
-    public Cosmatic[] anchor_skins;
+    public AnchorCosmatic[] anchor_skins;
 
     public int Get_Lenght
     {
@@ -15,7 +15,7 @@ public class AnchorCosmaticData : ScriptableObject
         }
     }
 
-    public Cosmatic Get_Skin(int index)
+    public AnchorCosmatic Get_Skin(int index)
     {
         return anchor_skins[index];
     }

@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7be0d18b9f19d9f44bcfa54cf89663d2, type: 3}
   m_Name: flagsSkins
   m_EditorClassIdentifier: 
-  flag_skins: []
+  flag_skins:
+  - Cover: {fileID: 21300000, guid: 7fbbe9d0de1f3c64c94a6ecd96028b59, type: 3}
+    anim: {fileID: 9100000, guid: a2b8d771162413e4ababc4e6d0daaaf9, type: 2}
+    cost:
+      Coins: 0
+      Diamond: 0

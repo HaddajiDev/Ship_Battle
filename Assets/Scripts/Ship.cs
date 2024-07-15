@@ -26,6 +26,7 @@ public class Ship : MonoBehaviour
     public GameObject Destroyed_Ship;
     public Transform Destroy_Point;
 
+
     private void Awake()
     {
         Instance = this;

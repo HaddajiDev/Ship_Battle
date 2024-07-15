@@ -8,6 +8,7 @@ public class Shop : MonoBehaviour
 {
     public static Shop Instance;
     [HideInInspector] public Player_Bullets bullets = new Player_Bullets();
+    [HideInInspector] public Player_Skins skins = new Player_Skins();
 
     public Transform Container;
     public GameObject Bullet_UI_Prefab;
@@ -194,6 +195,83 @@ public class Shop : MonoBehaviour
         }
     }
 
+  
+
+    public void BuyShip_Skin(int index)
+    {
+        Cost cost = GameManager.Instance.player_1.shipCosmatic.Get_Skin(index).cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+            skins.Add_Skin(skins.Ships_Skins, index);
+
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("ship_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+    }
+    public void BuySail_Skin(int index)
+    {
+        Cost cost = GameManager.Instance.player_1.sailCosmatic.Get_Skin(index).cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+            skins.Add_Skin(skins.Sail_Skins, index);
+
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("sail_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+    }
+    public void BuyFlag_Skin(int index)
+    {
+        Cost cost = GameManager.Instance.player_1.flagCosmatic.Get_Skin(index).cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+            skins.Add_Skin(skins.Flag_Skins, index);
+
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("flag_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+    }
+    public void BuyCannon_Skin(int index)
+    {
+        Cost cost = GameManager.Instance.player_1.CannonCosmatic.Get_Skin(index).cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+            skins.Add_Skin(skins.Cannon_Skins, index);
+
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("cannon_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+    }
+    public void BuyAnchor_Skin(int index)
+    {
+        Cost cost = GameManager.Instance.player_1.anchorCosmatic.Get_Skin(index).cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+            skins.Add_Skin(skins.Anchors_Skins, index);
+
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("anchor_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+    }
     //public void Clear_Slot_1()
     //{
     //    //sprite null X or smth

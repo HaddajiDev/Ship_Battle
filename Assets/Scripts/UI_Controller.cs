@@ -20,6 +20,7 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Select_Bullets;
     public CanvasGroup Win_Obj;
     public CanvasGroup Buy_Upgrades;
+    public CanvasGroup Buy_Skins;
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -64,6 +65,9 @@ public class UI_Controller : MonoBehaviour
     public TMP_Text username;
     public GameObject SignInButton;
     public GameObject AccountButton;
+
+    [Header("Skins Stuff")]
+    public Transform skins_Container;
 
     private void Awake()
     {
@@ -168,10 +172,9 @@ public class UI_Controller : MonoBehaviour
         {            
             Win_Obj.DOFade(0, 0.3f).OnComplete(() => {
                 Win_Obj.interactable = false;
-                Win_Obj.blocksRaycasts = false;                
+                Win_Obj.blocksRaycasts = false;
             });
-        }
-        
+        }        
     }
 
     public void Back_Main()
@@ -184,7 +187,7 @@ public class UI_Controller : MonoBehaviour
         GameManager.Instance.cam_.transform.DOMove(GameManager.Instance.Main_Point.localPosition, 3).OnComplete(() => {
             Main_Menu.DOFade(1, 0.3f);
             Main_Menu.interactable = true;
-            Main_Menu.blocksRaycasts = true;            
+            Main_Menu.blocksRaycasts = true;
         });
     }
 
@@ -271,6 +274,24 @@ public class UI_Controller : MonoBehaviour
             });
         }
     }
+
+    public void Buy_Skins_Controller(int index)
+    {
+        if (index == 1)
+        {
+            Buy_Skins.interactable = true;
+            Buy_Skins.blocksRaycasts = true;
+            Buy_Skins.DOFade(1, 0.3f);
+        }
+        else
+        {
+            Buy_Skins.DOFade(0, 0.3f).OnComplete(() => {
+                Buy_Skins.interactable = false;
+                Buy_Skins.blocksRaycasts = false;
+            });
+        }
+    }
+
     public void Close_Start_Menu()
     {
         Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
@@ -297,5 +318,14 @@ public class UI_Controller : MonoBehaviour
     {
         Total_Fire.text = GameManager.Instance.Fire_Uses.ToString();
         Total_Busrt.text = GameManager.Instance.Burst_Uses.ToString();
+    }
+
+    public void ExitSkin()
+    {
+        foreach(Transform child in skins_Container)
+        {
+            if (child.gameObject.activeInHierarchy)
+                child.gameObject.SetActive(false);
+        }
     }
 }

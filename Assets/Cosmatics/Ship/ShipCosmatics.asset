@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efc650af47ef3643a465588ed722537, type: 3}
   m_Name: ShipCosmatics
   m_EditorClassIdentifier: 
-  ship_skins: []
+  ship_skins:
+  - Cover: {fileID: 21300000, guid: 8a65d8a0d6195dd4086ab80fed30b660, type: 3}
+    anim: {fileID: 9100000, guid: a3880ed5e2a2ebd4882ea1478a94e047, type: 2}
+    half_1: {fileID: 21300000, guid: ad4580c3edfb15446b03ef9045f4a824, type: 3}
+    half_2: {fileID: 21300000, guid: 0c05bd8ace96c2742bc219fdb254210d, type: 3}
+    cost:
+      Coins: 0
+      Diamond: 0

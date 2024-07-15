@@ -32,6 +32,37 @@ public class Player : MonoBehaviour
     [HideInInspector] public int _selectedBullet;
     public List<(int, int)> _bulletsLimit = new List<(int, int)>();
 
+    [Header("Cosmatic")]
+    public ShipCosmaticData shipCosmatic;
+    [HideInInspector] public int _selectedShip;
+    public Animator Ship;
+
+    [Space]
+    public CanonSkins CannonCosmatic;
+    [HideInInspector] public int _selectedCannon;
+    public Animator Cannon;
+    public SpriteRenderer Stand;
+
+    [Space]
+    public SailCosmaticData sailCosmatic;
+    [HideInInspector] public int _selectedSail;
+    public Animator sail;
+
+    [Space]
+    public HelmCosmaticData helmCosmatic;
+    [HideInInspector] public int _selectedHelm;
+    public Animator helm;
+
+    [Space]
+    public FlagCosmaticData flagCosmatic;
+    [HideInInspector] public int _selectedFlag;
+    public Animator Flag;
+
+    [Space]
+    public AnchorCosmaticData anchorCosmatic;
+    [HideInInspector] public int _selectedAnchor;
+    public SpriteRenderer[] anchors;
+
     void Start()
     {
         ready = false;
@@ -41,6 +72,8 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         impulseSource = GetComponent<CinemachineImpulseSource>();
         SelectBullet(0);
+
+        GetAllSkins();
     }
 
     void Update()
@@ -312,5 +345,53 @@ public class Player : MonoBehaviour
         {
             _bulletsLimit.RemoveAll(tuple => tuple.Item1 == itemToRemove);
         }
+    }
+
+    public void GetAllSkins()
+    {
+        GetShip_Skin(_selectedShip);
+        GetSail_skin(_selectedSail);
+        GetFlag_skin(_selectedFlag);
+        GetHelm_skin(_selectedHelm);
+        GetCannon_skin(_selectedCannon);
+        GetAnchor_skin(_selectedAnchor);
+    }
+
+   private void GetShip_Skin(int index)
+   {
+        ShipCosmatic cos = shipCosmatic.Get_Skin(index);
+        Ship.runtimeAnimatorController = cos.anim;
+   }
+
+    private void GetSail_skin(int index)
+    {
+        Cosmatic cos = sailCosmatic.Get_Skin(index);
+        sail.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetFlag_skin(int index)
+    {
+        Cosmatic cos = flagCosmatic.Get_Skin(index);
+        Flag.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetHelm_skin(int index)
+    {
+        Cosmatic cos = helmCosmatic.Get_Skin(index);
+        helm.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetCannon_skin(int index)
+    {
+        CanonCosmaticData data = CannonCosmatic.Get_Skin(index);
+        Cannon.runtimeAnimatorController = data.anim;
+        Stand.sprite = data.Stand;
+    }
+
+    private void GetAnchor_skin(int index)
+    {
+        AnchorCosmatic cos = anchorCosmatic.Get_Skin(index);
+        anchors[0].sprite = cos.Top;
+        anchors[1].sprite = cos.Bottom;
     }
 }
