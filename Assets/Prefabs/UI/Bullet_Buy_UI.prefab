@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7172550092190915562}
   - component: {fileID: 8675311418373261168}
   - component: {fileID: 6744662543029296431}
+  - component: {fileID: 2737583651538712890}
   m_Layer: 5
   m_Name: Moreinfo
   m_TagString: Untagged
@@ -146,6 +147,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2737583651538712890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108495037958951945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547fa98ae783a2b47acd638ed1b2f441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &128164483515664302
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,6 +611,7 @@ GameObject:
   - component: {fileID: 2460731480295715884}
   - component: {fileID: 2460731480295715874}
   - component: {fileID: 3898086891607814095}
+  - component: {fileID: 5883037517138292088}
   m_Layer: 5
   m_Name: Buy_Button
   m_TagString: Untagged
@@ -741,6 +755,18 @@ MonoBehaviour:
   BulletName: {fileID: 2460731479335201453}
   BulletSprite: {fileID: 2460731478788033097}
   infos: {fileID: 0}
+--- !u!114 &5883037517138292088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460731480295715886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547fa98ae783a2b47acd638ed1b2f441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2460731480505532394
 GameObject:
   m_ObjectHideFlags: 0

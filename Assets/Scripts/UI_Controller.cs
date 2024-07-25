@@ -167,6 +167,10 @@ public class UI_Controller : MonoBehaviour
             Getting_Ready_Object.DOFade(0, 0.1f);
             Getting_Ready_Object.interactable = false;
             Getting_Ready_Object.blocksRaycasts = false;
+            if (state.ToLower().Contains("win"))
+                State_Win.color = Color.green;
+            else
+                State_Win.color = Color.red;
         }
         else
         {            

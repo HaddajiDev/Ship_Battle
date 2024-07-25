@@ -27,6 +27,8 @@ public class Shop : MonoBehaviour
             UI_Controller.instance.bullet_slot_Extra.transform.parent.gameObject.SetActive(true);
             UI_Controller.instance.Extra_Bullet_Buy_Button.SetActive(false);
         }
+
+        
     }
 
     public void Buy_Bullet(int index)
@@ -195,8 +197,6 @@ public class Shop : MonoBehaviour
         }
     }
 
-  
-
     public void BuyShip_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.shipCosmatic.Get_Skin(index).cost;
@@ -222,7 +222,7 @@ public class Shop : MonoBehaviour
             skins.Add_Skin(skins.Sail_Skins, index);
 
             UI_Controller.instance.SetCurrencyUI();
-            GameManager.Instance.SaveData("sail_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("sail_skins", skins.Sail_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
         }
@@ -237,7 +237,7 @@ public class Shop : MonoBehaviour
             skins.Add_Skin(skins.Flag_Skins, index);
 
             UI_Controller.instance.SetCurrencyUI();
-            GameManager.Instance.SaveData("flag_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("flag_skins", skins.Flag_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
         }
@@ -252,7 +252,7 @@ public class Shop : MonoBehaviour
             skins.Add_Skin(skins.Cannon_Skins, index);
 
             UI_Controller.instance.SetCurrencyUI();
-            GameManager.Instance.SaveData("cannon_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("cannon_skins", skins.Cannon_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
         }
@@ -265,13 +265,30 @@ public class Shop : MonoBehaviour
             GameManager.Instance.Coins -= cost.Coins;
             GameManager.Instance.Diamond -= cost.Diamond;
             skins.Add_Skin(skins.Anchors_Skins, index);
-
+            
             UI_Controller.instance.SetCurrencyUI();
-            GameManager.Instance.SaveData("anchor_skins", skins.Ships_Skins);
+            GameManager.Instance.SaveData("anchor_skins", skins.Anchors_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
         }
     }
+
+    public void BuyHelm_Skin(int index)
+    {
+        Cost cost = GameManager.Instance.player_1.helmCosmatic.Get_Skin(index).cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+            skins.Add_Skin(skins.Helm_Skins, index);
+
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("helm_skins", skins.Helm_Skins);
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+    }
+
     //public void Clear_Slot_1()
     //{
     //    //sprite null X or smth

@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
         }
+
+        Debug.Log(CrazySDK.Data.GetString("anchor_skins"));
     }
 
     public void Play()
@@ -431,13 +433,16 @@ public class GameManager : MonoBehaviour
         CrazySDK.Data.SetString("imgUrl", "");
         CrazySDK.Data.SetString("token", "");
 
+        //player bullets
         SetList("bullets", shop.bullets.data);
 
+        //skins
         SetList("ship_skins", shop.skins.Ships_Skins);
         SetList("sail_skins", shop.skins.Sail_Skins);
         SetList("flag_skins", shop.skins.Flag_Skins);
         SetList("cannon_skins", shop.skins.Cannon_Skins);
         SetList("anchor_skins", shop.skins.Anchors_Skins);
+        SetList("helm_skins", shop.skins.Helm_Skins);
     }
 
     void LoadData()
@@ -469,11 +474,13 @@ public class GameManager : MonoBehaviour
         //Player Bullets
         LoadList("bullets", shop.bullets.data);
 
+        //skins
         LoadList("ship_skins", shop.skins.Ships_Skins);
         LoadList("sail_skins", shop.skins.Sail_Skins);
         LoadList("flag_skins", shop.skins.Flag_Skins);
         LoadList("cannon_skins", shop.skins.Cannon_Skins);
         LoadList("anchor_skins", shop.skins.Anchors_Skins);
+        LoadList("helm_skins", shop.skins.Helm_Skins);
     }
 
     public void SetList(string key, List<int> list)
@@ -489,8 +496,7 @@ public class GameManager : MonoBehaviour
         if (!string.IsNullOrEmpty(intListString))
         {
             string[] stringArray = intListString.Split(',');
-            list = new List<int>();
-
+            list.Clear();
             foreach (string str in stringArray)
             {
                 int value;
@@ -501,6 +507,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 
     public async Task DownloadImageAsync(string imageUrl)
     {
