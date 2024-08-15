@@ -443,6 +443,14 @@ public class GameManager : MonoBehaviour
         SetList("cannon_skins", shop.skins.Cannon_Skins);
         SetList("anchor_skins", shop.skins.Anchors_Skins);
         SetList("helm_skins", shop.skins.Helm_Skins);
+
+        //selected skin
+        CrazySDK.Data.SetInt("select_skin_ship", player_1._selectedShip);
+        CrazySDK.Data.SetInt("select_skin_sail", player_1._selectedSail);
+        CrazySDK.Data.SetInt("select_skin_flag", player_1._selectedFlag);
+        CrazySDK.Data.SetInt("select_skin_cannon", player_1._selectedCannon);
+        CrazySDK.Data.SetInt("select_skin_anchor", player_1._selectedAnchor);
+        CrazySDK.Data.SetInt("select_skin_helm", player_1._selectedHelm);
     }
 
     void LoadData()
@@ -481,6 +489,15 @@ public class GameManager : MonoBehaviour
         LoadList("cannon_skins", shop.skins.Cannon_Skins);
         LoadList("anchor_skins", shop.skins.Anchors_Skins);
         LoadList("helm_skins", shop.skins.Helm_Skins);
+
+
+        //selected skins
+        player_1._selectedShip =  CrazySDK.Data.GetInt("select_skin_ship");
+        player_1._selectedSail = CrazySDK.Data.GetInt("select_skin_sail");
+        player_1._selectedFlag = CrazySDK.Data.GetInt("select_skin_flag");
+        player_1._selectedCannon = CrazySDK.Data.GetInt("select_skin_cannon");
+        player_1._selectedAnchor = CrazySDK.Data.GetInt("select_skin_anchor");
+        player_1._selectedHelm = CrazySDK.Data.GetInt("select_skin_helm");
     }
 
     public void SetList(string key, List<int> list)

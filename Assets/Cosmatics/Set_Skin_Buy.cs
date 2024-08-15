@@ -32,6 +32,8 @@ public class Set_Skin_Buy : MonoBehaviour
             ShipCosmatic shipSkin = shipCosmatic.Get_Skin(index);
             if (Shop.Instance.skins.Ships_Skins.Contains(index))
             {
+                //select
+                BuyButton.GetComponent<Button>().interactable = false;
                 BuyButton.transform.GetChild(0).gameObject.SetActive(true);
                 BuyButton.transform.GetChild(1).gameObject.SetActive(false);
             }
