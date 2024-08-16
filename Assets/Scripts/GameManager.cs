@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         Coins_Start = Coins;
         Reset_Ships();
 
-
+        player_1.GetAllSkins();
         player_2.Get_Stats(Current_Level);
 
         turn = 2;

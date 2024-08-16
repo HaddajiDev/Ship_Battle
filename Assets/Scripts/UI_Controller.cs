@@ -20,8 +20,7 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Select_Bullets;
     public CanvasGroup Win_Obj;
     public CanvasGroup Buy_Upgrades;
-    public CanvasGroup Buy_Skins;
-    public CanvasGroup Select_Skins;
+    public CanvasGroup Buy_Skins;    
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -297,22 +296,7 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
-    public void Select_Skins_Controller(int index)
-    {
-        if (index == 1)
-        {
-            Select_Skins.interactable = true;
-            Select_Skins.blocksRaycasts = true;
-            Select_Skins.DOFade(1, 0.3f);
-        }
-        else
-        {
-            Select_Skins.DOFade(0, 0.3f).OnComplete(() => {
-                Select_Skins.interactable = false;
-                Select_Skins.blocksRaycasts = false;
-            });
-        }
-    }
+
 
     public void Close_Start_Menu()
     {
