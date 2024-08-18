@@ -16,7 +16,12 @@ public class Cave_Collider : MonoBehaviour
             {                
                 Invoke("Check_Turns", 2);
             }
-                
+
+            if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)
+            {
+                if (!GameManager.Instance.MissShot)
+                    GameManager.Instance.MissShot = true;
+            }
         }
     }
 

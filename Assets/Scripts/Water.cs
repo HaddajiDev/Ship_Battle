@@ -44,6 +44,13 @@ public class Water : MonoBehaviour
             {
                 collision.gameObject.GetComponentInChildren<ParticleSystem>().Stop();
             }
+            if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)
+            {
+                if (!GameManager.Instance.MissShot)
+                    GameManager.Instance.MissShot = true;
+            }
+             
+            
         }
     }
    

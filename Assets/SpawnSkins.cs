@@ -20,42 +20,42 @@ public class SpawnSkins : MonoBehaviour
     {
         if (part == Part.ship)
         {
-            for (int i = 1; i < shipCosmatic.Get_Lenght; i++)
+            for (int i = 0; i < shipCosmatic.Get_Lenght; i++)
             {
                 SpawnStuff(Set_Skin_Buy.Part.ship, i);
             }
         }
         else if (part == Part.sail)
         {
-            for (int i = 1; i < sailCosmatic.Get_Lenght; i++)
+            for (int i = 0; i < sailCosmatic.Get_Lenght; i++)
             {
                 SpawnStuff(Set_Skin_Buy.Part.sail, i);
             }
         }
         else if (part == Part.flag)
         {
-            for (int i = 1; i < flagCosmatic.Get_Lenght; i++)
+            for (int i = 0; i < flagCosmatic.Get_Lenght; i++)
             {
                 SpawnStuff(Set_Skin_Buy.Part.flag, i);
             }
         }
         else if (part == Part.helm)
         {            
-            for (int i = 1; i < helmCosmatic.Get_Lenght; i++)
+            for (int i = 0; i < helmCosmatic.Get_Lenght; i++)
             {
                 SpawnStuff(Set_Skin_Buy.Part.helm, i);
             }
         }
         else if (part == Part.cannon)
         {
-            for (int i = 1; i < CannonCosmatic.GetLength; i++)
+            for (int i = 0; i < CannonCosmatic.GetLength; i++)
             {
                 SpawnStuff(Set_Skin_Buy.Part.cannon, i);
             }                
         }
         else if (part == Part.anchor)
         {
-            for (int i = 1; i < anchorCosmatic.Get_Lenght; i++)
+            for (int i = 0; i < anchorCosmatic.Get_Lenght; i++)
             {
                 SpawnStuff(Set_Skin_Buy.Part.anchor, i);
             }

@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 ///<summary>
 ///
@@ -42,6 +44,17 @@ public class GameManager : MonoBehaviour
 
     [Header("Ships")]
     public GameObject[] Ships;
+
+    [Header("Quests")]
+    public DateTime lastLogin;
+    public List<int> currentQuests;
+    public QuestData questsData;
+    public int WinCount;
+    public int FireShots;
+    public bool MissShot;
+    public int noMissShots;
+
+    [Space(20)]
 
     public Shop shop;
     public UI_Controller uI_Controller;
@@ -85,8 +98,6 @@ public class GameManager : MonoBehaviour
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
         }
-
-        Debug.Log(CrazySDK.Data.GetString("anchor_skins"));
     }
 
     public void Play()
@@ -95,10 +106,11 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Menu_BG.blocksRaycasts = true;
         UI_Controller.instance.Menu_BG.DOFade(1, 0.5f);
         UI_Controller.instance.Level_Counter.text = Current_Level.ToString();
+        UI_Controller.instance.SetAbilitesCount();
     }
 
     public void Start_Game()
-    {
+    {        
         //ui controller
         UI_Controller.instance.Main_Menu.DOFade(0, 0.3f);
         UI_Controller.instance.Main_Menu.interactable = false;
@@ -123,17 +135,14 @@ public class GameManager : MonoBehaviour
         });
         UI_Controller.instance.Menu_BG.interactable = false;
         UI_Controller.instance.Menu_BG.blocksRaycasts = false;
-
+        
         Coins_Start = Coins;
         Reset_Ships();
-
+        Set_Player();
         player_1.GetAllSkins();
         player_2.Get_Stats(Current_Level);
-
         turn = 2;
-
-        Set_Player();
-
+        MissShot = false;
         CrazySDK.Game.GameplayStart();
     }
 
@@ -185,8 +194,13 @@ public class GameManager : MonoBehaviour
     {
         if (Fire_Uses == 0)
             UI_Controller.instance.Fire_Object.SetActive(false);
+        else
+            UI_Controller.instance.Fire_Object.SetActive(true);
+
         if (Burst_Uses == 0)
             UI_Controller.instance.Burst_Object.SetActive(false);
+        else
+            UI_Controller.instance.Burst_Object.SetActive(true);
     }
     public void Get_Fire()
     {
@@ -269,12 +283,19 @@ public class GameManager : MonoBehaviour
     {
         if (UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index == 0)
             UI_Controller.instance.Select_Bullet_1.gameObject.SetActive(false);
+        else
+            UI_Controller.instance.Select_Bullet_1.gameObject.SetActive(true);
 
         if (UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().index == 0)
             UI_Controller.instance.Select_Bullet_2.gameObject.SetActive(false);
+        else
+            UI_Controller.instance.Select_Bullet_2.gameObject.SetActive(true);
+
         if (Shop.Instance.Got_Extra_Slot == 1)
         {
-            if (UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().index != 0)
+            if (UI_Controller.instance.bullet_slot_Extra.GetComponent<Bullet_Slot>().index == 0)
+                UI_Controller.instance.Select_Bullet_Extra.gameObject.SetActive(false);
+            else
                 UI_Controller.instance.Select_Bullet_Extra.gameObject.SetActive(true);
 
             UI_Controller.instance.Select_Bullet_Extra.onClick.RemoveAllListeners();
@@ -335,6 +356,83 @@ public class GameManager : MonoBehaviour
     {        
         string bulletList = string.Join(",", value.ConvertAll(i => i.ToString()).ToArray());
         CrazySDK.Data.SetString(key, bulletList);
+    }
+    public void SaveLastLogin()
+    {
+        lastLogin = DateTime.Now;
+        CrazySDK.Data.SetString("LastLogin", lastLogin.ToString("o"));
+    }
+    public bool Has24HoursPassed()
+    {
+        if (CrazySDK.Data.HasKey("LastLogin"))
+        {
+            string lastLoginStr = CrazySDK.Data.GetString("LastLogin");
+            DateTime lastLogin = DateTime.Parse(lastLoginStr);
+
+            TimeSpan timeSinceLastLogin = DateTime.Now - lastLogin;            
+            if (timeSinceLastLogin.TotalHours >= 24)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void GenerateQuests()
+    {
+        currentQuests.Clear();
+        HashSet<int> uniqueQuests = new HashSet<int>();
+        HashSet<Quest.Type> usedQuestTypes = new HashSet<Quest.Type>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            System.Random random = new System.Random();
+            int value;
+            Quest quest;
+
+            do
+            {
+                value = random.Next(0, questsData.Get_Length);
+                quest = questsData.Get_Quest(value);
+            } while (uniqueQuests.Contains(value) || usedQuestTypes.Contains(quest.type));
+            
+            uniqueQuests.Add(value);
+            usedQuestTypes.Add(quest.type);
+            
+            currentQuests.Add(value);
+        }
+
+        SetQuestsValues();
+    }
+
+    private void SetQuestsValues()
+    {
+        CrazySDK.Data.SetInt("WinCount", 0);
+        CrazySDK.Data.SetInt("FireShots", 0);
+        CrazySDK.Data.SetInt("noMissShots", 0);
+    }
+
+    private void LoadQuestValue()
+    {
+        WinCount =  CrazySDK.Data.GetInt("WinCount");
+        FireShots = CrazySDK.Data.GetInt("FireShots");
+        noMissShots =  CrazySDK.Data.GetInt("noMissShots");
+    }
+
+    public void CheckForQuests()
+    {
+        if (Has24HoursPassed())
+        {
+            GenerateQuests();            
+            SaveLastLogin();
+            SetList("current_Quests", currentQuests);
+            SetQuestsValues();
+        }
+        else
+        {
+            LoadList("current_Quests", currentQuests);
+            LoadQuestValue();
+        }
     }
 
 
@@ -451,6 +549,12 @@ public class GameManager : MonoBehaviour
         CrazySDK.Data.SetInt("select_skin_cannon", player_1._selectedCannon);
         CrazySDK.Data.SetInt("select_skin_anchor", player_1._selectedAnchor);
         CrazySDK.Data.SetInt("select_skin_helm", player_1._selectedHelm);
+
+        SaveLastLogin();
+
+        //current Quests
+        GenerateQuests();
+        SetList("current_Quests", currentQuests);        
     }
 
     void LoadData()
@@ -498,10 +602,18 @@ public class GameManager : MonoBehaviour
         player_1._selectedCannon = CrazySDK.Data.GetInt("select_skin_cannon");
         player_1._selectedAnchor = CrazySDK.Data.GetInt("select_skin_anchor");
         player_1._selectedHelm = CrazySDK.Data.GetInt("select_skin_helm");
+
+        //quests
+        CheckForQuests();
+        
     }
 
     public void SetList(string key, List<int> list)
     {
+        if (key.Contains("skins"))
+        {
+            list.Add(0);
+        }        
         string _list = string.Join(",", list.ConvertAll(i => i.ToString()).ToArray());
         CrazySDK.Data.SetString(key, _list);
     }

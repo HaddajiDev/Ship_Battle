@@ -60,9 +60,4 @@ public class Check_Bought_Bullet : MonoBehaviour
         else
             infos.SetActive(true);
     }
-
-    private void OnMouseOver()
-    {
-        
-    }
 }

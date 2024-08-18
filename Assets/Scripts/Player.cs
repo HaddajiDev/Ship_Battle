@@ -141,6 +141,7 @@ public class Player : MonoBehaviour
                         shootBurst(swipeDirection, forceStrength);
                     }
                     GameManager.Instance.Burst_Uses--;
+                    GameManager.Instance.SaveData("burstUses", GameManager.Instance.Burst_Uses);
                 }
                 else
                 {
@@ -184,7 +185,11 @@ public class Player : MonoBehaviour
     void afterShoot()
     {
         if (inFire && GameManager.Instance.Fire_Uses != 0)
+        {
             GameManager.Instance.Fire_Uses--;
+            GameManager.Instance.SaveData("fireUses", GameManager.Instance.Fire_Uses);
+        }
+            
 
         if (cannonFireEffect != null)
             Instantiate(cannonFireEffect, shootPoint.position, transform.rotation);

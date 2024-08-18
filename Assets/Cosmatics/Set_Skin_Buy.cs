@@ -24,7 +24,6 @@ public class Set_Skin_Buy : MonoBehaviour
     public Image image;
     public GameObject BuyButton;
 
-
     private void Start()
     {        
         if(part == Part.ship)
@@ -137,7 +136,7 @@ public class Set_Skin_Buy : MonoBehaviour
         }
         else if (part == Part.cannon)
         {
-            Cosmatic cannonSkin = CannonCosmatic.Get_Skin(index);
+            CanonCosmaticData cannonSkin = CannonCosmatic.Get_Skin(index);
             if (Shop.Instance.skins.Cannon_Skins.Contains(index))
             {
                 BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -336,6 +335,75 @@ public class Set_Skin_Buy : MonoBehaviour
         GameManager.Instance.SaveData("select_skin_ship", index);
         BuyButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().text = "Selected";
         BuyButton.GetComponent<Button>().interactable = false;
+    }
+
+    public void Show_Skin()
+    {
+        if (part == Part.ship)
+        {
+            ShipCosmatic shipSkin = shipCosmatic.Get_Skin(index);
+            UI_Controller.instance.Show_Skin_Controller(1);
+            GameObject show = UI_Controller.instance.Show_Skin.gameObject;
+
+            Image ship = show.transform.Find("BG/ship").GetComponent<Image>();
+
+            ship.sprite = shipSkin.Cover;
+        }
+        else if (part == Part.sail)
+        {
+            Cosmatic sailSkin = sailCosmatic.Get_Skin(index);
+            UI_Controller.instance.Show_Skin_Controller(1);
+            GameObject show = UI_Controller.instance.Show_Skin.gameObject;
+
+            Image sail = show.transform.Find("BG/sail").GetComponent<Image>();
+
+            sail.sprite = sailSkin.Cover;
+        }
+        else if (part == Part.flag)
+        {
+            Cosmatic flagSkin = flagCosmatic.Get_Skin(index);
+            UI_Controller.instance.Show_Skin_Controller(1);
+            GameObject show = UI_Controller.instance.Show_Skin.gameObject;
+
+            Image flag = show.transform.Find("BG/flag").GetComponent<Image>();
+
+            flag.sprite = flagSkin.Cover;
+        }
+        else if (part == Part.helm)
+        {
+            Cosmatic helmSkin = helmCosmatic.Get_Skin(index);
+            UI_Controller.instance.Show_Skin_Controller(1);
+            GameObject show = UI_Controller.instance.Show_Skin.gameObject;
+
+            Image helm = show.transform.Find("BG/helm").GetComponent<Image>();
+
+            helm.sprite = helmSkin.Cover;
+            
+        }
+        else if (part == Part.cannon)
+        {
+            CanonCosmaticData cannonSkin = CannonCosmatic.Get_Skin(index);
+            UI_Controller.instance.Show_Skin_Controller(1);
+            GameObject show = UI_Controller.instance.Show_Skin.gameObject;
+
+            Image cannon_Top = show.transform.Find("BG/cannon/top").GetComponent<Image>();
+            Image cannon_stand = show.transform.Find("BG/cannon/stand").GetComponent<Image>();
+
+            cannon_Top.sprite = cannonSkin.Cover;
+            cannon_stand.sprite = cannonSkin.Stand;
+        }
+        else if (part == Part.anchor)
+        {
+            AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(index);
+            UI_Controller.instance.Show_Skin_Controller(1);
+            GameObject show = UI_Controller.instance.Show_Skin.gameObject;
+
+            Image anchor_Top = show.transform.Find("BG/anchor/1").GetComponent<Image>();
+            Image anchor_Bottom = show.transform.Find("BG/anchor/2").GetComponent<Image>();
+
+            anchor_Top.sprite = anchorSkin.Top;
+            anchor_Bottom.sprite = anchorSkin.Bottom;
+        }
     }
 
     public enum Part

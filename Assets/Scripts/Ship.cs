@@ -104,7 +104,18 @@ public class Ship : MonoBehaviour
             {
                 Instantiate(Fire_Effect, collision.transform.position, Quaternion.identity, gameObject.transform);
                 collision.gameObject.GetComponentInChildren<ParticleSystem>().Stop();
-                GameManager.Instance.Coins += player ? Random.Range(5, 11) : 0;
+                if (!player)
+                {
+                    GameManager.Instance.Coins += player ? Random.Range(5, 11) : 0;
+
+                    //Quests
+                    GameManager.Instance.FireShots++;
+                    GameManager.Instance.SaveData("FireShots", GameManager.Instance.FireShots);
+                    for (int i = 0; i < QuestSpawner.instance.questsBanners.Count; i++)
+                    {
+                        QuestSpawner.instance.questsBanners[i].UpdateStats();
+                    }
+                }                
             }
 
             //Coins
@@ -137,14 +148,19 @@ public class Ship : MonoBehaviour
             if (player)
             {
                 Invoke("Win_Obj_Lose", 3);
-                Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
+                fo.Ship = true;
                 UI_Controller.instance.Getting_Ready_Object.interactable = false;
                 UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
             }
             else
             {
                 Invoke("Win_Obj_Win", 3);
-                Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity).transform.localScale = new Vector3(-1, 1, 0);
+                GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                DestroyedShip.transform.localScale = new Vector3(-1, 1, 0);
+                Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
+                fo.Ship = false;
             }            
             GameManager.Instance.Reset_play();            
         }
@@ -158,9 +174,26 @@ public class Ship : MonoBehaviour
         if(GameManager.Instance.Current_Level < GameManager.Instance.player_2.levels.Get_Lenght - 1)
         {
             GameManager.Instance.Current_Level++;
-            GameManager.Instance.SaveData("level", GameManager.Instance.Current_Level);
+            GameManager.Instance.SaveData("level", GameManager.Instance.Current_Level);            
         }
-            
+        //Quests
+        GameManager.Instance.WinCount++;
+        GameManager.Instance.SaveData("WinCount", GameManager.Instance.WinCount);
+        for (int i = 0; i < QuestSpawner.instance.questsBanners.Count; i++)
+        {
+            QuestSpawner.instance.questsBanners[i].UpdateStats();
+        }
+
+        if (!GameManager.Instance.MissShot)
+        {
+            GameManager.Instance.noMissShots++;
+            GameManager.Instance.SaveData("noMissShots", GameManager.Instance.noMissShots);
+            for (int i = 0; i < QuestSpawner.instance.questsBanners.Count; i++)
+            {
+                QuestSpawner.instance.questsBanners[i].UpdateStats();
+            }
+        }
+
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
 
