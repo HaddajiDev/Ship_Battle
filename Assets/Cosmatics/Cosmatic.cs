@@ -6,8 +6,10 @@ using UnityEngine;
 public class Cosmatic
 {
     public Sprite Cover;
+    public Sprite[] spriteSheet;
     public RuntimeAnimatorController anim;
 
     [SerializeField]
     public Cost cost;
+    public bool Ad_Skin = false;
 }

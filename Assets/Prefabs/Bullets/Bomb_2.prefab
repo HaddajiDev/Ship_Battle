@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 3150539136020477450}
   - component: {fileID: 4336075002446396745}
   - component: {fileID: 2831085060783292048}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bomb_2
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8756439959682033215}
   - component: {fileID: 5825701296923467375}
   - component: {fileID: 8832821519071565257}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,7 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flag_skins:
   - Cover: {fileID: 21300000, guid: 7fbbe9d0de1f3c64c94a6ecd96028b59, type: 3}
+    spriteSheet:
+    - {fileID: 21300000, guid: 7fbbe9d0de1f3c64c94a6ecd96028b59, type: 3}
+    - {fileID: 21300000, guid: e00a867b86ff82247b4228c2045ad977, type: 3}
+    - {fileID: 21300000, guid: de3189218008d8246b6818000078bcbf, type: 3}
+    - {fileID: 21300000, guid: 2614776d426042e4cb61dbe442ec5568, type: 3}
+    - {fileID: 21300000, guid: ee312e9d498c1ca4e92f4c6ad3a2c137, type: 3}
+    - {fileID: 21300000, guid: ecb834e723b6c2b4389e03f1ac801b92, type: 3}
+    - {fileID: 21300000, guid: 639f1726c8b91794c84dda567a3a1383, type: 3}
+    - {fileID: 21300000, guid: 07bd712aef1530743a6f9e8253634b92, type: 3}
+    - {fileID: 21300000, guid: d597050e12231d2439b2ab3c4c34daac, type: 3}
     anim: {fileID: 9100000, guid: a2b8d771162413e4ababc4e6d0daaaf9, type: 2}
     cost:
       Coins: 0
       Diamond: 0
+    Ad_Skin: 0
+  - Cover: {fileID: 173059716, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    spriteSheet:
+    - {fileID: 173059716, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: -107955053, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: 1998663136, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: -1138756603, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: 774674817, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: -367769665, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: 733307409, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: 194624353, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    - {fileID: 592220082, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
+    anim: {fileID: 9100000, guid: 3dd59309466f5724ebaed592a7448cd9, type: 2}
+    cost:
+      Coins: 2000
+      Diamond: 500
+    Ad_Skin: 0

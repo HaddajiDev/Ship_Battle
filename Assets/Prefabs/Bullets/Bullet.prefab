@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6019814541299898813}
   - component: {fileID: 4408353589533658653}
   - component: {fileID: 461049137759043113}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -140,6 +140,8 @@ MonoBehaviour:
   Damage: 0
   type: 0
   Fire_Partical: {fileID: 821748811357637068, guid: cb834dfe182b96344a2428ec1ce2bd5c, type: 3}
+  Player_Bullet: 0
+  inFire: 0
 --- !u!95 &461049137759043113
 Animator:
   serializedVersion: 4

@@ -15,5 +15,6 @@ public class Quest
         wins,
         fireShots,
         noMissShots,
+        none
     }
 }

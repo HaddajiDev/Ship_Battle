@@ -48,6 +48,8 @@ public class Water : MonoBehaviour
             {
                 if (!GameManager.Instance.MissShot)
                     GameManager.Instance.MissShot = true;
+                GameManager.Instance.TotalShotsMiss++;
+                GameManager.Instance.SaveData("totalShotsMiss", GameManager.Instance.TotalShotsMiss);
             }
              
             
@@ -60,7 +62,7 @@ public class Water : MonoBehaviour
         if (!GameManager.Instance.isChecking)
         {
             GameManager.Instance.isChecking = true;
-            GameManager.Instance.Check_Turn();            
+            GameManager.Instance.Check_Turn();
         }
     }
 

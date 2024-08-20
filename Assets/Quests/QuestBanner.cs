@@ -85,7 +85,11 @@ public class QuestBanner : MonoBehaviour
             {
                 gameObject.SetActive(false);
             });
-        });        
+        });
+        if (GameManager.Instance.currentQuests.Count == 0)
+        {
+            QuestSpawner.instance.NoQuests.SetActive(true);
+        }
     }
     
 }

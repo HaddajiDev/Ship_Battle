@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
         cam.Follow = this.transform;
 
         Invoke("Destroy_bullet", 10);
-        Physics2D.IgnoreLayerCollision(6, 7);
+
 
         if (type == BulletType.Bomb)
         {
@@ -42,7 +42,7 @@ public class Bullet : MonoBehaviour
         if (this != null)
         {
             transform.DOScale(0, 1.5f).OnComplete(() =>
-            {
+            {                
                 Destroy(gameObject);
             });
         }
@@ -53,7 +53,6 @@ public class Bullet : MonoBehaviour
         Normal_Bullet,
         Bomb
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

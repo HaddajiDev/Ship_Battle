@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 578586210542590856}
   - component: {fileID: 606087502544065063}
   - component: {fileID: 7469785659457756637}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skull Bomb
   m_TagString: Bullet
   m_Icon: {fileID: 0}

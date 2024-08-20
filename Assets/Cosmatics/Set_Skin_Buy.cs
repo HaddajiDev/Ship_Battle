@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using CrazyGames;
 
 public class Set_Skin_Buy : MonoBehaviour
 {   
@@ -23,6 +24,9 @@ public class Set_Skin_Buy : MonoBehaviour
 
     public Image image;
     public GameObject BuyButton;
+
+    public GameObject CostObject;
+    public GameObject AdObject;
 
     private void Start()
     {        
@@ -47,11 +51,23 @@ public class Set_Skin_Buy : MonoBehaviour
                 BuyButton.transform.GetChild(1).gameObject.SetActive(false);
             }
             else
-            {                
-                Coins.text = shipSkin.cost.Coins.ToString();
-                Diammond.text = shipSkin.cost.Diamond.ToString();
+            {
+                if (shipSkin.Ad_Skin)
+                {
+                    AdObject.SetActive(true);
+                    CostObject.SetActive(false);
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => WatchAd());
+                }
+                else
+                {
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
+                    Coins.text = shipSkin.cost.Coins.ToString();
+                    Diammond.text = shipSkin.cost.Diamond.ToString();
+                }
             }
             image.sprite = shipSkin.Cover;
+            UI_Animator _animator = image.gameObject.GetComponent<UI_Animator>();
+            _animator.sprites = shipSkin.spriteSheet;            
         }
         else if(part == Part.sail)
         {
@@ -75,10 +91,22 @@ public class Set_Skin_Buy : MonoBehaviour
             }
             else
             {
-                Coins.text = sailSkin.cost.Coins.ToString();
-                Diammond.text = sailSkin.cost.Diamond.ToString();
+                if (sailSkin.Ad_Skin)
+                {
+                    AdObject.SetActive(true);
+                    CostObject.SetActive(false);
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => WatchAd());
+                }
+                else
+                {
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
+                    Coins.text = sailSkin.cost.Coins.ToString();
+                    Diammond.text = sailSkin.cost.Diamond.ToString();
+                }
             }
             image.sprite = sailSkin.Cover;
+            UI_Animator _animator = image.gameObject.GetComponent<UI_Animator>();
+            _animator.sprites = sailSkin.spriteSheet;            
         }
         else if (part == Part.flag)
         {
@@ -102,10 +130,22 @@ public class Set_Skin_Buy : MonoBehaviour
             }
             else
             {
-                Coins.text = flagSkin.cost.Coins.ToString();
-                Diammond.text = flagSkin.cost.Diamond.ToString();
+                if (flagSkin.Ad_Skin)
+                {
+                    AdObject.SetActive(true);
+                    CostObject.SetActive(false);
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => WatchAd());
+                }
+                else
+                {
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
+                    Coins.text = flagSkin.cost.Coins.ToString();
+                    Diammond.text = flagSkin.cost.Diamond.ToString();
+                }
             }
             image.sprite = flagSkin.Cover;
+            UI_Animator _animator = image.gameObject.GetComponent<UI_Animator>();
+            _animator.sprites = flagSkin.spriteSheet;            
         }
         else if (part == Part.helm)
         {
@@ -129,10 +169,22 @@ public class Set_Skin_Buy : MonoBehaviour
             }
             else
             {
-                Coins.text = helmSkin.cost.Coins.ToString();
-                Diammond.text = helmSkin.cost.Diamond.ToString();
+                if (helmSkin.Ad_Skin)
+                {
+                    AdObject.SetActive(true);
+                    CostObject.SetActive(false);
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => WatchAd());
+                }
+                else
+                {
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
+                    Coins.text = helmSkin.cost.Coins.ToString();
+                    Diammond.text = helmSkin.cost.Diamond.ToString();
+                }
             }
             image.sprite = helmSkin.Cover;
+            UI_Animator _animator = image.gameObject.GetComponent<UI_Animator>();
+            _animator.enabled = false;
         }
         else if (part == Part.cannon)
         {
@@ -156,14 +208,27 @@ public class Set_Skin_Buy : MonoBehaviour
             }
             else
             {
-                Coins.text = cannonSkin.cost.Coins.ToString();
-                Diammond.text = cannonSkin.cost.Diamond.ToString();
+                if (cannonSkin.Ad_Skin)
+                {
+                    AdObject.SetActive(true);
+                    CostObject.SetActive(false);
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => WatchAd());
+                }
+                else
+                {
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
+                    Coins.text = cannonSkin.cost.Coins.ToString();
+                    Diammond.text = cannonSkin.cost.Diamond.ToString();
+                }
             }
             image.sprite = cannonSkin.Cover;
+            UI_Animator _animator = image.gameObject.GetComponent<UI_Animator>();
+            _animator.enabled = false;
         }
         else if(part == Part.anchor)
         {
-            AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(index);
+            AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(index);            
+
             if (Shop.Instance.skins.Anchors_Skins.Contains(index))
             {
                 BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -183,11 +248,22 @@ public class Set_Skin_Buy : MonoBehaviour
             }
             else
             {
-                BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
-                Coins.text = anchorSkin.cost.Coins.ToString();
-                Diammond.text = anchorSkin.cost.Diamond.ToString();                
+                if (anchorSkin.Ad_Skin)
+                {
+                    AdObject.SetActive(true);
+                    CostObject.SetActive(false);
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => WatchAd());
+                }
+                else
+                {
+                    BuyButton.GetComponent<Button>().onClick.AddListener(() => BuySkin());
+                    Coins.text = anchorSkin.cost.Coins.ToString();
+                    Diammond.text = anchorSkin.cost.Diamond.ToString();
+                }                
             }
             image.sprite = anchorSkin.Bottom;
+            UI_Animator _animator = image.gameObject.GetComponent<UI_Animator>();
+            _animator.enabled = false;
         }
     }
 
@@ -247,23 +323,99 @@ public class Set_Skin_Buy : MonoBehaviour
             BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
             BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinAnchor(index));
         }
-    }    
+    }
+    public void WatchAd()
+    {        
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            Time.timeScale = 0;
+            UI_Controller.instance.Block.SetActive(true);
+            //mute audio
+            //ad Started
+        }, (error) =>
+        {
+            Time.timeScale = 1;
+            UI_Controller.instance.Block.SetActive(false);
+            UI_Controller.instance.Show_AdFeedback_Controller(1);
+            UI_Controller.instance.feed_sprite.sprite = UI_Controller.instance.failure;
+            UI_Controller.instance.feed_sprite.color = Color.red;
+            UI_Controller.instance.feed_text.text = "Someting went wrong try again later";
+            //unmute audio
+            //ad Error
+        }, () =>
+        {
+            //unmute audio
+            Time.timeScale = 1;
+            UI_Controller.instance.Block.SetActive(false);
+            UI_Controller.instance.Show_AdFeedback_Controller(1);
+            UI_Controller.instance.feed_sprite.sprite = UI_Controller.instance.succes;
+            UI_Controller.instance.feed_sprite.color = Color.green;
+            UI_Controller.instance.feed_text.text = "Congratulations!! You've unlocked a new skin for your ship";
+            CrazySDK.Game.HappyTime();
+            if (part == Part.ship)
+            {
+                GetSkinFromAd(Shop.Instance.skins.Ships_Skins, "ship_skins");
+                SelectSkinShip(index);
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinShip(index));
+            }
+            else if (part == Part.sail)
+            {
+                GetSkinFromAd(Shop.Instance.skins.Sail_Skins, "sail_skins");
+                SelectSkinSail(index);
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinSail(index));
+            }
+            else if (part == Part.flag)
+            {
+                GetSkinFromAd(Shop.Instance.skins.Flag_Skins, "flag_skins");
+                SelectSkinFlag(index);
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinFlag(index));
+            }
+            else if (part == Part.helm)
+            {
+                GetSkinFromAd(Shop.Instance.skins.Cannon_Skins, "helm_skins");
+                SelectSkinHelm(index);
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinHelm(index));
+            }
+            else if (part == Part.cannon)
+            {
+                GetSkinFromAd(Shop.Instance.skins.Cannon_Skins, "cannon_skins");
+                SelectSkinCannon(index);
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinCannon(index));
+            }
+            else if (part == Part.anchor)
+            {
+                GetSkinFromAd(Shop.Instance.skins.Anchors_Skins, "anchor_skins");
+                SelectSkinAnchor(index);
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinAnchor(index));
+            }
+        });
+    }
 
+    private void GetSkinFromAd(List<int> skinList, string key)
+    {
+        Shop.Instance.skins.Add_Skin(skinList, index);
+        GameManager.Instance.SaveData(key, skinList);
+        BuyButton.transform.GetChild(0).gameObject.SetActive(true);        
+        BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+        BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();        
+        AdObject.SetActive(false);
+    }
+    
     private void Update()
     {
         if (UI_Controller.instance.Buy_Skins.gameObject.activeInHierarchy)
         {
             if (part == Part.ship)
             {
-                CheckForSelected("select_skin_ship");
+                CheckForSelected("select_skin_ship");                
             }
             else if (part == Part.sail)
             {
-                CheckForSelected("select_skin_sail");
+                CheckForSelected("select_skin_sail");                
             }
             else if (part == Part.flag)
             {
-                CheckForSelected("select_skin_flag");
+                CheckForSelected("select_skin_flag");                
             }
             else if (part == Part.helm)
             {
@@ -276,9 +428,10 @@ public class Set_Skin_Buy : MonoBehaviour
             else if (part == Part.anchor)
             {
                 CheckForSelected("select_skin_anchor");
-            }
-        }
+            }            
+        }        
     }
+
 
     private void CheckForSelected(string key)
     {
@@ -341,33 +494,43 @@ public class Set_Skin_Buy : MonoBehaviour
     {
         if (part == Part.ship)
         {
-            ShipCosmatic shipSkin = shipCosmatic.Get_Skin(index);
+            ShipCosmatic shipSkin = shipCosmatic.Get_Skin(index);            
             UI_Controller.instance.Show_Skin_Controller(1);
             GameObject show = UI_Controller.instance.Show_Skin.gameObject;
 
             Image ship = show.transform.Find("BG/ship").GetComponent<Image>();
 
             ship.sprite = shipSkin.Cover;
+            UI_Animator _animator = ship.gameObject.GetComponent<UI_Animator>();
+            _animator.sprites = shipSkin.spriteSheet;
+            _animator.Func_PlayUIAnim();
         }
         else if (part == Part.sail)
         {
-            Cosmatic sailSkin = sailCosmatic.Get_Skin(index);
+            Cosmatic sailSkin = sailCosmatic.Get_Skin(index);            
             UI_Controller.instance.Show_Skin_Controller(1);
             GameObject show = UI_Controller.instance.Show_Skin.gameObject;
 
             Image sail = show.transform.Find("BG/sail").GetComponent<Image>();
 
             sail.sprite = sailSkin.Cover;
+            UI_Animator _animator = sail.gameObject.GetComponent<UI_Animator>();
+            _animator.sprites = sailSkin.spriteSheet;
+            _animator.Func_PlayUIAnim();
         }
         else if (part == Part.flag)
         {
-            Cosmatic flagSkin = flagCosmatic.Get_Skin(index);
+            Cosmatic flagSkin = flagCosmatic.Get_Skin(index);            
             UI_Controller.instance.Show_Skin_Controller(1);
+
             GameObject show = UI_Controller.instance.Show_Skin.gameObject;
 
             Image flag = show.transform.Find("BG/flag").GetComponent<Image>();
 
             flag.sprite = flagSkin.Cover;
+            UI_Animator _animator = flag.gameObject.GetComponent<UI_Animator>();
+            _animator.sprites = flagSkin.spriteSheet;
+            _animator.Func_PlayUIAnim();
         }
         else if (part == Part.helm)
         {
@@ -382,7 +545,7 @@ public class Set_Skin_Buy : MonoBehaviour
         }
         else if (part == Part.cannon)
         {
-            CanonCosmaticData cannonSkin = CannonCosmatic.Get_Skin(index);
+            CanonCosmaticData cannonSkin = CannonCosmatic.Get_Skin(index);            
             UI_Controller.instance.Show_Skin_Controller(1);
             GameObject show = UI_Controller.instance.Show_Skin.gameObject;
 
@@ -394,7 +557,7 @@ public class Set_Skin_Buy : MonoBehaviour
         }
         else if (part == Part.anchor)
         {
-            AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(index);
+            AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(index);            
             UI_Controller.instance.Show_Skin_Controller(1);
             GameObject show = UI_Controller.instance.Show_Skin.gameObject;
 

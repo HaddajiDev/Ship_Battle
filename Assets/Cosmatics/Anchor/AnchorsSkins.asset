@@ -18,13 +18,16 @@ MonoBehaviour:
     cost:
       Coins: 0
       Diamond: 0
+    Ad_Skin: 0
   - Top: {fileID: 21300000, guid: c28962fa04741c9478f7ab3848f5030e, type: 3}
     Bottom: {fileID: 21300000, guid: 3037804105cb2da4ca6d330a14b109d3, type: 3}
     cost:
       Coins: 2000
       Diamond: 50
+    Ad_Skin: 0
   - Top: {fileID: 21300000, guid: c28962fa04741c9478f7ab3848f5030e, type: 3}
     Bottom: {fileID: 21300000, guid: aa1aeeee34ab71040bbf01938fa8ad05, type: 3}
     cost:
       Coins: 5000
       Diamond: 120
+    Ad_Skin: 1

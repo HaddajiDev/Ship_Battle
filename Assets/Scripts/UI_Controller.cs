@@ -23,6 +23,7 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Buy_Skins;
     public CanvasGroup Show_Skin;
     public CanvasGroup Quests;
+    public CanvasGroup Ad_FeedBack;
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -67,9 +68,18 @@ public class UI_Controller : MonoBehaviour
     public TMP_Text username;
     public GameObject SignInButton;
     public GameObject AccountButton;
+    public TMP_Text Stats;
 
     [Header("Skins Stuff")]
     public Transform skins_Container;
+
+    [Header("Others")]
+    public Transform playButton;
+    public GameObject Block;
+    public Sprite succes;
+    public Sprite failure;
+    public Image feed_sprite;
+    public TMP_Text feed_text;
 
     private void Awake()
     {
@@ -83,7 +93,13 @@ public class UI_Controller : MonoBehaviour
 
         SetAbilitesCount();
         SetCurrencyUI();
+        SetPlayerStats();
+        
+        playButton.DOScale(new Vector3(1.05f, 1.05f, 1), 1)
+        .SetEase(Ease.InOutSine)
+        .SetLoops(-1, LoopType.Yoyo);
     }
+
     public void Check_Fire()
     {
         GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
@@ -111,7 +127,7 @@ public class UI_Controller : MonoBehaviour
         else if (my_img.sprite == null)
         {
             my_img.sprite = Check;
-            my_img.enabled = true;
+            my_img.enabled = true;            
             GameManager.Instance.player_1.inFire = true;
         }
     }
@@ -302,6 +318,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            Show_Skin.gameObject.SetActive(true);
             Show_Skin.interactable = true;
             Show_Skin.blocksRaycasts = true;
             Show_Skin.DOFade(1, 0.3f);
@@ -311,6 +328,7 @@ public class UI_Controller : MonoBehaviour
             Show_Skin.DOFade(0, 0.3f).OnComplete(() => {
                 Show_Skin.interactable = false;
                 Show_Skin.blocksRaycasts = false;
+                Show_Skin.gameObject.SetActive(false);
             });
         }
     }
@@ -328,6 +346,23 @@ public class UI_Controller : MonoBehaviour
             Quests.DOFade(0, 0.3f).OnComplete(() => {
                 Quests.interactable = false;
                 Quests.blocksRaycasts = false;
+            });
+        }
+    }
+
+    public void Show_AdFeedback_Controller(int index)
+    {
+        if (index == 1)
+        {
+            Ad_FeedBack.interactable = true;
+            Ad_FeedBack.blocksRaycasts = true;
+            Ad_FeedBack.DOFade(1, 0.3f);
+        }
+        else
+        {
+            Ad_FeedBack.DOFade(0, 0.3f).OnComplete(() => {
+                Ad_FeedBack.interactable = false;
+                Ad_FeedBack.blocksRaycasts = false;
             });
         }
     }
@@ -359,6 +394,27 @@ public class UI_Controller : MonoBehaviour
     {
         Total_Fire.text = GameManager.Instance.Fire_Uses.ToString();
         Total_Busrt.text = GameManager.Instance.Burst_Uses.ToString();
+    }
+
+    public void SetPlayerStats()
+    {
+        Stats.text =
+            $"Stats \n" +
+            $"Total Games Win : {GameManager.Instance.totalMatchWin} \n" +
+            $"Total Games Lost : {GameManager.Instance.totalMatchLost} \n" +
+            $"Total Shots Fired : {GameManager.Instance.TotalShotsFired} \n" +
+            $"Total Shots Missed : {GameManager.Instance.TotalShotsMiss} \n" +
+            $"Total Shots Hit : {GameManager.Instance.TotalShotsHit} \n" +
+            $"Total Fire Shots Hit : {GameManager.Instance.FireShotsHit}";
+    }
+
+    public void PlaySkinAnimation(GameObject parent)
+    {
+        UI_Animator[] _animator = parent.GetComponentsInChildren<UI_Animator>();
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {            
+            _animator[i].Func_PlayUIAnim();
+        }        
     }
 
     public void ExitSkin()

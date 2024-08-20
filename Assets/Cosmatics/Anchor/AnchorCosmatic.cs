@@ -10,4 +10,5 @@ public class AnchorCosmatic
 
     [SerializeField]
     public Cost cost;
+    public bool Ad_Skin = false;
 }

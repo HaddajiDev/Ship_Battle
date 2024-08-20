@@ -8,6 +8,10 @@ public class QuestSpawner : MonoBehaviour
     public GameObject QuestPrefab;
     public RectTransform container;
     public List<QuestBanner> questsBanners;
+    public GameObject NoQuests;
+
+    public GameObject QuestPop;
+    public Transform QuestPopContainer;
 
     private void Awake()
     {
@@ -23,10 +27,17 @@ public class QuestSpawner : MonoBehaviour
             quest.index = GameManager.Instance.currentQuests[i];
             questsBanners.Add(quest);
         }
+        if(GameManager.Instance.currentQuests.Count == 0)
+        {
+            NoQuests.SetActive(true);
+        }
     }
     
-    void Update()
+   public void SpawnQuestPopUp(QuestPopUp.Type type, int index)
     {
-        
+        GameObject ob = Instantiate(QuestPop, QuestPopContainer);
+        QuestPopUp pop = ob.GetComponent<QuestPopUp>();
+        pop.type = type;
+        pop.index = index;
     }
 }

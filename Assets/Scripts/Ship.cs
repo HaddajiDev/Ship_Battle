@@ -114,14 +114,23 @@ public class Ship : MonoBehaviour
                     for (int i = 0; i < QuestSpawner.instance.questsBanners.Count; i++)
                     {
                         QuestSpawner.instance.questsBanners[i].UpdateStats();
-                    }
+                        if(GameManager.Instance.CheckQuestType(QuestSpawner.instance.questsBanners[i].index) == Quest.Type.fireShots)
+                        {
+                            QuestSpawner.instance.SpawnQuestPopUp(QuestPopUp.Type.fireShots, QuestSpawner.instance.questsBanners[i].index);
+                        }
+                    }                   
+
+                    GameManager.Instance.FireShotsHit++;
+                    GameManager.Instance.SaveData("fireShotsHit", GameManager.Instance.FireShotsHit);
                 }                
             }
-
+            
             //Coins
             if (!player)
             {
                 GameManager.Instance.Coins += Random.value < 0.85f ? Random.Range(15, 21) : Random.Range(40, 61);
+                GameManager.Instance.TotalShotsHit++;
+                GameManager.Instance.SaveData("totalShotsHit", GameManager.Instance.TotalShotsHit);
             }            
         }
     }
@@ -147,6 +156,7 @@ public class Ship : MonoBehaviour
             GameManager.Instance.Coins += player ? 0 : Random.Range(50, 81);
             if (player)
             {
+                UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
                 Invoke("Win_Obj_Lose", 3);
                 GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
                 Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
@@ -182,6 +192,10 @@ public class Ship : MonoBehaviour
         for (int i = 0; i < QuestSpawner.instance.questsBanners.Count; i++)
         {
             QuestSpawner.instance.questsBanners[i].UpdateStats();
+            if (GameManager.Instance.CheckQuestType(QuestSpawner.instance.questsBanners[i].index) == Quest.Type.wins)
+            {
+                QuestSpawner.instance.SpawnQuestPopUp(QuestPopUp.Type.wins, QuestSpawner.instance.questsBanners[i].index);
+            }
         }
 
         if (!GameManager.Instance.MissShot)
@@ -191,11 +205,23 @@ public class Ship : MonoBehaviour
             for (int i = 0; i < QuestSpawner.instance.questsBanners.Count; i++)
             {
                 QuestSpawner.instance.questsBanners[i].UpdateStats();
+                if (GameManager.Instance.CheckQuestType(QuestSpawner.instance.questsBanners[i].index) == Quest.Type.noMissShots)
+                {
+                    QuestSpawner.instance.SpawnQuestPopUp(QuestPopUp.Type.noMissShots, QuestSpawner.instance.questsBanners[i].index);
+                }
             }
         }
+        
 
+        //coins
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+
+        //stats
+        GameManager.Instance.totalMatchWin++;
+        GameManager.Instance.SaveData("totalWins", GameManager.Instance.totalMatchLost);        
+        UI_Controller.instance.SetPlayerStats();
+
 
         CrazySDK.Game.GameplayStop();
         CrazySDK.Game.HappyTime();
@@ -206,6 +232,11 @@ public class Ship : MonoBehaviour
         UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+
+        //stats
+        GameManager.Instance.totalMatchLost++;
+        GameManager.Instance.SaveData("totalLost", GameManager.Instance.totalMatchLost);
+        UI_Controller.instance.SetPlayerStats();
         CrazySDK.Game.GameplayStop();
     }
 

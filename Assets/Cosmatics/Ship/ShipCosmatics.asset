@@ -14,9 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ship_skins:
   - Cover: {fileID: 21300000, guid: 8a65d8a0d6195dd4086ab80fed30b660, type: 3}
+    spriteSheet:
+    - {fileID: 21300000, guid: 8a65d8a0d6195dd4086ab80fed30b660, type: 3}
+    - {fileID: 21300000, guid: 4d91a1fc51afe10408581105ce40a73c, type: 3}
+    - {fileID: 21300000, guid: 18400e6c59e45b14ebc0a4c29a78f730, type: 3}
+    - {fileID: 21300000, guid: 260c2c2491a15934e8a8a81160b25656, type: 3}
+    - {fileID: 21300000, guid: 9ce228c740791094da7f470327fc57b6, type: 3}
+    - {fileID: 21300000, guid: c3be92fdc1bc6cd409ebc1ad5dfcdd18, type: 3}
     anim: {fileID: 9100000, guid: a3880ed5e2a2ebd4882ea1478a94e047, type: 2}
-    half_1: {fileID: 21300000, guid: ad4580c3edfb15446b03ef9045f4a824, type: 3}
-    half_2: {fileID: 21300000, guid: 0c05bd8ace96c2742bc219fdb254210d, type: 3}
     cost:
       Coins: 0
       Diamond: 0
+    Ad_Skin: 0
+    half_1: {fileID: 21300000, guid: ad4580c3edfb15446b03ef9045f4a824, type: 3}
+    half_2: {fileID: 21300000, guid: 0c05bd8ace96c2742bc219fdb254210d, type: 3}

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using System.Linq;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
     private Camera mainCamera;
+    public CinemachineVirtualCamera cam;
     private Vector2 startDragPos;
     private LineRenderer trajectoryLineRenderer;
     private float maxPullDistance;
@@ -22,6 +24,10 @@ public class Player : MonoBehaviour
     public GameObject cannonFireEffect;
     public Bullets_Data bulletsData;
     private int damage;
+    public float scaleFactor = 0.5f;
+    public float minSize = 17.0f;
+    public float maxSize = 19.0f;
+    public float resizeSpeed = 1.0f;
 
     public bool ready = true;
     public int burstCount;
@@ -62,6 +68,7 @@ public class Player : MonoBehaviour
     public AnchorCosmaticData anchorCosmatic;
     [HideInInspector] public int _selectedAnchor;
     public SpriteRenderer[] anchors;
+
 
     void Start()
     {
@@ -111,6 +118,9 @@ public class Player : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended))
             {
+                mainCamera.orthographicSize = 17;
+                cam.m_Lens.OrthographicSize = 17;
+
                 trajectoryLineRenderer.enabled = false;
                 Vector2 endDragPos;
                 if (Input.touchCount > 0)
@@ -126,7 +136,7 @@ public class Player : MonoBehaviour
                 float swipeMagnitude = swipeDirection.magnitude;
 
                 swipeMagnitude = Mathf.Min(swipeMagnitude, maxPullDistance);
-                float forceStrength = swipeMagnitude / maxPullDistance * maxForce;
+                float forceStrength = swipeMagnitude / maxPullDistance * maxForce;                
 
                 if (GameManager.Instance.Fire_Uses == 0)
                     inFire = false;
@@ -159,12 +169,14 @@ public class Player : MonoBehaviour
         GameObject bullet = Instantiate(BulletPrefab, shootPoint.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Player_Bullet = true;
         bullet.GetComponent<Bullet>().Damage = damage;
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();        
         rb.AddForce(-swipeDirection.normalized * forceStrength, ForceMode2D.Impulse);
         if (inFire)
         {
             bullet.GetComponent<Bullet>().inFire = true;
         }
+        GameManager.Instance.TotalShotsFired++;
+        GameManager.Instance.SaveData("totalShotsFired", GameManager.Instance.TotalShotsFired);
     }
 
     void shootBurst(Vector2 swipeDirection, float forceStrength)
@@ -180,6 +192,8 @@ public class Player : MonoBehaviour
         {
             bullet.GetComponent<Bullet>().inFire = true;
         }
+        GameManager.Instance.TotalShotsFired += 3;
+        GameManager.Instance.SaveData("totalShotsFired", GameManager.Instance.TotalShotsFired);
     }
 
     void afterShoot()
@@ -222,7 +236,7 @@ public class Player : MonoBehaviour
             points[i] = start + startVelocity * t + 0.5f * gravity * t * t;
         }
         return points;
-    }
+    }    
 
     private void DrawTrajectory(Vector2 startPos, Vector2 endPos)
     {
@@ -237,6 +251,9 @@ public class Player : MonoBehaviour
         }
         trajectoryLineRenderer.positionCount = trajectoryPoints.Length;
         trajectoryLineRenderer.SetPositions(trajectoryPoints);
+
+        float targetSize = Mathf.Clamp(forceMagnitude * scaleFactor, minSize, maxSize);        
+        cam.m_Lens.OrthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * resizeSpeed);
     }
 
     private void ReadyDelay()

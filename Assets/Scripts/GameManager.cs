@@ -10,6 +10,8 @@ using System;
 
 ///<summary>
 ///
+/// Fire removed
+/// 
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -54,6 +56,14 @@ public class GameManager : MonoBehaviour
     public bool MissShot;
     public int noMissShots;
 
+    [Header("Account")]
+    public int totalMatchLost;
+    public int totalMatchWin;
+    public int FireShotsHit;
+    public int TotalShotsFired;
+    public int TotalShotsHit;
+    public int TotalShotsMiss;
+
     [Space(20)]
 
     public Shop shop;
@@ -83,6 +93,15 @@ public class GameManager : MonoBehaviour
         CrazySDK.User.SyncUnityGameData();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Shop.Instance.skins.Anchors_Skins.Remove(2);
+            SaveData("anchor_skins", Shop.Instance.skins.Anchors_Skins);
+        }
+    }
+
     private async void Start()
     {
         var isAvailable = CrazySDK.User.IsUserAccountAvailable;
@@ -97,7 +116,7 @@ public class GameManager : MonoBehaviour
             username = user.username;
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
-        }
+        }        
     }
 
     public void Play()
@@ -115,7 +134,7 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Main_Menu.DOFade(0, 0.3f);
         UI_Controller.instance.Main_Menu.interactable = false;
         UI_Controller.instance.Main_Menu.blocksRaycasts = false;
-
+        UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
         //get abilites if exited
         Check_Abilites();
         UI_Controller.instance.Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
@@ -143,6 +162,8 @@ public class GameManager : MonoBehaviour
         player_2.Get_Stats(Current_Level);
         turn = 2;
         MissShot = false;
+        
+        UI_Controller.instance.SetPlayerStats();
         CrazySDK.Game.GameplayStart();
     }
 
@@ -211,6 +232,7 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("fireUses", Fire_Uses);
+            SaveData("coins", Coins);
         }
     }    public void Dump_Fire()
     {
@@ -221,6 +243,7 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("fireUses", Fire_Uses);
+            SaveData("coins", Coins);
         }
     }
     public void Get_Burst()
@@ -232,6 +255,7 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("burstUses", Burst_Uses);
+            SaveData("coins", Coins);
         }
     }
     public void Dump_Burst()
@@ -243,6 +267,7 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("burstUses", Burst_Uses);
+            SaveData("coins", Coins);
         }
     }
 
@@ -268,15 +293,19 @@ public class GameManager : MonoBehaviour
         Ships[0].GetComponentInChildren<Player>().transform.localRotation = Quaternion.Euler(0, 0, 0);
         Ships[1].GetComponentInChildren<Enemy_AI>().Canon.localRotation = Quaternion.Euler(0, 0, 0);
 
-        //|---------------------------------------|//
-        //|                                       |//
-        //|                                       |//
-        //|                                       |//
-        //|       Remove fire if existed          |//
-        //|                                       |//
-        //|                                       |//
-        //|                                       |//
-        //|---------------------------------------|//
+        Transform fireTransform_0 = Ships[0].transform.Find("Fire(Clone)");
+        if (fireTransform_0 != null)
+        {
+            GameObject fire_0 = fireTransform_0.gameObject;
+            Destroy(fire_0);
+        }
+
+        Transform fireTransform_1 = Ships[1].transform.Find("Fire(Clone)");
+        if (fireTransform_1 != null)
+        {
+            GameObject fire_1 = fireTransform_1.gameObject;
+            Destroy(fire_1);
+        }
     }
 
     public void Set_Player()
@@ -403,6 +432,7 @@ public class GameManager : MonoBehaviour
         }
 
         SetQuestsValues();
+        QuestSpawner.instance.NoQuests.SetActive(false);
     }
 
     private void SetQuestsValues()
@@ -435,6 +465,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Quest.Type CheckQuestType(int index)
+    {
+        if (currentQuests.Contains(index))
+        {
+            Quest quest = questsData.Get_Quest(index);
+            return quest.type;
+        }
+        return Quest.Type.none;        
+    }
 
     public async void SignIn()
     {
@@ -527,9 +566,17 @@ public class GameManager : MonoBehaviour
         CrazySDK.Data.SetInt("levelHealth", upgrades.lvl_health);
         CrazySDK.Data.SetInt("levelForce", upgrades.lvl_force);
 
+        //acountStuff
         CrazySDK.Data.SetString("username", "");
         CrazySDK.Data.SetString("imgUrl", "");
         CrazySDK.Data.SetString("token", "");
+
+        CrazySDK.Data.SetInt("totalWins", 0);
+        CrazySDK.Data.SetInt("totalLost", 0);
+        CrazySDK.Data.SetInt("totalShotsFired", 0);
+        CrazySDK.Data.SetInt("fireShotsHit", 0);
+        CrazySDK.Data.SetInt("totalShotsHit", 0);
+        CrazySDK.Data.SetInt("totalShotsMiss", 0);
 
         //player bullets
         SetList("bullets", shop.bullets.data);
@@ -579,9 +626,17 @@ public class GameManager : MonoBehaviour
         upgrades.lvl_health = CrazySDK.Data.GetInt("levelHealth");
         upgrades.lvl_force = CrazySDK.Data.GetInt("levelForce");
 
+        //acountStuff
         username = CrazySDK.Data.GetString("username");
         imgURL = CrazySDK.Data.GetString("imgUrl");
         token = CrazySDK.Data.GetString("token");
+
+        totalMatchWin = CrazySDK.Data.GetInt("totalWins");
+        totalMatchLost = CrazySDK.Data.GetInt("totalLost");
+        TotalShotsFired = CrazySDK.Data.GetInt("totalShotsFired");
+        FireShotsHit = CrazySDK.Data.GetInt("fireShotsHit");
+        TotalShotsHit = CrazySDK.Data.GetInt("totalShotsHit");
+        TotalShotsMiss = CrazySDK.Data.GetInt("totalShotsMiss");
 
         //Player Bullets
         LoadList("bullets", shop.bullets.data);

@@ -26,9 +26,7 @@ public class Shop : MonoBehaviour
         {
             UI_Controller.instance.bullet_slot_Extra.transform.parent.gameObject.SetActive(true);
             UI_Controller.instance.Extra_Bullet_Buy_Button.SetActive(false);
-        }
-
-        
+        }        
     }
 
     public void Buy_Bullet(int index)
