@@ -116,7 +116,9 @@ public class GameManager : MonoBehaviour
             username = user.username;
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
-        }        
+        }
+        Debug.Log(CrazySDK.Data.GetString("LastLogin"));
+
     }
 
     public void Play()
@@ -391,6 +393,23 @@ public class GameManager : MonoBehaviour
         lastLogin = DateTime.Now;
         CrazySDK.Data.SetString("LastLogin", lastLogin.ToString("o"));
     }
+    public void SaveLogin()
+    {        
+        string lastLoginString = CrazySDK.Data.GetString("LastLogin");
+        DateTime lastLogin;
+        
+        if (DateTime.TryParse(lastLoginString, out lastLogin))
+        {            
+            lastLogin = lastLogin.AddDays(1);
+        }
+        else
+        {            
+            lastLogin = DateTime.Now;
+        }
+        
+        CrazySDK.Data.SetString("LastLogin", lastLogin.ToString("o"));
+    }
+
     public bool Has24HoursPassed()
     {
         if (CrazySDK.Data.HasKey("LastLogin"))
@@ -453,8 +472,8 @@ public class GameManager : MonoBehaviour
     {
         if (Has24HoursPassed())
         {
-            GenerateQuests();            
-            SaveLastLogin();
+            GenerateQuests();
+            SaveLogin();
             SetList("current_Quests", currentQuests);
             SetQuestsValues();
         }

@@ -19,9 +19,7 @@ public class QuestPopUp : MonoBehaviour
     {
         group = GetComponent<CanvasGroup>();
         group.alpha = 0;
-        transform.localPosition = new Vector2(transform.localPosition.x, transform.localPosition.y - 10);
-
-        transform.DOLocalMove(new Vector3(transform.localPosition.x, transform.localPosition.y + 10), 0.5f);
+        
         group.DOFade(1, 0.3f);
 
         Quest quest = questsData.Get_Quest(index);
