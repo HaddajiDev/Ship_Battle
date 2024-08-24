@@ -23,8 +23,11 @@ public class GameManager : MonoBehaviour
     int turn = 0;
     public CinemachineVirtualCamera cam;
     public Camera cam_;
-    [SerializeField] private Transform End_Point;
+    [SerializeField] private Transform End_Point; // Camera player pos
     public Transform Main_Point;
+
+    public Transform PlayerStuff;
+    public Level_Data level_Data;
 
     [HideInInspector] public bool isChecking = false;
 
@@ -55,6 +58,11 @@ public class GameManager : MonoBehaviour
     public int FireShots;
     public bool MissShot;
     public int noMissShots;
+    public int ReadNotification;
+
+    [Header("Gifts")]
+    public List<int> currentGifts;
+    public GiftsData giftsData;
 
     [Header("Account")]
     public int totalMatchLost;
@@ -79,6 +87,9 @@ public class GameManager : MonoBehaviour
 
     bool isAvailable;
 
+    private bool WatchedRewardAd;
+    [HideInInspector] public bool Revived = false;
+
     private void Awake()
     {
         Instance = this;
@@ -91,15 +102,6 @@ public class GameManager : MonoBehaviour
         }        
         LoadData();
         CrazySDK.User.SyncUnityGameData();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Shop.Instance.skins.Anchors_Skins.Remove(2);
-            SaveData("anchor_skins", Shop.Instance.skins.Anchors_Skins);
-        }
     }
 
     private async void Start()
@@ -117,8 +119,6 @@ public class GameManager : MonoBehaviour
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
         }
-        Debug.Log(CrazySDK.Data.GetString("LastLogin"));
-
     }
 
     public void Play()
@@ -129,7 +129,14 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Level_Counter.text = Current_Level.ToString();
         UI_Controller.instance.SetAbilitesCount();
     }
-
+    void MovePlayerAndCamera()
+    {
+        PlayerStuff.localPosition = new Vector3(0, 0, 0);
+        End_Point.localPosition = new Vector3(-49.97f, 2.18f, -18.4f);
+        Level lvl = level_Data.Get_Level(Current_Level);
+        PlayerStuff.localPosition = new Vector3(-lvl.distance, 0, 0);
+        End_Point.localPosition = new Vector3(End_Point.localPosition.x - lvl.distance, End_Point.localPosition.y, -18.4f);
+    }
     public void Start_Game()
     {        
         //ui controller
@@ -137,6 +144,9 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Main_Menu.interactable = false;
         UI_Controller.instance.Main_Menu.blocksRaycasts = false;
         UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
+
+        MovePlayerAndCamera();
+
         //get abilites if exited
         Check_Abilites();
         UI_Controller.instance.Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
@@ -158,12 +168,14 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Menu_BG.blocksRaycasts = false;
         
         Coins_Start = Coins;
-        Reset_Ships();
+        Reset_Ships(false);
         Set_Player();
         player_1.GetAllSkins();
         player_2.Get_Stats(Current_Level);
         turn = 2;
         MissShot = false;
+        WatchedRewardAd = false;
+        Revived = false;
         
         UI_Controller.instance.SetPlayerStats();
         CrazySDK.Game.GameplayStart();
@@ -280,7 +292,7 @@ public class GameManager : MonoBehaviour
         player_2.StopAllCoroutines();
     }
 
-    private void Reset_Ships()
+    private void Reset_Ships(bool restart)
     {
         for (int i = 0; i < Ships.Length; i++)
         {
@@ -289,7 +301,16 @@ public class GameManager : MonoBehaviour
         Ship[] ships = FindObjectsOfType<Ship>();
         for (int i = 0; i < ships.Length; i++)
         {
-            ships[i].Get_Health();
+            if (!restart)
+                ships[i].Get_Health();
+            else
+            {
+                if (ships[i].player)
+                    ships[i].Get_Player_Health();
+            }
+
+            if(ships[i].Start_Pos != null)
+                ships[i].transform.localPosition = ships[i].Start_Pos;
         }
 
         Ships[0].GetComponentInChildren<Player>().transform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -388,6 +409,9 @@ public class GameManager : MonoBehaviour
         string bulletList = string.Join(",", value.ConvertAll(i => i.ToString()).ToArray());
         CrazySDK.Data.SetString(key, bulletList);
     }
+
+
+
     public void SaveLastLogin()
     {
         lastLogin = DateTime.Now;
@@ -454,11 +478,30 @@ public class GameManager : MonoBehaviour
         QuestSpawner.instance.NoQuests.SetActive(false);
     }
 
+    void GenerateGifts()
+    {
+        currentGifts.Clear();
+        HashSet<int> uniqueGifts = new HashSet<int>();
+
+        for (int i = 0; i < 2; i++)
+        {
+            System.Random random = new System.Random();
+            int value;
+            do
+            {
+                value = random.Next(0, giftsData.Get_Length);
+            } while (uniqueGifts.Contains(value));            
+            uniqueGifts.Add(value);
+            currentGifts.Add(value);
+        }
+    }
+
     private void SetQuestsValues()
     {
         CrazySDK.Data.SetInt("WinCount", 0);
         CrazySDK.Data.SetInt("FireShots", 0);
         CrazySDK.Data.SetInt("noMissShots", 0);
+        CrazySDK.Data.SetInt("readNotification", 0);
     }
 
     private void LoadQuestValue()
@@ -466,20 +509,24 @@ public class GameManager : MonoBehaviour
         WinCount =  CrazySDK.Data.GetInt("WinCount");
         FireShots = CrazySDK.Data.GetInt("FireShots");
         noMissShots =  CrazySDK.Data.GetInt("noMissShots");
+        ReadNotification = CrazySDK.Data.GetInt("readNotification");
     }
 
-    public void CheckForQuests()
+    public void CheckForQuestsAndGifts()
     {
         if (Has24HoursPassed())
         {
             GenerateQuests();
+            GenerateGifts();
             SaveLogin();
             SetList("current_Quests", currentQuests);
+            SetList("current_Gifts", currentGifts);
             SetQuestsValues();
         }
         else
         {
             LoadList("current_Quests", currentQuests);
+            LoadList("current_Gifts", currentGifts);
             LoadQuestValue();
         }
     }
@@ -620,7 +667,11 @@ public class GameManager : MonoBehaviour
 
         //current Quests
         GenerateQuests();
-        SetList("current_Quests", currentQuests);        
+        SetList("current_Quests", currentQuests);
+
+        //gifts
+        GenerateGifts();
+        SetList("current_Gifts", currentGifts);
     }
 
     void LoadData()
@@ -677,9 +728,8 @@ public class GameManager : MonoBehaviour
         player_1._selectedAnchor = CrazySDK.Data.GetInt("select_skin_anchor");
         player_1._selectedHelm = CrazySDK.Data.GetInt("select_skin_helm");
 
-        //quests
-        CheckForQuests();
-        
+        //quests and gifts
+        CheckForQuestsAndGifts();        
     }
 
     public void SetList(string key, List<int> list)
@@ -739,7 +789,42 @@ public class GameManager : MonoBehaviour
     private Sprite SpriteFromTexture2D(Texture2D texture)
     {
         return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }  
+    }
+    
+    public void RevivePlayer()
+    {
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, ()=>
+        {
+            Time.timeScale = 0;
+            UI_Controller.instance.Block.SetActive(true);
+        }, (error) =>
+        {
+            Time.timeScale = 1;
+            UI_Controller.instance.FeedBackPopUp("Someting went wrong", UI_Controller.FeedbackType.failed);
+            UI_Controller.instance.Back_Main();
+            //ad error
+        }, () =>
+        {
+            //ad finished
+            //player Revive
+            Time.timeScale = 1;
+            Reset_Ships(true);
+            UI_Controller.instance.Block.SetActive(false);
+            UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
+            UI_Controller.instance.Win_Tigger(0);            
+            WatchedRewardAd = true;
+            Revived = true;
+        }
+        );
+    }
+
+    public void WatchMidGameAd()
+    {
+        if (!WatchedRewardAd)
+        {
+            CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, null, null, null);
+        }        
+    }
 }
 
 [System.Serializable]

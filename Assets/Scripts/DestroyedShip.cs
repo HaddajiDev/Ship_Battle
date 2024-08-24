@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class DestroyedShip : MonoBehaviour
 {
+    [Header("Player")]
     public SpriteRenderer ShipPart_1;
     public SpriteRenderer ShipPart_2;
     public SpriteRenderer cannon;
     public SpriteRenderer stand;
-    public SpriteRenderer flag;
-    public SpriteRenderer sail;
+    public Animator flag;
+    public Animator sail;
     public SpriteRenderer anchor_top;
     public SpriteRenderer anchor_bottom;
     public SpriteRenderer helm;
@@ -23,7 +24,11 @@ public class DestroyedShip : MonoBehaviour
 
     Destroy_Effect fo;
 
-    
+    [Header("Enemy")]
+    public Level_Data lvl;
+ 
+
+
 
     void Start()
     {
@@ -35,19 +40,43 @@ public class DestroyedShip : MonoBehaviour
             ShipPart_2.sprite = shipCos.half_2;
 
             Cosmatic sailSkin = sailCosmatic.Get_Skin(GameManager.Instance.player_1._selectedSail);
-            sail.sprite = sailSkin.Cover;
+            sail.runtimeAnimatorController = sailSkin.anim;
 
             Cosmatic flagSkin = flagCosmatic.Get_Skin(GameManager.Instance.player_1._selectedFlag);
-            flag.sprite = flagSkin.Cover;
+            flag.runtimeAnimatorController = flagSkin.anim;
 
             Cosmatic helmSkin = helmCosmatic.Get_Skin(GameManager.Instance.player_1._selectedHelm);
-            helm.sprite = helmSkin.Cover;
+            helm.sprite = helmSkin.spriteSheet[0];
 
             CanonCosmaticData cannonSkin = CannonCosmatic.Get_Skin(GameManager.Instance.player_1._selectedCannon);
-            cannon.sprite = cannonSkin.Cover;
+            cannon.sprite = cannonSkin.spriteSheet[0];
             stand.sprite = cannonSkin.Stand;
 
             AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(GameManager.Instance.player_1._selectedAnchor);
+            anchor_top.sprite = anchorSkin.Top;
+            anchor_bottom.sprite = anchorSkin.Bottom;
+        }
+        else
+        {
+            Level level = lvl.Get_Level(GameManager.Instance.Current_Level);
+            ShipCosmatic shipCos = shipCosmatic.Get_Skin(level.ship);
+            ShipPart_1.sprite = shipCos.half_1;
+            ShipPart_2.sprite = shipCos.half_2;
+
+            Cosmatic sailSkin = sailCosmatic.Get_Skin(level.sail);
+            sail.runtimeAnimatorController = sailSkin.anim;
+
+            Cosmatic flagSkin = flagCosmatic.Get_Skin(level.flag);
+            flag.runtimeAnimatorController = flagSkin.anim;
+
+            Cosmatic helmSkin = helmCosmatic.Get_Skin(level.helm);
+            helm.sprite = helmSkin.spriteSheet[0];
+
+            CanonCosmaticData cannonSkin = CannonCosmatic.Get_Skin(level.cannon);
+            cannon.sprite = cannonSkin.spriteSheet[0];
+            stand.sprite = cannonSkin.Stand;
+
+            AnchorCosmatic anchorSkin = anchorCosmatic.Get_Skin(level.anchor);
             anchor_top.sprite = anchorSkin.Top;
             anchor_bottom.sprite = anchorSkin.Bottom;
         }

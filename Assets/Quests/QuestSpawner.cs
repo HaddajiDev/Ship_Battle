@@ -13,6 +13,8 @@ public class QuestSpawner : MonoBehaviour
     public GameObject QuestPop;
     public Transform QuestPopContainer;
 
+    public int QuestCompleted;
+
     private void Awake()
     {
         instance = this;
@@ -30,6 +32,16 @@ public class QuestSpawner : MonoBehaviour
         if(GameManager.Instance.currentQuests.Count == 0)
         {
             NoQuests.SetActive(true);
+        }
+        if(GameManager.Instance.ReadNotification == 0)
+        {
+            UI_Controller.instance.QuestNotification.SetActive(true);
+            TMPro.TMP_Text count = UI_Controller.instance.QuestNotification.GetComponentInChildren<TMPro.TMP_Text>();
+            count.text = $"{GameManager.Instance.currentQuests.Count}";
+        }
+        else
+        {
+            UI_Controller.instance.QuestNotification.SetActive(false);
         }
     }
     

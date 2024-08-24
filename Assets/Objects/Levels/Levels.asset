@@ -26,6 +26,13 @@ MonoBehaviour:
     Burst_Shoots: 3
     DamageMin: 1
     DamageMax: 2
+    ship: 0
+    anchor: 0
+    flag: 0
+    sail: 0
+    helm: 0
+    cannon: 0
+    distance: 0
   - level: 1
     bullets_prefabs:
     - {fileID: 6019814541299898752, guid: c028e666350cb85429e882a29b55e92d, type: 3}
@@ -38,3 +45,10 @@ MonoBehaviour:
     Burst_Shoots: 3
     DamageMin: 1
     DamageMax: 2
+    ship: 0
+    anchor: 2
+    flag: 1
+    sail: 0
+    helm: 0
+    cannon: 0
+    distance: 0

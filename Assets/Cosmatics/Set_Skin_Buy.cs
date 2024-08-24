@@ -334,24 +334,15 @@ public class Set_Skin_Buy : MonoBehaviour
             //ad Started
         }, (error) =>
         {
-            Time.timeScale = 1;
-            UI_Controller.instance.Block.SetActive(false);
-            UI_Controller.instance.Show_AdFeedback_Controller(1);
-            UI_Controller.instance.feed_sprite.sprite = UI_Controller.instance.failure;
-            UI_Controller.instance.feed_sprite.color = Color.red;
-            UI_Controller.instance.feed_text.text = "Someting went wrong try again later";
+            Time.timeScale = 1;            
+            UI_Controller.instance.FeedBackPopUp("Someting went wrong try again later", UI_Controller.FeedbackType.failed);
             //unmute audio
             //ad Error
         }, () =>
         {
             //unmute audio
-            Time.timeScale = 1;
-            UI_Controller.instance.Block.SetActive(false);
-            UI_Controller.instance.Show_AdFeedback_Controller(1);
-            UI_Controller.instance.feed_sprite.sprite = UI_Controller.instance.succes;
-            UI_Controller.instance.feed_sprite.color = Color.green;
-            UI_Controller.instance.feed_text.text = "Congratulations!! You've unlocked a new skin for your ship";
-            CrazySDK.Game.HappyTime();
+            Time.timeScale = 1;            
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
             if (part == Part.ship)
             {
                 GetSkinFromAd(Shop.Instance.skins.Ships_Skins, "ship_skins");
@@ -435,7 +426,7 @@ public class Set_Skin_Buy : MonoBehaviour
 
     private void CheckForSelected(string key)
     {
-        if (index == CrazyGames.CrazySDK.Data.GetInt(key))
+        if (index == CrazySDK.Data.GetInt(key))
         {
             BuyButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().text = "Selected";
             BuyButton.GetComponent<Button>().interactable = false;

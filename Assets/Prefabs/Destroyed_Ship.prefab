@@ -165,7 +165,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4485057206173054886}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 0c446d194bf0413498e9696e05d8d50c, type: 2}
   m_CullingMode: 0
@@ -555,8 +555,8 @@ MonoBehaviour:
   ShipPart_2: {fileID: 7397052981717310945}
   cannon: {fileID: 7397052980877183650}
   stand: {fileID: 7397052980295269380}
-  flag: {fileID: 7397052981871056922}
-  sail: {fileID: 7397052981474567997}
+  flag: {fileID: 7397052981871056921}
+  sail: {fileID: 7397052981474567996}
   anchor_top: {fileID: 6728106995948267566}
   anchor_bottom: {fileID: 5757751283064808558}
   helm: {fileID: 8880003825547864488}
@@ -566,6 +566,7 @@ MonoBehaviour:
   helmCosmatic: {fileID: 11400000, guid: 253004d5a07a5b247830dc8d0475f68b, type: 2}
   flagCosmatic: {fileID: 11400000, guid: d69a2e32f49cf9a459b473e32c84e18e, type: 2}
   anchorCosmatic: {fileID: 11400000, guid: 0cce31172296e8d4ca47af8fa31b994c, type: 2}
+  lvl: {fileID: 11400000, guid: f3ff783ae01d0cc44a76850a2792519d, type: 2}
 --- !u!1 &7397052980877183711
 GameObject:
   m_ObjectHideFlags: 0

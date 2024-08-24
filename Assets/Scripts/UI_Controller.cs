@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
+using CrazyGames;
 
 public class UI_Controller : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Show_Skin;
     public CanvasGroup Quests;
     public CanvasGroup Ad_FeedBack;
+    public CanvasGroup Gifts;
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -80,6 +82,9 @@ public class UI_Controller : MonoBehaviour
     public Sprite failure;
     public Image feed_sprite;
     public TMP_Text feed_text;
+    public GameObject ReviveButton;
+    public GameObject QuestNotification;
+    public GameObject GiftsNotification;
 
     private void Awake()
     {
@@ -188,13 +193,26 @@ public class UI_Controller : MonoBehaviour
             if (state.ToLower().Contains("win"))
                 State_Win.color = Color.green;
             else
+            {
                 State_Win.color = Color.red;
+                if (!GameManager.Instance.Revived)
+                {
+                    float randomValue = Random.Range(0.0f, 1.0f);
+
+                    if (randomValue <= 0.2f)
+                    {
+                        ReviveButton.SetActive(true);
+                    }
+                }                
+            }
+                
         }
         else
         {            
             Win_Obj.DOFade(0, 0.3f).OnComplete(() => {
                 Win_Obj.interactable = false;
                 Win_Obj.blocksRaycasts = false;
+                ReviveButton.SetActive(false);
             });
         }        
     }
@@ -210,6 +228,7 @@ public class UI_Controller : MonoBehaviour
             Main_Menu.DOFade(1, 0.3f);
             Main_Menu.interactable = true;
             Main_Menu.blocksRaycasts = true;
+            GameManager.Instance.WatchMidGameAd();
         });
     }
 
@@ -217,6 +236,7 @@ public class UI_Controller : MonoBehaviour
     {
         if(index == 1)
         {
+            Bullets_Shop.gameObject.SetActive(true);
             Bullets_Shop.interactable = true;
             Bullets_Shop.blocksRaycasts = true;
             Bullets_Shop.DOFade(1, 0.3f);
@@ -226,6 +246,7 @@ public class UI_Controller : MonoBehaviour
             Bullets_Shop.DOFade(0, 0.3f).OnComplete(() => {
                 Bullets_Shop.interactable = false;
                 Bullets_Shop.blocksRaycasts = false;
+                Bullets_Shop.gameObject.SetActive(false);
             });
         }
     }
@@ -234,6 +255,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            Select_Bullets.gameObject.SetActive(true);
             Select_Bullets.interactable = true;
             Select_Bullets.blocksRaycasts = true;
             Select_Bullets.DOFade(1, 0.3f);
@@ -243,6 +265,7 @@ public class UI_Controller : MonoBehaviour
             Select_Bullets.DOFade(0, 0.3f).OnComplete(() => {
                 Select_Bullets.interactable = false;
                 Select_Bullets.blocksRaycasts = false;
+                Select_Bullets.gameObject.SetActive(false);
             });
         }
     }
@@ -251,6 +274,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            Extra_Slot_Buy_UI.gameObject.SetActive(true);
             Extra_Slot_Buy_UI.interactable = true;
             Extra_Slot_Buy_UI.blocksRaycasts = true;
             Extra_Slot_Buy_UI.DOFade(1, 0.3f);
@@ -260,6 +284,7 @@ public class UI_Controller : MonoBehaviour
             Extra_Slot_Buy_UI.DOFade(0, 0.3f).OnComplete(() => {
                 Extra_Slot_Buy_UI.interactable = false;
                 Extra_Slot_Buy_UI.blocksRaycasts = false;
+                Extra_Slot_Buy_UI.gameObject.SetActive(false);
             });
         }        
     }
@@ -268,6 +293,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            Buy_Upgrades.gameObject.SetActive(true);
             Buy_Upgrades.interactable = true;
             Buy_Upgrades.blocksRaycasts = true;
             Buy_Upgrades.DOFade(1, 0.3f);
@@ -277,6 +303,7 @@ public class UI_Controller : MonoBehaviour
             Buy_Upgrades.DOFade(0, 0.3f).OnComplete(() => {
                 Buy_Upgrades.interactable = false;
                 Buy_Upgrades.blocksRaycasts = false;
+                Buy_Upgrades.gameObject.SetActive(false);
             });
         }
     }
@@ -284,6 +311,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            account.gameObject.SetActive(true);
             account.interactable = true;
             account.blocksRaycasts = true;
             account.DOFade(1, 0.3f);
@@ -293,6 +321,7 @@ public class UI_Controller : MonoBehaviour
             account.DOFade(0, 0.3f).OnComplete(() => {
                 account.interactable = false;
                 account.blocksRaycasts = false;
+                account.gameObject.SetActive(false);
             });
         }
     }
@@ -301,6 +330,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            Buy_Skins.gameObject.SetActive(true);
             Buy_Skins.interactable = true;
             Buy_Skins.blocksRaycasts = true;
             Buy_Skins.DOFade(1, 0.3f);
@@ -310,6 +340,7 @@ public class UI_Controller : MonoBehaviour
             Buy_Skins.DOFade(0, 0.3f).OnComplete(() => {
                 Buy_Skins.interactable = false;
                 Buy_Skins.blocksRaycasts = false;
+                Buy_Skins.gameObject.SetActive(false);
             });
         }
     }
@@ -337,6 +368,9 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            GameManager.Instance.ReadNotification = 1;
+            CrazySDK.Data.SetInt("readNotification", GameManager.Instance.ReadNotification);
+            QuestNotification.SetActive(false);
             Quests.interactable = true;
             Quests.blocksRaycasts = true;
             Quests.DOFade(1, 0.3f);
@@ -345,7 +379,7 @@ public class UI_Controller : MonoBehaviour
         {
             Quests.DOFade(0, 0.3f).OnComplete(() => {
                 Quests.interactable = false;
-                Quests.blocksRaycasts = false;
+                Quests.blocksRaycasts = false;                
             });
         }
     }
@@ -354,6 +388,7 @@ public class UI_Controller : MonoBehaviour
     {
         if (index == 1)
         {
+            Ad_FeedBack.gameObject.SetActive(true);
             Ad_FeedBack.interactable = true;
             Ad_FeedBack.blocksRaycasts = true;
             Ad_FeedBack.DOFade(1, 0.3f);
@@ -363,6 +398,42 @@ public class UI_Controller : MonoBehaviour
             Ad_FeedBack.DOFade(0, 0.3f).OnComplete(() => {
                 Ad_FeedBack.interactable = false;
                 Ad_FeedBack.blocksRaycasts = false;
+                Ad_FeedBack.gameObject.SetActive(false);
+            });
+        }
+    }
+
+    public void FeedBackPopUp(string text, FeedbackType type)
+    {
+        Block.SetActive(false);
+        Show_AdFeedback_Controller(1);
+        feed_text.text = text;
+        if(type == FeedbackType.failed)
+        {
+            feed_sprite.sprite = failure;
+            feed_sprite.color = Color.red;
+        }
+        else if(type == FeedbackType.succes)
+        {
+            feed_sprite.sprite = succes;
+            feed_sprite.color = Color.green;
+            CrazySDK.Game.HappyTime();
+        }        
+    }
+
+    public void Show_Gifts_Controller(int index)
+    {
+        if (index == 1)
+        {            
+            Gifts.interactable = true;
+            Gifts.blocksRaycasts = true;
+            Gifts.DOFade(1, 0.3f);
+        }
+        else
+        {
+            Gifts.DOFade(0, 0.3f).OnComplete(() => {
+                Gifts.interactable = false;
+                Gifts.blocksRaycasts = false;                
             });
         }
     }
@@ -424,5 +495,11 @@ public class UI_Controller : MonoBehaviour
             if (child.gameObject.activeInHierarchy)
                 child.gameObject.SetActive(false);
         }
+    }
+
+    public enum FeedbackType
+    {
+        succes,
+        failed
     }
 }

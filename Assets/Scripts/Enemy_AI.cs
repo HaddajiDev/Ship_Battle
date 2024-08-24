@@ -28,6 +28,30 @@ public class Enemy_AI : MonoBehaviour
     Animator anim;
 
     CinemachineImpulseSource source;
+    [Header("Cosmatic")]
+    public ShipCosmaticData shipCosmatic;    
+    public Animator Ship;
+
+    [Space]
+    public CanonSkins CannonCosmatic;    
+    public Animator Cannon;
+    public SpriteRenderer Stand;
+
+    [Space]
+    public SailCosmaticData sailCosmatic;    
+    public Animator sail;
+
+    [Space]
+    public HelmCosmaticData helmCosmatic;    
+    public Animator helm;
+
+    [Space]
+    public FlagCosmaticData flagCosmatic;    
+    public Animator Flag;
+
+    [Space]
+    public AnchorCosmaticData anchorCosmatic;   
+    public SpriteRenderer[] anchors;
 
     private void Start()
     {
@@ -92,6 +116,13 @@ public class Enemy_AI : MonoBehaviour
 
         DamageMax = lvl.DamageMax;
         DamageMin = lvl.DamageMin;
+
+        GetShip_Skin(lvl.ship);
+        GetSail_skin(lvl.sail);
+        GetFlag_skin(lvl.flag);
+        GetHelm_skin(lvl.helm);
+        GetCannon_skin(lvl.cannon);
+        GetAnchor_skin(lvl.anchor);
     }
 
     void getRandomBullet(int index)
@@ -101,5 +132,43 @@ public class Enemy_AI : MonoBehaviour
             BulletPrefab = lvl.bullets_prefabs[Random.Range(0, lvl.bullets_prefabs.Length)];
         else
             BulletPrefab = lvl.bullets_prefabs[0];
+    }
+
+    private void GetShip_Skin(int index)
+    {
+        ShipCosmatic cos = shipCosmatic.Get_Skin(index);
+        Ship.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetSail_skin(int index)
+    {
+        Cosmatic cos = sailCosmatic.Get_Skin(index);
+        sail.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetFlag_skin(int index)
+    {
+        Cosmatic cos = flagCosmatic.Get_Skin(index);
+        Flag.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetHelm_skin(int index)
+    {
+        Cosmatic cos = helmCosmatic.Get_Skin(index);
+        helm.runtimeAnimatorController = cos.anim;
+    }
+
+    private void GetCannon_skin(int index)
+    {
+        CanonCosmaticData data = CannonCosmatic.Get_Skin(index);
+        Cannon.runtimeAnimatorController = data.anim;
+        Stand.sprite = data.Stand;
+    }
+
+    private void GetAnchor_skin(int index)
+    {
+        AnchorCosmatic cos = anchorCosmatic.Get_Skin(index);
+        anchors[0].sprite = cos.Top;
+        anchors[1].sprite = cos.Bottom;
     }
 }

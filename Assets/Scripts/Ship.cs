@@ -12,7 +12,7 @@ public class Ship : MonoBehaviour
     public int Health = 10;
     int Current_Health;
 
-    private Vector3 Start_Pos;
+    public Vector3 Start_Pos;
 
     public bool player;
     public Animator Sail_Anim;
@@ -180,7 +180,7 @@ public class Ship : MonoBehaviour
     void Win_Obj_Win()
     {
         UI_Controller.instance.Win_Tigger(1, "You Win");
-        UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
+        UI_Controller.instance.Coins_text.text = (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         if(GameManager.Instance.Current_Level < GameManager.Instance.player_2.levels.Get_Lenght - 1)
         {
             GameManager.Instance.Current_Level++;
@@ -229,7 +229,7 @@ public class Ship : MonoBehaviour
     void Win_Obj_Lose()
     {
         UI_Controller.instance.Win_Tigger(1, "You Lost");        
-        UI_Controller.instance.Coins_text.text = "Coins : " + (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
+        UI_Controller.instance.Coins_text.text = (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
 
@@ -290,14 +290,14 @@ public class Ship : MonoBehaviour
     {
         Sail_Anim.SetTrigger("toWind");
         Ship_helm.SetTrigger("move");
-        transform.DOMove(new Vector3(Start_Pos.x, Start_Pos.y, 0), 2).OnComplete(() =>
+        transform.DOLocalMove(new Vector3(Start_Pos.x, Start_Pos.y, 0), 2).OnComplete(() =>
         {
             Sail_Anim.SetTrigger("toNoWind");
         });
     }
 
 
-    void Get_Player_Health()
+    public void Get_Player_Health()
     {
         Current_Health = Health;
     }

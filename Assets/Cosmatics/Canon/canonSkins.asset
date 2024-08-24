@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canonCosmatics:
   - Cover: {fileID: -1922706855, guid: fe68f66e06bb62b4489f049230dd7c0f, type: 3}
+    spriteSheet:
+    - {fileID: -1922706855, guid: fe68f66e06bb62b4489f049230dd7c0f, type: 3}
     anim: {fileID: 9100000, guid: a8538bd6f7e8ee942b612cd4444045c3, type: 2}
     cost:
       Coins: 0
       Diamond: 0
+    Ad_Skin: 0
     Stand: {fileID: 314932610, guid: fe68f66e06bb62b4489f049230dd7c0f, type: 3}

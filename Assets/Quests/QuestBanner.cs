@@ -19,6 +19,7 @@ public class QuestBanner : MonoBehaviour
 
     public Slider slider;
 
+    
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class QuestBanner : MonoBehaviour
                 ClaimButton.onClick.RemoveAllListeners();
                 ClaimButton.onClick.AddListener(() => ClaimReward(quest.cost));
                 ClaimButton.interactable = true;
+                QuestSpawner.instance.QuestCompleted += 1;
             }                
         }
         else if (quest.type == Quest.Type.fireShots)
@@ -49,6 +51,7 @@ public class QuestBanner : MonoBehaviour
                 ClaimButton.onClick.RemoveAllListeners();
                 ClaimButton.onClick.AddListener(() => ClaimReward(quest.cost));
                 ClaimButton.interactable = true;
+                QuestSpawner.instance.QuestCompleted += 1;
             }
         }
         else if (quest.type == Quest.Type.noMissShots)
@@ -60,11 +63,23 @@ public class QuestBanner : MonoBehaviour
                 ClaimButton.onClick.RemoveAllListeners();
                 ClaimButton.onClick.AddListener(() => ClaimReward(quest.cost));
                 ClaimButton.interactable = true;
+                QuestSpawner.instance.QuestCompleted += 1;
             }
         }
         Descrption.text = quest.Descrption;
         diammonds.text = quest.cost.Diamond.ToString();
         coins.text = quest.cost.Coins.ToString();
+
+        
+        if(QuestSpawner.instance.QuestCompleted > 0)
+        {
+            UI_Controller.instance.QuestNotification.SetActive(true);
+            TMP_Text count = UI_Controller.instance.QuestNotification.GetComponentInChildren<TMP_Text>();
+            count.text = $"{QuestSpawner.instance.QuestCompleted}";
+            Image circle = UI_Controller.instance.QuestNotification.GetComponentInChildren<Image>();
+            circle.color = Color.green;
+            count.color = Color.black;
+        }
     }
 
 
@@ -79,6 +94,10 @@ public class QuestBanner : MonoBehaviour
 
         GameManager.Instance.currentQuests.Remove(index);
         GameManager.Instance.SetList("current_Quests", GameManager.Instance.currentQuests);
+
+        TMPro.TMP_Text count = UI_Controller.instance.QuestNotification.GetComponentInChildren<TMPro.TMP_Text>();
+        count.text = $"{GameManager.Instance.currentQuests.Count}";
+
         gameObject.transform.DOScale(1.1f, 0.2f).OnComplete(() =>
         {
             gameObject.transform.DOScale(0, 0.3f).OnComplete(() =>
@@ -89,6 +108,7 @@ public class QuestBanner : MonoBehaviour
         if (GameManager.Instance.currentQuests.Count == 0)
         {
             QuestSpawner.instance.NoQuests.SetActive(true);
+            UI_Controller.instance.QuestNotification.SetActive(false);
         }
     }
     

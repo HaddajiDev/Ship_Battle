@@ -16,22 +16,29 @@ public class Level
     [Header("Force")]
     public float MaxshootForce = 30;
     public float MinshootForce = 50;
-
-    [Space]
+    
     [Header("Angle")]
     public float Min_Angle = 10;
     public float Max_Angle = 60;
-
-    [Space]
+    
     [Header("Fire Shots")]
     public bool Fire = false;
-
-    [Space]
+    
     [Header("Burst Shots")]    
     public int Burst_Shoots = 1;
-
-    [Space(10)]
+    
     [Header("Damage")]
     public int DamageMin = 1;
-    public int DamageMax = 2;    
+    public int DamageMax = 2;
+
+    [Header("Skins")]
+    public int ship;
+    public int anchor;
+    public int flag;
+    public int sail;
+    public int helm;
+    public int cannon;
+
+    [Header("further level")]
+    public float distance = 0;
 }

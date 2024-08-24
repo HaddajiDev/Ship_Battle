@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu]
 public class Level_Data : ScriptableObject
-{
+{    
     public Level[] levels;
 
     public int Get_Lenght
