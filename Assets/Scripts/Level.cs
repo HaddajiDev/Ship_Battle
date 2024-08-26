@@ -39,6 +39,6 @@ public class Level
     public int helm;
     public int cannon;
 
-    [Header("further level")]
+    [Header("Distance")]
     public float distance = 0;
 }

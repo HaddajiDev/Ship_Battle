@@ -8,6 +8,8 @@ TagManager:
   - Water
   - Wall
   - cloud
+  - sheild
+  - ice
   layers:
   - Default
   - TransparentFX

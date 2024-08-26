@@ -271,57 +271,75 @@ public class Set_Skin_Buy : MonoBehaviour
     {
         if (part == Part.ship)
         {
-            Shop.Instance.BuyShip_Skin(index);
-            BuyButton.transform.GetChild(0).gameObject.SetActive(true);
-            SelectSkinShip(index);
-            BuyButton.transform.GetChild(1).gameObject.SetActive(false);
-            BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinShip(index));
+            bool bought = Shop.Instance.BuyShip_Skin(index);
+            if (bought)
+            {
+                BuyButton.transform.GetChild(0).gameObject.SetActive(true);
+                SelectSkinShip(index);
+                BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+                BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinShip(index));
+            }            
         }
         else if (part == Part.sail)
         {
-            Shop.Instance.BuySail_Skin(index);
-            BuyButton.transform.GetChild(0).gameObject.SetActive(true);
-            SelectSkinSail(index);
-            BuyButton.transform.GetChild(1).gameObject.SetActive(false);
-            BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinSail(index));
+            bool bought = Shop.Instance.BuySail_Skin(index);
+            if (bought)
+            {
+                BuyButton.transform.GetChild(0).gameObject.SetActive(true);
+                SelectSkinSail(index);
+                BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+                BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinSail(index));
+            }            
         }
         else if (part == Part.flag)
         {
-            Shop.Instance.BuyFlag_Skin(index);
-            BuyButton.transform.GetChild(0).gameObject.SetActive(true);
-            SelectSkinFlag(index);
-            BuyButton.transform.GetChild(1).gameObject.SetActive(false);
-            BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinFlag(index));
+            bool bought = Shop.Instance.BuyFlag_Skin(index);
+            if (bought)
+            {
+                BuyButton.transform.GetChild(0).gameObject.SetActive(true);
+                SelectSkinFlag(index);
+                BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+                BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinFlag(index));
+            }            
         }
         else if (part == Part.helm)
         {
-            Shop.Instance.BuyHelm_Skin(index);
-            BuyButton.transform.GetChild(0).gameObject.SetActive(true);
-            SelectSkinHelm(index);
-            BuyButton.transform.GetChild(1).gameObject.SetActive(false);
-            BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinHelm(index));
+            bool bought = Shop.Instance.BuyHelm_Skin(index);
+            if (bought)
+            {
+                BuyButton.transform.GetChild(0).gameObject.SetActive(true);
+                SelectSkinHelm(index);
+                BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+                BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinHelm(index));
+            }            
         }
         else if (part == Part.cannon)
         {
-            Shop.Instance.BuyCannon_Skin(index);
-            BuyButton.transform.GetChild(0).gameObject.SetActive(true);
-            SelectSkinCannon(index);
-            BuyButton.transform.GetChild(1).gameObject.SetActive(false);
-            BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinCannon(index));
+            bool bought = Shop.Instance.BuyCannon_Skin(index);
+            if (bought)
+            {
+                BuyButton.transform.GetChild(0).gameObject.SetActive(true);
+                SelectSkinCannon(index);
+                BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+                BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinCannon(index));
+            }            
         }
         else if (part == Part.anchor)
         {            
-            Shop.Instance.BuyAnchor_Skin(index);            
-            BuyButton.transform.GetChild(0).gameObject.SetActive(true);
-            SelectSkinAnchor(index);            
-            BuyButton.transform.GetChild(1).gameObject.SetActive(false);            
-            BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinAnchor(index));
+            bool bougth = Shop.Instance.BuyAnchor_Skin(index);
+            if (bougth)
+            {
+                BuyButton.transform.GetChild(0).gameObject.SetActive(true);
+                SelectSkinAnchor(index);
+                BuyButton.transform.GetChild(1).gameObject.SetActive(false);
+                BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+                BuyButton.GetComponent<Button>().onClick.AddListener(() => SelectSkinAnchor(index));
+            }            
         }
     }
     public void WatchAd()

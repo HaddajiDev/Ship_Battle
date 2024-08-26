@@ -69,17 +69,14 @@ public class Shop : MonoBehaviour
                     GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
                     Button clickedButton = selectedObject.GetComponent<Button>();
                     select.onClick.RemoveAllListeners();
-
-                    //UI_Controller.instance.Clear_Button_Bullet.onClick.RemoveAllListeners();
+                    
                     if (clickedButton.name == "Bullet_1")
                     {
-                        select.onClick.AddListener(() => Select_Bullet_From_list_1(selected));
-                        //UI_Controller.instance.Clear_Button_Bullet.onClick.AddListener(() => Clear_Slot_1());
+                        select.onClick.AddListener(() => Select_Bullet_From_list_1(selected));                        
                     }
                     else if(clickedButton.name == "Bullet_2")
                     {
-                        select.onClick.AddListener(() => Select_Bullet_From_list_2(selected));
-                        //UI_Controller.instance.Clear_Button_Bullet.onClick.AddListener(() => Clear_Slot_2());
+                        select.onClick.AddListener(() => Select_Bullet_From_list_2(selected));                        
                     }
                     else
                     {
@@ -192,10 +189,16 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             GameManager.Instance.SaveData("extraSlot", 1);
+            UI_Controller.instance.FeedBackPopUp("New shot slot unlocked", UI_Controller.FeedbackType.succes);
+            UI_Controller.instance.Buy_Extra_Bullet_Slot(0);
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
         }
     }
 
-    public void BuyShip_Skin(int index)
+    public bool BuyShip_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.shipCosmatic.Get_Skin(index).cost;
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
@@ -208,9 +211,15 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("ship_skins", skins.Ships_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
-    public void BuySail_Skin(int index)
+    public bool BuySail_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.sailCosmatic.Get_Skin(index).cost;
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
@@ -223,9 +232,16 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("sail_skins", skins.Sail_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+            return true;
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+            return false;
         }
     }
-    public void BuyFlag_Skin(int index)
+    public bool BuyFlag_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.flagCosmatic.Get_Skin(index).cost;
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
@@ -238,9 +254,16 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("flag_skins", skins.Flag_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+            return true;
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+            return false;
         }
     }
-    public void BuyCannon_Skin(int index)
+    public bool BuyCannon_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.CannonCosmatic.Get_Skin(index).cost;
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
@@ -253,9 +276,16 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("cannon_skins", skins.Cannon_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+            return true;
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+            return false;
         }
     }
-    public void BuyAnchor_Skin(int index)
+    public bool BuyAnchor_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.anchorCosmatic.Get_Skin(index).cost;
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
@@ -268,10 +298,17 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("anchor_skins", skins.Anchors_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+            return true;
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+            return false;            
         }
     }
 
-    public void BuyHelm_Skin(int index)
+    public bool BuyHelm_Skin(int index)
     {
         Cost cost = GameManager.Instance.player_1.helmCosmatic.Get_Skin(index).cost;
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
@@ -284,25 +321,15 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("helm_skins", skins.Helm_Skins);
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+            UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+            return true;
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+            return false;
         }
     }
-
-    //public void Clear_Slot_1()
-    //{
-    //    //sprite null X or smth
-    //    UI_Controller.instance.bullet_slot_1.sprite = null;
-    //    UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().bullet = null;
-    //    UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index = 0;
-    //    CheckForSelctedBullets();
-    //}
-    //public void Clear_Slot_2()
-    //{
-    //    //sprite null X or smth
-    //    UI_Controller.instance.bullet_slot_2.sprite = null;
-    //    UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().bullet = null;
-    //    UI_Controller.instance.bullet_slot_2.GetComponent<Bullet_Slot>().index = 0;
-    //    CheckForSelctedBullets();
-    //}
 }
 
 [System.Serializable]

@@ -13,18 +13,23 @@ public class Water : MonoBehaviour
         {
             Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
             rb.mass = 2;
-            if(collision.gameObject.tag == "Bullet") rb.velocity = new Vector2(rb.velocity.x + ((rb.velocity.x * 80) / 100), rb.velocity.y);
+            if(collision.gameObject.CompareTag("Bullet")) rb.velocity = new Vector2(rb.velocity.x + ((rb.velocity.x * 80) / 100), rb.velocity.y);
             {
                 rb.velocity = new Vector2(rb.velocity.x - ((rb.velocity.x * 50) / 100), rb.velocity.y + ((rb.velocity.y * 10) / 100));
             }
             rb.gravityScale *= -1;
             rb.gravityScale += (rb.gravityScale * 50) / 100;
-            if(collision.gameObject.tag == "Bullet")
+            if(collision.gameObject.CompareTag("Bullet"))
             {
                 hit++;
                 if(hit == 1)
                 {
-                    Invoke("Check_Turns", 1);                    
+                    Invoke("Check_Turns", 1);
+                    if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)
+                    {                        
+                        GameManager.Instance.TotalShotsMiss++;
+                        GameManager.Instance.SaveData("totalShotsMiss", GameManager.Instance.TotalShotsMiss);
+                    }                    
                 }
                     
                 collision.gameObject.tag = "Respawn";
@@ -38,7 +43,7 @@ public class Water : MonoBehaviour
                 });
             }
 
-            Instantiate(WaterSplash[Random.Range(0, WaterSplash.Length)], collision.transform.position, Quaternion.identity);            
+            Instantiate(WaterSplash[Random.Range(0, WaterSplash.Length)], collision.transform.position, Quaternion.identity);
             
             if(collision.gameObject.GetComponent<Bullet>().transform.childCount != 0)
             {
@@ -47,12 +52,40 @@ public class Water : MonoBehaviour
             if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)
             {
                 if (!GameManager.Instance.MissShot)
-                    GameManager.Instance.MissShot = true;
-                GameManager.Instance.TotalShotsMiss++;
-                GameManager.Instance.SaveData("totalShotsMiss", GameManager.Instance.TotalShotsMiss);
+                    GameManager.Instance.MissShot = true;                
             }
-             
+        }
+
+        if (collision.gameObject.CompareTag("ice"))
+        {
+            Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
             
+            rb.mass = 2;
+            if (collision.gameObject.CompareTag("ice")) rb.velocity = new Vector2(rb.velocity.x + ((rb.velocity.x * 80) / 100), rb.velocity.y);
+            {
+                rb.velocity = new Vector2(rb.velocity.x - ((rb.velocity.x * 50) / 100), rb.velocity.y + ((rb.velocity.y * 10) / 100));
+            }
+            rb.gravityScale *= -1;
+            rb.gravityScale += (rb.gravityScale * 50) / 100;
+            if (collision.gameObject.CompareTag("ice"))
+            {
+                hit++;
+                if (hit == 1)
+                {
+                    Invoke("Check_Turns", 1);
+                }                
+            }
+            if (rb.gravityScale >= 2.5f || rb.gravityScale <= -2.5f)
+            {
+                rb.gravityScale = 0;
+                IceBlock ice = collision.gameObject.GetComponent<IceBlock>();
+                ice.Shrink();
+                collision.gameObject.transform.DOScale(0, 1.5f).OnComplete(() =>
+                {
+                    Destroy(collision.gameObject);
+                });
+            }
+            Instantiate(WaterSplash[Random.Range(0, WaterSplash.Length)], collision.transform.position, Quaternion.identity);
         }
     }
    

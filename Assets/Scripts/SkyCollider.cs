@@ -7,7 +7,7 @@ public class SkyCollider : MonoBehaviour
     int hit = 0;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.CompareTag("Bullet"))
         {
             collision.gameObject.tag = "Respawn";
             hit++;

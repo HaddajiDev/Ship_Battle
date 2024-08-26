@@ -61,6 +61,8 @@ public class Enemy_AI : MonoBehaviour
 
     void Shoot()
     {
+        GameManager.Instance.phase = GameManager.GamePhase.EnemyShootPhase;
+        GameManager.Instance.Check_PowerUps();
         getRandomBullet(GameManager.Instance.Current_Level);
         if (Can_Fire)
         {            

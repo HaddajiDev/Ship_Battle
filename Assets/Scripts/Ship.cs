@@ -95,7 +95,7 @@ public class Ship : MonoBehaviour
             hit++;
             if(hit == 1)
             {
-                Invoke("Check_Turns", 1);                
+                Invoke("Check_Turns", 1);
             }
                 
             Take_Damage(collision.gameObject.GetComponent<Bullet>().Damage);
@@ -181,6 +181,12 @@ public class Ship : MonoBehaviour
     {
         UI_Controller.instance.Win_Tigger(1, "You Win");
         UI_Controller.instance.Coins_text.text = (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
+        GameManager.Instance.phase = GameManager.GamePhase.GameOver;
+
+        //some gems
+        int value = Random.Range(0, 3) == 2 ? Random.Range(1, 11) : 0;
+        
+
         if(GameManager.Instance.Current_Level < GameManager.Instance.player_2.levels.Get_Lenght - 1)
         {
             GameManager.Instance.Current_Level++;
@@ -212,6 +218,13 @@ public class Ship : MonoBehaviour
             }
         }
         
+        if(value > 0)
+        {
+            UI_Controller.instance.DiammondWinObj.SetActive(true);
+            UI_Controller.instance.Diammind_Win.text = $"{value}";
+            GameManager.Instance.Diamond += value;
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
 
         //coins
         UI_Controller.instance.SetCurrencyUI();
@@ -226,17 +239,24 @@ public class Ship : MonoBehaviour
         CrazySDK.Game.GameplayStop();
         CrazySDK.Game.HappyTime();
     }
+
+
     void Win_Obj_Lose()
     {
         UI_Controller.instance.Win_Tigger(1, "You Lost");        
         UI_Controller.instance.Coins_text.text = (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+        GameManager.Instance.phase = GameManager.GamePhase.GameOver;
 
         //stats
         GameManager.Instance.totalMatchLost++;
         GameManager.Instance.SaveData("totalLost", GameManager.Instance.totalMatchLost);
         UI_Controller.instance.SetPlayerStats();
+
+        UI_Controller.instance.SetCurrencyUI();
+        GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+
         CrazySDK.Game.GameplayStop();
     }
 

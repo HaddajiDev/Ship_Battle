@@ -46,10 +46,10 @@ public class QuestSpawner : MonoBehaviour
     }
     
    public void SpawnQuestPopUp(QuestPopUp.Type type, int index)
-    {
+   {
         GameObject ob = Instantiate(QuestPop, QuestPopContainer);
         QuestPopUp pop = ob.GetComponent<QuestPopUp>();
         pop.type = type;
         pop.index = index;
-    }
+   }
 }

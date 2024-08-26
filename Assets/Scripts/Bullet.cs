@@ -14,19 +14,17 @@ public class Bullet : MonoBehaviour
     public bool Player_Bullet = false;
 
     public bool inFire = false;
-
+    
     void Start()
     {
-        cam = GameObject.FindWithTag("GameController").GetComponent<CinemachineVirtualCamera>();
-        //GameManager.Instance.cam_.GetComponent<CameraFollow>().SetTarget(transform);
+        cam = GameObject.FindWithTag("GameController").GetComponent<CinemachineVirtualCamera>();        
         cam.Follow = this.transform;
 
         Invoke("Destroy_bullet", 10);
 
 
         if (type == BulletType.Bomb)
-        {
-            //transform.DORotate(new Vector3(0, 0, 300), 5);
+        {            
             anim = GetComponent<Animator>();
         }
 
@@ -62,6 +60,6 @@ public class Bullet : MonoBehaviour
             {
                 anim.SetTrigger("off");
             }
-        }
+        }       
     }
 }

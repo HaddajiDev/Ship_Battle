@@ -30,6 +30,7 @@ public class QuestBanner : MonoBehaviour
     {
         Quest quest = questData.Get_Quest(index);
         slider.maxValue = quest.Goal_Value;
+        QuestSpawner.instance.QuestCompleted = 0;
         if (quest.type == Quest.Type.wins)
         {
             slider.value = GameManager.Instance.WinCount;
@@ -39,6 +40,9 @@ public class QuestBanner : MonoBehaviour
                 ClaimButton.onClick.RemoveAllListeners();
                 ClaimButton.onClick.AddListener(() => ClaimReward(quest.cost));
                 ClaimButton.interactable = true;
+                ClaimButton.transform.DOScale(new Vector3(1.08f, 1.08f, 1), 0.7f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo);
                 QuestSpawner.instance.QuestCompleted += 1;
             }                
         }
@@ -51,6 +55,9 @@ public class QuestBanner : MonoBehaviour
                 ClaimButton.onClick.RemoveAllListeners();
                 ClaimButton.onClick.AddListener(() => ClaimReward(quest.cost));
                 ClaimButton.interactable = true;
+                ClaimButton.transform.DOScale(new Vector3(1.08f, 1.08f, 1), 0.7f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo);
                 QuestSpawner.instance.QuestCompleted += 1;
             }
         }
@@ -63,6 +70,9 @@ public class QuestBanner : MonoBehaviour
                 ClaimButton.onClick.RemoveAllListeners();
                 ClaimButton.onClick.AddListener(() => ClaimReward(quest.cost));
                 ClaimButton.interactable = true;
+                ClaimButton.transform.DOScale(new Vector3(1.08f, 1.08f, 1), 0.7f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo);
                 QuestSpawner.instance.QuestCompleted += 1;
             }
         }
@@ -78,7 +88,7 @@ public class QuestBanner : MonoBehaviour
             count.text = $"{QuestSpawner.instance.QuestCompleted}";
             Image circle = UI_Controller.instance.QuestNotification.GetComponentInChildren<Image>();
             circle.color = Color.green;
-            count.color = Color.black;
+            count.color = Color.black;            
         }
     }
 
@@ -111,5 +121,4 @@ public class QuestBanner : MonoBehaviour
             UI_Controller.instance.QuestNotification.SetActive(false);
         }
     }
-    
 }

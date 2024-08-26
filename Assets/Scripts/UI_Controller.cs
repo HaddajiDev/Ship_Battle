@@ -38,6 +38,13 @@ public class UI_Controller : MonoBehaviour
     public GameObject Fire_Object;
     public GameObject Burst_Object;
 
+    [Header("Power Ups")]
+    public GameObject Sheild_Object;
+    public GameObject Freez_Object;
+    public GameObject TinyShots_Object;
+    public GameObject TinyShip_Object;
+    public GameObject All_PowerUps;
+
     [Header("Texts")]
     public TMP_Text Coins_Main_Text;
     public TMP_Text Diamond_Text;
@@ -55,6 +62,7 @@ public class UI_Controller : MonoBehaviour
     public TMP_Text Health_Cost_Upgrade_Diamond;
     public TMP_Text Force_Cost_Upgrade_Coins;    
     public TMP_Text Force_Cost_Upgrade__Diamond;
+    public TMP_Text Diammind_Win;
 
     [Header("Bullets Slots")]
     public Image bullet_slot_1;
@@ -85,6 +93,7 @@ public class UI_Controller : MonoBehaviour
     public GameObject ReviveButton;
     public GameObject QuestNotification;
     public GameObject GiftsNotification;
+    public GameObject DiammondWinObj;
 
     private void Awake()
     {
@@ -93,8 +102,8 @@ public class UI_Controller : MonoBehaviour
 
     private void Start()
     {
-        Fire_Shot_Price.text = GameManager.Instance.Fire_Cost.ToString();
-        Busrt_Shot_Price.text = GameManager.Instance.Burst_Cost.ToString();
+        Fire_Shot_Price.text = GameManager.Instance.Fire_Cost.Coins.ToString();
+        Busrt_Shot_Price.text = GameManager.Instance.Burst_Cost.Coins.ToString();
 
         SetAbilitesCount();
         SetCurrencyUI();
@@ -199,7 +208,7 @@ public class UI_Controller : MonoBehaviour
                 {
                     float randomValue = Random.Range(0.0f, 1.0f);
 
-                    if (randomValue <= 0.2f)
+                    if (randomValue <= 0.3f)
                     {
                         ReviveButton.SetActive(true);
                     }
@@ -228,7 +237,8 @@ public class UI_Controller : MonoBehaviour
             Main_Menu.DOFade(1, 0.3f);
             Main_Menu.interactable = true;
             Main_Menu.blocksRaycasts = true;
-            GameManager.Instance.WatchMidGameAd();
+            GameManager.Instance.phase = GameManager.GamePhase.MainMenu;
+            GameManager.Instance.WatchMidGameAd();            
         });
     }
 

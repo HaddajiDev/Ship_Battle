@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+
 ///<summary>
 ///
 /// Fire removed
@@ -35,14 +36,43 @@ public class GameManager : MonoBehaviour
     public int Fire_Uses;
     public int Burst_Uses;
 
+    [Header("Power Ups")]
+    [Header("Sheild")]
+    public GameObject SheildObj;
+    public int Sheild_UsagePerGame = 2;
+    private int current_Usage_Sheild;
+    public int Sheild_count; // sheild block shots
+
+    [Header("Freez")]
+    public GameObject FreezObj;
+    public int Freez_count; // freez upcoming shots
+    private int current_Usage_freeze;
+    public int Freez_UsagePerGame = 2;
+
+    [Header("Tiny Shots")]
+    public int TinyShots_count; // make upcoming shots tiny and reduce damage by 50%
+    private int current_Usage_TinyShots;
+    public int TinyShots_UsagePerGame = 3;
+
+    [Header("Tiny Ship")]
+    public int TinyShip_count; // make ship tiny
+    private int current_Usage_TinyShip;
+    public int TinyShip_UsagePerGame = 3;
+
+    [Header("Power Ups Cost")]
+    public Cost Sheild_cost = new Cost(1200, 25);
+    public Cost Freez_cost = new Cost(1500, 35);
+    public Cost TinyShots_cost = new Cost(1000, 10);
+    public Cost TinyShip_cost = new Cost(1100, 15);
+
     [Header("Currency")]
     public int Coins = 50000;
     public int Diamond = 1000;
     public int Coins_Start;
 
     [Header("Abilites Cost")]
-    public int Fire_Cost = 60;
-    public int Burst_Cost = 120;
+    public Cost Fire_Cost = new Cost(60, 0);
+    public Cost Burst_Cost = new Cost(120, 0);
 
     [Header("Current level")]
     public int Current_Level = 0;
@@ -71,7 +101,8 @@ public class GameManager : MonoBehaviour
     public int TotalShotsFired;
     public int TotalShotsHit;
     public int TotalShotsMiss;
-
+    [Header("Game Phase")]
+    public GamePhase phase;
     [Space(20)]
 
     public Shop shop;
@@ -89,6 +120,8 @@ public class GameManager : MonoBehaviour
 
     private bool WatchedRewardAd;
     [HideInInspector] public bool Revived = false;
+
+    
 
     private void Awake()
     {
@@ -119,6 +152,7 @@ public class GameManager : MonoBehaviour
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
         }
+        phase = GamePhase.MainMenu;
     }
 
     public void Play()
@@ -143,10 +177,10 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Main_Menu.DOFade(0, 0.3f);
         UI_Controller.instance.Main_Menu.interactable = false;
         UI_Controller.instance.Main_Menu.blocksRaycasts = false;
-        UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
+        UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
 
         MovePlayerAndCamera();
-
+        phase = GamePhase.Start;
         //get abilites if exited
         Check_Abilites();
         UI_Controller.instance.Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
@@ -154,7 +188,9 @@ public class GameManager : MonoBehaviour
             cam_.GetComponent<CameraFollow>().SetTarget(null);
             cam_.transform.DOMove(End_Point.localPosition, 5).OnComplete(() =>
             {
+                UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
                 Get_Ready_UI(1);
+                phase = GamePhase.ReadyPhase;
                 player_1.enabled = true;
                 player_1.GetComponent<Rotate_Object>().enabled = true;
                 player_2.enabled = false;
@@ -176,7 +212,8 @@ public class GameManager : MonoBehaviour
         MissShot = false;
         WatchedRewardAd = false;
         Revived = false;
-        
+        ResetPowerUpsCurrent();
+
         UI_Controller.instance.SetPlayerStats();
         CrazySDK.Game.GameplayStart();
     }
@@ -189,10 +226,13 @@ public class GameManager : MonoBehaviour
             player_1.enabled = true;
             player_1.GetComponent<Rotate_Object>().enabled = true;
             player_2.enabled = false;
-            cam.Follow = player_1.transform.parent.transform;
-            //cam_.GetComponent<CameraFollow>().SetTarget(player_1.transform.parent.transform);
-            Check_Abilites();
+            cam.Follow = player_1.transform.parent.transform;            
+            Check_Abilites();            
             Get_Ready_UI(1);
+            phase = GamePhase.ReadyPhase;
+            UncheckPowerUps();
+            if (SheildObj.activeInHierarchy)
+                SheildObj.SetActive(false);
         }
         else
         {
@@ -201,7 +241,7 @@ public class GameManager : MonoBehaviour
             player_2.enabled = true;
             player_2.Shoot_Invoked(2);
             cam.Follow = player_2.transform.GetChild(1).GetChild(1).transform;
-            //cam_.GetComponent<CameraFollow>().SetTarget(player_2.transform.GetChild(1).GetChild(1).transform);
+            phase = GamePhase.EnemyReadyPhase;            
         }
     }
 
@@ -237,23 +277,64 @@ public class GameManager : MonoBehaviour
         else
             UI_Controller.instance.Burst_Object.SetActive(true);
     }
+
+    public void Check_PowerUps()
+    {
+        UI_Controller.instance.All_PowerUps.SetActive(true);
+        if (Sheild_count > 0 && current_Usage_Sheild < Sheild_UsagePerGame)
+            UI_Controller.instance.Sheild_Object.SetActive(true);
+        else
+            UI_Controller.instance.Sheild_Object.SetActive(false);
+
+        if (Freez_count > 0 && current_Usage_freeze < Freez_UsagePerGame)
+            UI_Controller.instance.Freez_Object.SetActive(true);
+        else
+            UI_Controller.instance.Freez_Object.SetActive(false);
+
+        if (TinyShots_count > 0 && current_Usage_TinyShots < TinyShots_UsagePerGame)
+            UI_Controller.instance.TinyShots_Object.SetActive(true);
+        else
+            UI_Controller.instance.TinyShots_Object.SetActive(false);
+
+        if (TinyShip_count > 0 && current_Usage_TinyShip < TinyShip_UsagePerGame)
+            UI_Controller.instance.TinyShip_Object.SetActive(true);
+        else
+            UI_Controller.instance.TinyShip_Object.SetActive(false);
+    }
+
+    void UncheckPowerUps()
+    {
+        UI_Controller.instance.All_PowerUps.SetActive(false);
+        UI_Controller.instance.Sheild_Object.SetActive(false);
+        UI_Controller.instance.Freez_Object.SetActive(false);
+        UI_Controller.instance.TinyShots_Object.SetActive(false);
+        UI_Controller.instance.TinyShip_Object.SetActive(false);        
+    }
+    void ResetPowerUpsCurrent()
+    {
+        current_Usage_freeze = 0;
+        current_Usage_Sheild = 0;
+        current_Usage_TinyShip = 0;
+        current_Usage_TinyShots = 0;
+    }
     public void Get_Fire()
     {
-        if (Coins >= Fire_Cost)
+        if (Coins >= Fire_Cost.Coins)
         {
             Fire_Uses++;
-            Coins -= Fire_Cost;
+            Coins -= Fire_Cost.Coins;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("fireUses", Fire_Uses);
             SaveData("coins", Coins);
         }
-    }    public void Dump_Fire()
+    }
+    public void Dump_Fire()
     {
         if (Fire_Uses != 0)
         {
             Fire_Uses--;
-            Coins += Fire_Cost;
+            Coins += Fire_Cost.Coins;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("fireUses", Fire_Uses);
@@ -262,10 +343,10 @@ public class GameManager : MonoBehaviour
     }
     public void Get_Burst()
     {
-        if (Coins >= Burst_Cost)
+        if (Coins >= Burst_Cost.Coins)
         {
             Burst_Uses++;
-            Coins -= Burst_Cost;
+            Coins -= Burst_Cost.Coins;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("burstUses", Burst_Uses);
@@ -277,7 +358,7 @@ public class GameManager : MonoBehaviour
         if (Burst_Uses != 0)
         {
             Burst_Uses--;
-            Coins += Burst_Cost;
+            Coins += Burst_Cost.Coins;
             UI_Controller.instance.SetAbilitesCount();
             UI_Controller.instance.SetCurrencyUI();
             SaveData("burstUses", Burst_Uses);
@@ -328,7 +409,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject fire_1 = fireTransform_1.gameObject;
             Destroy(fire_1);
-        }
+        }       
     }
 
     public void Set_Player()
@@ -538,7 +619,7 @@ public class GameManager : MonoBehaviour
             Quest quest = questsData.Get_Quest(index);
             return quest.type;
         }
-        return Quest.Type.none;        
+        return Quest.Type.none;
     }
 
     public async void SignIn()
@@ -729,7 +810,7 @@ public class GameManager : MonoBehaviour
         player_1._selectedHelm = CrazySDK.Data.GetInt("select_skin_helm");
 
         //quests and gifts
-        CheckForQuestsAndGifts();        
+        CheckForQuestsAndGifts();
     }
 
     public void SetList(string key, List<int> list)
@@ -824,6 +905,91 @@ public class GameManager : MonoBehaviour
         {
             CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, null, null, null);
         }        
+    }
+
+    public void OpenSheild()
+    {
+        SheildObj.SetActive(true);
+        Animator anim = SheildObj.GetComponent<Animator>();
+        anim.SetTrigger("open");
+        UncheckPowerUps();
+        current_Usage_Sheild++;
+        Sheild_count -= 1;
+    }
+
+    public void Freez()
+    {
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            GameObject iceCube = Instantiate(FreezObj, bullets[i].transform.position, bullets[i].transform.rotation);            
+            bullets[i].transform.SetParent(iceCube.transform);
+
+            SpriteRenderer sr = bullets[i].GetComponent<SpriteRenderer>();
+            sr.sortingOrder = 0;
+
+
+            Rigidbody2D bulletRb = bullets[i].GetComponent<Rigidbody2D>();
+            bulletRb.velocity *= 0.2f;
+
+            Collider2D col = bullets[i].GetComponent<Collider2D>();
+            col.isTrigger = true;
+
+            Rigidbody2D iceRb = iceCube.GetComponent<Rigidbody2D>();
+            iceRb.velocity = bulletRb.velocity;            
+            bulletRb.isKinematic = true;            
+            bullets[i].tag = "Finish";
+            
+            ParticleSystem particleSystem = bullets[i].GetComponentInChildren<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                particleSystem.Stop();
+            }
+        }
+        UncheckPowerUps();
+        current_Usage_freeze++;
+        Freez_count--;
+    }
+
+    public void TinyShots()
+    {
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            Vector3 scale = bullets[i].transform.localScale;
+            bullets[i].transform.DOScale(new Vector3(scale.x / 2, scale.y / 2, scale.z), 0.2f);
+
+            Bullet bullet = bullets[i].GetComponent<Bullet>();
+            bullet.Damage /= 2;
+
+            ParticleSystem particleSystem = bullets[i].GetComponentInChildren<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                Vector3 scalePart = particleSystem.gameObject.transform.localScale;
+                particleSystem.gameObject.transform.DOScale(new Vector3(scalePart.x / 2, scalePart.y / 2, scalePart.z), 0.2f);
+            }
+        }
+        UncheckPowerUps();
+        current_Usage_TinyShots++;
+        TinyShots_count--;
+    }
+
+    public void TinyShip()
+    {
+        UncheckPowerUps();
+        current_Usage_TinyShip++;
+        TinyShip_count--;
+    }
+
+    public enum GamePhase
+    {
+        MainMenu,
+        Start,
+        ReadyPhase,
+        PlayerShootPhase,
+        EnemyReadyPhase,
+        EnemyShootPhase,
+        GameOver,
     }
 }
 

@@ -140,6 +140,8 @@ MonoBehaviour:
   Damage: 10
   type: 1
   Fire_Partical: {fileID: 821748811357637068, guid: cb834dfe182b96344a2428ec1ce2bd5c, type: 3}
+  Player_Bullet: 0
+  inFire: 0
 --- !u!95 &461049137759043113
 Animator:
   serializedVersion: 4

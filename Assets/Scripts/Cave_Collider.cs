@@ -8,12 +8,12 @@ public class Cave_Collider : MonoBehaviour
     int hit = 0;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Bullet")
+        if(collision.gameObject.CompareTag("Bullet"))
         {
             collision.gameObject.tag = "Respawn";
             hit++;
             if (hit == 1)
-            {                
+            {
                 Invoke("Check_Turns", 2);
             }
 

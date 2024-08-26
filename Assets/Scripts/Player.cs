@@ -203,7 +203,8 @@ public class Player : MonoBehaviour
             GameManager.Instance.Fire_Uses--;
             GameManager.Instance.SaveData("fireUses", GameManager.Instance.Fire_Uses);
         }
-            
+
+        GameManager.Instance.phase = GameManager.GamePhase.PlayerShootPhase;        
 
         if (cannonFireEffect != null)
             Instantiate(cannonFireEffect, shootPoint.position, transform.rotation);
