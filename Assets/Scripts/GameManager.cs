@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     public int TinyShots_UsagePerGame = 3;
 
     [Header("Tiny Ship")]
+    public GameObject PlayerShip;
     public int TinyShip_count; // make ship tiny
     private int current_Usage_TinyShip;
     public int TinyShip_UsagePerGame = 3;
@@ -227,12 +228,20 @@ public class GameManager : MonoBehaviour
             player_1.GetComponent<Rotate_Object>().enabled = true;
             player_2.enabled = false;
             cam.Follow = player_1.transform.parent.transform;            
-            Check_Abilites();            
+            Check_Abilites();
             Get_Ready_UI(1);
             phase = GamePhase.ReadyPhase;
             UncheckPowerUps();
             if (SheildObj.activeInHierarchy)
                 SheildObj.SetActive(false);
+            if (PlayerShip.transform.localScale.x == 2)
+            {
+                Ship ship = Ships[0].GetComponent<Ship>();
+                ship.Floating = true;
+                PlayerShip.transform.DOScale(new Vector3(4.3f, 4.3f, 1), 0.2f);
+                PlayerShip.transform.localPosition = new Vector3(PlayerShip.transform.localPosition.x, -1.73f, PlayerShip.transform.localPosition.z);
+            }
+            
         }
         else
         {
@@ -241,7 +250,7 @@ public class GameManager : MonoBehaviour
             player_2.enabled = true;
             player_2.Shoot_Invoked(2);
             cam.Follow = player_2.transform.GetChild(1).GetChild(1).transform;
-            phase = GamePhase.EnemyReadyPhase;            
+            phase = GamePhase.EnemyReadyPhase;
         }
     }
 
@@ -308,7 +317,7 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Sheild_Object.SetActive(false);
         UI_Controller.instance.Freez_Object.SetActive(false);
         UI_Controller.instance.TinyShots_Object.SetActive(false);
-        UI_Controller.instance.TinyShip_Object.SetActive(false);        
+        UI_Controller.instance.TinyShip_Object.SetActive(false);
     }
     void ResetPowerUpsCurrent()
     {
@@ -753,6 +762,12 @@ public class GameManager : MonoBehaviour
         //gifts
         GenerateGifts();
         SetList("current_Gifts", currentGifts);
+
+        //power ups
+        CrazySDK.Data.SetInt("freeze", Freez_count);
+        CrazySDK.Data.SetInt("tinyShots", TinyShots_count);
+        CrazySDK.Data.SetInt("shield", Sheild_count);
+        CrazySDK.Data.SetInt("tinyShip", TinyShip_count);
     }
 
     void LoadData()
@@ -811,6 +826,13 @@ public class GameManager : MonoBehaviour
 
         //quests and gifts
         CheckForQuestsAndGifts();
+
+
+        //power ups
+        Freez_count = CrazySDK.Data.GetInt("freeze");
+        TinyShots_count = CrazySDK.Data.GetInt("tinyShots");
+        Sheild_count = CrazySDK.Data.GetInt("shield");
+        TinyShip_count = CrazySDK.Data.GetInt("tinyShip");
     }
 
     public void SetList(string key, List<int> list)
@@ -915,6 +937,7 @@ public class GameManager : MonoBehaviour
         UncheckPowerUps();
         current_Usage_Sheild++;
         Sheild_count -= 1;
+        UI_Controller.instance.SetPowerUpsCount();
     }
 
     public void Freez()
@@ -949,6 +972,7 @@ public class GameManager : MonoBehaviour
         UncheckPowerUps();
         current_Usage_freeze++;
         Freez_count--;
+        UI_Controller.instance.SetPowerUpsCount();
     }
 
     public void TinyShots()
@@ -972,13 +996,19 @@ public class GameManager : MonoBehaviour
         UncheckPowerUps();
         current_Usage_TinyShots++;
         TinyShots_count--;
+        UI_Controller.instance.SetPowerUpsCount();
     }
 
     public void TinyShip()
     {
         UncheckPowerUps();
+        Ship ship = Ships[0].GetComponent<Ship>();
+        ship.Floating = false;
+        PlayerShip.transform.DOLocalMove(new Vector3(PlayerShip.transform.localPosition.x, -2.5f, PlayerShip.transform.localPosition.z), 0.1f);        
         current_Usage_TinyShip++;
         TinyShip_count--;
+        PlayerShip.transform.DOScale(new Vector3(2, 2, 1), 0.3f);
+        UI_Controller.instance.SetPowerUpsCount();
     }
 
     public enum GamePhase

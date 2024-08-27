@@ -26,6 +26,8 @@ public class Ship : MonoBehaviour
     public GameObject Destroyed_Ship;
     public Transform Destroy_Point;
 
+    public bool Floating = true;
+
 
     private void Awake()
     {
@@ -64,23 +66,26 @@ public class Ship : MonoBehaviour
     
     void Update()
     {
-        if (cap)
+        if (Floating)
         {
-            yPos -= Time.deltaTime;
-            if (yPos <= pos - 0.2f)
+            if (cap)
             {
-                cap = false;
+                yPos -= Time.deltaTime;
+                if (yPos <= pos - 0.2f)
+                {
+                    cap = false;
+                }
             }
-        }
-        if (!cap)
-        {
-            yPos += Time.deltaTime;
-            if (yPos >= pos + 0.2f)
+            if (!cap)
             {
-                cap = true;
+                yPos += Time.deltaTime;
+                if (yPos >= pos + 0.2f)
+                {
+                    cap = true;
+                }
             }
-        }
-        transform.localPosition = new Vector3(transform.localPosition.x, yPos, 0);        
+            transform.localPosition = new Vector3(transform.localPosition.x, yPos, 0);
+        }               
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

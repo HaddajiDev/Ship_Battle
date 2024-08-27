@@ -330,6 +330,91 @@ public class Shop : MonoBehaviour
             return false;
         }
     }
+
+    public void Buy_Freeze()
+    {
+        Cost cost = GameManager.Instance.Freez_cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+
+            GameManager.Instance.Freez_count += 1;
+            GameManager.Instance.SaveData("freeze", GameManager.Instance.Freez_count);           
+
+            UI_Controller.instance.SetPowerUpsCount();
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
+    }
+    public void Buy_TinyShots()
+    {
+        Cost cost = GameManager.Instance.TinyShots_cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+
+            GameManager.Instance.TinyShots_count += 1;
+            GameManager.Instance.SaveData("tinyShots", GameManager.Instance.TinyShots_count);
+
+            UI_Controller.instance.SetPowerUpsCount();
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
+    }
+    public void Buy_Shield()
+    {
+        Cost cost = GameManager.Instance.Sheild_cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+
+            GameManager.Instance.Sheild_count += 1;
+            GameManager.Instance.SaveData("shield", GameManager.Instance.Sheild_count);
+
+            UI_Controller.instance.SetPowerUpsCount();
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
+    }
+    public void Buy_TinyShip()
+    {
+        Cost cost = GameManager.Instance.TinyShip_cost;
+        if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
+        {
+            GameManager.Instance.Coins -= cost.Coins;
+            GameManager.Instance.Diamond -= cost.Diamond;
+
+            GameManager.Instance.TinyShip_count += 1;
+            GameManager.Instance.SaveData("tinyShip", GameManager.Instance.TinyShip_count);
+
+            UI_Controller.instance.SetPowerUpsCount();
+            UI_Controller.instance.SetCurrencyUI();
+            GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+            GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
+    }
 }
 
 [System.Serializable]

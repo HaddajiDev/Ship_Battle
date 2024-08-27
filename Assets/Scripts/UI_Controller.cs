@@ -26,6 +26,7 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Quests;
     public CanvasGroup Ad_FeedBack;
     public CanvasGroup Gifts;
+    public CanvasGroup SelectBattleStrategies;
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -44,6 +45,8 @@ public class UI_Controller : MonoBehaviour
     public GameObject TinyShots_Object;
     public GameObject TinyShip_Object;
     public GameObject All_PowerUps;
+    public GameObject infernoAnimUI;
+    public GameObject sheildAnimUI;     
 
     [Header("Texts")]
     public TMP_Text Coins_Main_Text;
@@ -63,6 +66,18 @@ public class UI_Controller : MonoBehaviour
     public TMP_Text Force_Cost_Upgrade_Coins;    
     public TMP_Text Force_Cost_Upgrade__Diamond;
     public TMP_Text Diammind_Win;
+    public TMP_Text Freeze_Count;
+    public TMP_Text Freeze_Cost_Coins;
+    public TMP_Text Freeze_Cost_gems;
+    public TMP_Text TinyShots_Count;
+    public TMP_Text TinyShots_Cost_Coins;
+    public TMP_Text TinyShots_Cost_gems;
+    public TMP_Text Sheild_Count;
+    public TMP_Text Sheild_Cost_Coins;
+    public TMP_Text Sheild_Cost_gems;
+    public TMP_Text TinyShip_Count;
+    public TMP_Text TinyShip_Cost_Coins;
+    public TMP_Text TinyShip_Cost_gems;    
 
     [Header("Bullets Slots")]
     public Image bullet_slot_1;
@@ -80,8 +95,12 @@ public class UI_Controller : MonoBehaviour
     public GameObject AccountButton;
     public TMP_Text Stats;
 
+    
+
     [Header("Skins Stuff")]
     public Transform skins_Container;
+
+
 
     [Header("Others")]
     public Transform playButton;
@@ -95,6 +114,8 @@ public class UI_Controller : MonoBehaviour
     public GameObject GiftsNotification;
     public GameObject DiammondWinObj;
 
+    
+
     private void Awake()
     {
         instance = this;
@@ -102,10 +123,10 @@ public class UI_Controller : MonoBehaviour
 
     private void Start()
     {
-        Fire_Shot_Price.text = GameManager.Instance.Fire_Cost.Coins.ToString();
-        Busrt_Shot_Price.text = GameManager.Instance.Burst_Cost.Coins.ToString();
+        SetPowerUpsCost();
 
         SetAbilitesCount();
+        SetPowerUpsCount();
         SetCurrencyUI();
         SetPlayerStats();
         
@@ -413,6 +434,29 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
+    public void Show_SelectPowerUps_Controller(int index)
+    {
+        if (index == 1)
+        {            
+            SelectBattleStrategies.gameObject.SetActive(true);
+            UI_Animator infernoAnim = infernoAnimUI.GetComponentInChildren<UI_Animator>();
+            infernoAnim.Func_PlayUIAnim();
+            UI_Animator SheildAnim = sheildAnimUI.GetComponentInChildren<UI_Animator>();
+            SheildAnim.Func_PlayUIAnim();
+            SelectBattleStrategies.interactable = true;
+            SelectBattleStrategies.blocksRaycasts = true;
+            SelectBattleStrategies.DOFade(1, 0.3f);            
+        }
+        else
+        {
+            SelectBattleStrategies.DOFade(0, 0.3f).OnComplete(() => {
+                SelectBattleStrategies.interactable = false;
+                SelectBattleStrategies.blocksRaycasts = false;
+                SelectBattleStrategies.gameObject.SetActive(false);
+            });
+        }
+    }
+
     public void FeedBackPopUp(string text, FeedbackType type)
     {
         Block.SetActive(false);
@@ -473,8 +517,34 @@ public class UI_Controller : MonoBehaviour
     }
     public void SetAbilitesCount()
     {
-        Total_Fire.text = GameManager.Instance.Fire_Uses.ToString();
-        Total_Busrt.text = GameManager.Instance.Burst_Uses.ToString();
+        Total_Fire.text = $"You have : " + GameManager.Instance.Fire_Uses.ToString();
+        Total_Busrt.text = $"You have : " + GameManager.Instance.Burst_Uses.ToString();
+    }
+
+    public void SetPowerUpsCount()
+    {
+        Freeze_Count.text = $"You have : {GameManager.Instance.Freez_count}";
+        TinyShots_Count.text = $"You have : {GameManager.Instance.TinyShots_count}";
+        Sheild_Count.text = $"You have : {GameManager.Instance.Sheild_count}";
+        TinyShip_Count.text = $"You have : {GameManager.Instance.TinyShip_count}";
+    }
+
+    private void SetPowerUpsCost()
+    {
+        Fire_Shot_Price.text = GameManager.Instance.Fire_Cost.Coins.ToString();
+        Busrt_Shot_Price.text = GameManager.Instance.Burst_Cost.Coins.ToString();
+
+        Freeze_Cost_Coins.text = $"{GameManager.Instance.Freez_cost.Coins}";
+        Freeze_Cost_gems.text = $"{GameManager.Instance.Freez_cost.Diamond}";
+
+        TinyShots_Cost_Coins.text = $"{GameManager.Instance.TinyShots_cost.Coins}";
+        TinyShots_Cost_gems.text = $"{GameManager.Instance.TinyShots_cost.Diamond}";
+
+        Sheild_Cost_Coins.text = $"{GameManager.Instance.Sheild_cost.Coins}";
+        Sheild_Cost_gems.text = $"{GameManager.Instance.Sheild_cost.Diamond}";
+
+        TinyShip_Cost_Coins.text = $"{GameManager.Instance.TinyShip_cost.Coins}";
+        TinyShip_Cost_gems.text = $"{GameManager.Instance.TinyShip_cost.Diamond}";
     }
 
     public void SetPlayerStats()
