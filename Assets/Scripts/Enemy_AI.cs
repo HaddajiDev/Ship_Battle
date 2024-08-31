@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using DG.Tweening;
 
 public class Enemy_AI : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Enemy_AI : MonoBehaviour
     
     private bool Can_Fire = false;
     [HideInInspector] public bool Fire = false;
+
+    private bool canUsePowerUps = false;
 
     private int Burst_Count;
 
@@ -53,6 +56,15 @@ public class Enemy_AI : MonoBehaviour
     public AnchorCosmaticData anchorCosmatic;   
     public SpriteRenderer[] anchors;
 
+    public GameObject SheildObj;
+    int current_Usage_Sheild;
+
+    int current_Usage_freeze;
+
+    int current_Usage_TinyShots;
+
+    int current_Usage_TinyShip;
+
     private void Start()
     {
         anim = Canon.gameObject.GetComponent<Animator>();
@@ -84,11 +96,36 @@ public class Enemy_AI : MonoBehaviour
             bull.Damage = Random.Range(DamageMin, DamageMax + 1);
             if (Fire)
                 bull.inFire = true;
-        }
+        }        
         
         GameManager.Instance.isChecking = false;
         anim.SetTrigger("shoot");
         Camera_Shake.Instance.Shake(source, 1);
+    }
+
+    public void EnemyPowerUps()
+    {
+        Invoke("EnemyPowerUpsInvoke", 0.5f);
+    }
+    private void EnemyPowerUpsInvoke()
+    {
+        if (canUsePowerUps)
+        {
+            float randomValue = Random.Range(0.0f, 1.0f);
+
+            if (randomValue <= 0.5f)
+            {
+                int random = Random.Range(0, 4);
+                if (random == 0)
+                    OpenSheild();
+                else if (random == 1)
+                    Freeze();
+                else if (random == 2)
+                    TinyShots();
+                else
+                    TinyShip();
+            }
+        }
     }
 
     public void Shoot_Invoked(float value)
@@ -119,12 +156,126 @@ public class Enemy_AI : MonoBehaviour
         DamageMax = lvl.DamageMax;
         DamageMin = lvl.DamageMin;
 
+        canUsePowerUps = lvl.usePowerUps;
+
         GetShip_Skin(lvl.ship);
         GetSail_skin(lvl.sail);
         GetFlag_skin(lvl.flag);
         GetHelm_skin(lvl.helm);
         GetCannon_skin(lvl.cannon);
         GetAnchor_skin(lvl.anchor);
+    }
+
+    private void OpenSheild()
+    {
+        if(current_Usage_Sheild <= GameManager.Instance.Sheild_UsagePerGame)
+        {
+            SheildObj.SetActive(true);
+            Animator anim = SheildObj.GetComponent<Animator>();
+            anim.SetTrigger("open");
+            current_Usage_Sheild++;
+        }        
+    }
+
+    private void Freeze()
+    {
+        if(current_Usage_freeze <= GameManager.Instance.Freez_UsagePerGame)
+        {
+            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+            for (int i = 0; i < bullets.Length; i++)
+            {
+                GameObject iceCube = Instantiate(GameManager.Instance.FreezObj, bullets[i].transform.position, bullets[i].transform.rotation);
+                bullets[i].transform.SetParent(iceCube.transform);
+
+                SpriteRenderer sr = bullets[i].GetComponent<SpriteRenderer>();
+                sr.sortingOrder = 0;
+
+
+                Rigidbody2D bulletRb = bullets[i].GetComponent<Rigidbody2D>();
+                bulletRb.velocity *= 0.2f;
+
+                Collider2D col = bullets[i].GetComponent<Collider2D>();
+                col.isTrigger = true;
+
+                Rigidbody2D iceRb = iceCube.GetComponent<Rigidbody2D>();
+                iceRb.velocity = bulletRb.velocity;
+                bulletRb.isKinematic = true;
+                bullets[i].tag = "Finish";
+
+                ParticleSystem particleSystem = bullets[i].GetComponentInChildren<ParticleSystem>();
+                if (particleSystem != null)
+                {
+                    particleSystem.Stop();
+                }
+            }
+            current_Usage_freeze++;
+            Invoke("check_After", 2);
+        }        
+    }
+
+    void check_After()
+    {
+        if (!GameManager.Instance.isChecking)
+        {
+            GameManager.Instance.isChecking = true;
+            GameManager.Instance.Check_Turn();
+        }
+    }
+
+    private void TinyShots()
+    {
+        if(current_Usage_TinyShots <= GameManager.Instance.TinyShots_UsagePerGame)
+        {
+            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+            for (int i = 0; i < bullets.Length; i++)
+            {
+                Vector3 scale = bullets[i].transform.localScale;
+                bullets[i].transform.DOScale(new Vector3(scale.x / 2, scale.y / 2, scale.z), 0.2f);
+
+                Bullet bullet = bullets[i].GetComponent<Bullet>();
+                bullet.Damage /= 2;
+
+                ParticleSystem particleSystem = bullets[i].GetComponentInChildren<ParticleSystem>();
+                if (particleSystem != null)
+                {
+                    Vector3 scalePart = particleSystem.gameObject.transform.localScale;
+                    particleSystem.gameObject.transform.DOScale(new Vector3(scalePart.x / 2, scalePart.y / 2, scalePart.z), 0.2f);
+                }
+            }
+            current_Usage_TinyShots++;
+        }        
+    }
+
+    private void TinyShip()
+    {   
+        if(current_Usage_TinyShip <= GameManager.Instance.TinyShip_UsagePerGame)
+        {
+            Ship ship = GetComponent<Ship>();
+            ship.Floating = false;
+            transform.DOLocalMove(new Vector3(transform.localPosition.x, -2.5f, transform.localPosition.z), 0.1f);
+            current_Usage_TinyShip++;
+
+            transform.DOScale(new Vector3(-2, 2, 1), 0.3f);
+        }
+    }
+
+    public void ResetPowerUpsEnemy()
+    {
+        current_Usage_Sheild = 0;
+        current_Usage_freeze = 0;
+        current_Usage_TinyShots = 0;
+        current_Usage_TinyShip = 0;
+        ResetShipEnemy();
+    }
+
+    public void ResetShipEnemy()
+    {
+        Ship ship = GetComponent<Ship>();
+        ship.Floating = true;
+
+        transform.DOScale(new Vector3(-4.3f, 4.3f, 1), 0.3f);
+        if (SheildObj.activeInHierarchy)
+            SheildObj.SetActive(false);
     }
 
     void getRandomBullet(int index)

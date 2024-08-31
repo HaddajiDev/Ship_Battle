@@ -24,6 +24,7 @@ MonoBehaviour:
     Max_Angle: 60
     Fire: 1
     Burst_Shoots: 3
+    usePowerUps: 0
     DamageMin: 1
     DamageMax: 2
     ship: 0
@@ -43,8 +44,9 @@ MonoBehaviour:
     Max_Angle: 60
     Fire: 1
     Burst_Shoots: 3
+    usePowerUps: 1
     DamageMin: 1
-    DamageMax: 2
+    DamageMax: 1
     ship: 0
     anchor: 2
     flag: 1

@@ -104,7 +104,7 @@ public class QuestBanner : MonoBehaviour
 
         GameManager.Instance.currentQuests.Remove(index);
         GameManager.Instance.SetList("current_Quests", GameManager.Instance.currentQuests);
-
+        
         TMPro.TMP_Text count = UI_Controller.instance.QuestNotification.GetComponentInChildren<TMPro.TMP_Text>();
         count.text = $"{GameManager.Instance.currentQuests.Count}";
 

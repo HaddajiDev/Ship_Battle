@@ -45,7 +45,11 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             GameManager.Instance.SaveData("bullets", bullets.data);
-        }        
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
     }
 
     public void Get_Player_Bullets()
@@ -76,7 +80,7 @@ public class Shop : MonoBehaviour
                     }
                     else if(clickedButton.name == "Bullet_2")
                     {
-                        select.onClick.AddListener(() => Select_Bullet_From_list_2(selected));                        
+                        select.onClick.AddListener(() => Select_Bullet_From_list_2(selected));
                     }
                     else
                     {

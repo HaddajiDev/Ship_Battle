@@ -27,6 +27,7 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Ad_FeedBack;
     public CanvasGroup Gifts;
     public CanvasGroup SelectBattleStrategies;
+    public CanvasGroup Settings;
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -113,7 +114,7 @@ public class UI_Controller : MonoBehaviour
     public GameObject QuestNotification;
     public GameObject GiftsNotification;
     public GameObject DiammondWinObj;
-
+    
     
 
     private void Awake()
@@ -400,7 +401,7 @@ public class UI_Controller : MonoBehaviour
         if (index == 1)
         {
             GameManager.Instance.ReadNotification = 1;
-            CrazySDK.Data.SetInt("readNotification", GameManager.Instance.ReadNotification);
+            GameManager.Instance.SaveData("readNotification", GameManager.Instance.ReadNotification);            
             QuestNotification.SetActive(false);
             Quests.interactable = true;
             Quests.blocksRaycasts = true;
@@ -488,6 +489,25 @@ public class UI_Controller : MonoBehaviour
             Gifts.DOFade(0, 0.3f).OnComplete(() => {
                 Gifts.interactable = false;
                 Gifts.blocksRaycasts = false;                
+            });
+        }
+    }
+
+    public void Show_Settings_Controller(int index)
+    {
+        if (index == 1)
+        {
+            Settings.gameObject.SetActive(true);
+            Settings.interactable = true;
+            Settings.blocksRaycasts = true;
+            Settings.DOFade(1, 0.3f);
+        }
+        else
+        {
+            Settings.DOFade(0, 0.3f).OnComplete(() => {
+                Settings.interactable = false;
+                Settings.blocksRaycasts = false;
+                Settings.gameObject.SetActive(false);
             });
         }
     }

@@ -99,6 +99,12 @@ public class Player : MonoBehaviour
                 }
 
                 trajectoryLineRenderer.enabled = true;
+                if(CrazyGames.CrazySDK.Data.GetInt("tut") == 0)
+                {
+                    GameManager.Instance.Pointer.gameObject.SetActive(false);
+                    GameManager.Instance.Hand.gameObject.SetActive(false);
+                    GameManager.Instance.SkipNextDia();
+                }
             }
 
             if (Input.GetMouseButton(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved))
@@ -159,7 +165,13 @@ public class Player : MonoBehaviour
                 }
 
                 setLimit();
-                afterShoot();                
+                afterShoot();
+
+                //tut
+                if (CrazyGames.CrazySDK.Data.GetInt("tut") == 0)
+                {
+                    GameManager.Instance.SkipNextDia();                    
+                }
             }
         }
     }
@@ -204,7 +216,8 @@ public class Player : MonoBehaviour
             GameManager.Instance.SaveData("fireUses", GameManager.Instance.Fire_Uses);
         }
 
-        GameManager.Instance.phase = GameManager.GamePhase.PlayerShootPhase;        
+        GameManager.Instance.phase = GameManager.GamePhase.PlayerShootPhase;
+        GameManager.Instance.player_2.EnemyPowerUps();
 
         if (cannonFireEffect != null)
             Instantiate(cannonFireEffect, shootPoint.position, transform.rotation);

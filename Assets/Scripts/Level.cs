@@ -26,6 +26,9 @@ public class Level
     
     [Header("Burst Shots")]    
     public int Burst_Shoots = 1;
+
+    [Header("Power Ups")]
+    public bool usePowerUps = false;
     
     [Header("Damage")]
     public int DamageMin = 1;

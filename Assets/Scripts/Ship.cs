@@ -102,10 +102,10 @@ public class Ship : MonoBehaviour
             {
                 Invoke("Check_Turns", 1);
             }
-                
+
             Take_Damage(collision.gameObject.GetComponent<Bullet>().Damage);
-            
-            if(collision.gameObject.GetComponent<Bullet>().transform.childCount != 0)
+
+            if (collision.gameObject.GetComponent<Bullet>().transform.childCount != 0)
             {
                 Instantiate(Fire_Effect, collision.transform.position, Quaternion.identity, gameObject.transform);
                 collision.gameObject.GetComponentInChildren<ParticleSystem>().Stop();
@@ -130,6 +130,7 @@ public class Ship : MonoBehaviour
                 }                
             }
             
+            
             //Coins
             if (!player)
             {
@@ -141,44 +142,70 @@ public class Ship : MonoBehaviour
     }
 
     void Take_Damage(int Damage)
-    {
-        Current_Health -= Damage;
+    {        
         if (player)
         {
+            Current_Health -= Damage;
             HealthBar_Player.DOFade(1, 0.5f);
             Slider slider = HealthBar_Player.GetComponentInChildren<Slider>();
             slider.value = Current_Health;
+            if (Current_Health <= 0)
+            {
+                gameObject.SetActive(false);
+                GameManager.Instance.Coins += player ? 0 : Random.Range(50, 81);
+                if (player)
+                {
+                    UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
+                    Invoke("Win_Obj_Lose", 3);
+                    GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                    Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
+                    fo.Ship = true;
+                    UI_Controller.instance.Getting_Ready_Object.interactable = false;
+                    UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
+                }
+                else
+                {
+                    Invoke("Win_Obj_Win", 3);
+                    GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                    DestroyedShip.transform.localScale = new Vector3(-1, 1, 0);
+                    Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
+                    fo.Ship = false;
+                }
+                GameManager.Instance.Reset_play();
+            }
         }
         else
         {
+            Current_Health -= Damage;
             HealthBar_Enemy.DOFade(1, 0.5f);
             Slider slider = HealthBar_Enemy.GetComponentInChildren<Slider>();
             slider.value = Current_Health;
-        }
-        if(Current_Health <= 0)
-        {            
-            gameObject.SetActive(false);
-            GameManager.Instance.Coins += player ? 0 : Random.Range(50, 81);
-            if (player)
+            if (Current_Health <= 0)
             {
-                UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
-                Invoke("Win_Obj_Lose", 3);
-                GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
-                Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
-                fo.Ship = true;
-                UI_Controller.instance.Getting_Ready_Object.interactable = false;
-                UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
+                gameObject.SetActive(false);
+                GameManager.Instance.Coins += player ? 0 : Random.Range(50, 81);
+                if (player)
+                {
+                    UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
+                    Invoke("Win_Obj_Lose", 3);
+                    GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                    Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
+                    fo.Ship = true;
+                    UI_Controller.instance.Getting_Ready_Object.interactable = false;
+                    UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
+                }
+                else
+                {
+                    Invoke("Win_Obj_Win", 3);
+                    GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
+                    DestroyedShip.transform.localScale = new Vector3(-1, 1, 0);
+                    Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
+                    fo.Ship = false;
+                }
+                GameManager.Instance.Reset_play();
             }
-            else
-            {
-                Invoke("Win_Obj_Win", 3);
-                GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
-                DestroyedShip.transform.localScale = new Vector3(-1, 1, 0);
-                Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
-                fo.Ship = false;
-            }            
-            GameManager.Instance.Reset_play();            
         }
+        
         
     }
 
@@ -248,7 +275,7 @@ public class Ship : MonoBehaviour
 
     void Win_Obj_Lose()
     {
-        UI_Controller.instance.Win_Tigger(1, "You Lost");        
+        UI_Controller.instance.Win_Tigger(1, "You Lost");
         UI_Controller.instance.Coins_text.text = (GameManager.Instance.Coins - GameManager.Instance.Coins_Start).ToString();
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
@@ -296,7 +323,7 @@ public class Ship : MonoBehaviour
             GameManager.Instance.isChecking = true;
             GameManager.Instance.Check_Turn();            
         }
-        Invoke("Health_Bar_Out", 2);
+        Invoke("Health_Bar_Out", 3);
     }
 
     void Health_Bar_Out()

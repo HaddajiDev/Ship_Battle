@@ -67,14 +67,7 @@ public class Water : MonoBehaviour
             }
             rb.gravityScale *= -1;
             rb.gravityScale += (rb.gravityScale * 50) / 100;
-            if (collision.gameObject.CompareTag("ice"))
-            {
-                hit++;
-                if (hit == 1)
-                {
-                    Invoke("Check_Turns", 1);
-                }                
-            }
+            
             if (rb.gravityScale >= 2.5f || rb.gravityScale <= -2.5f)
             {
                 rb.gravityScale = 0;

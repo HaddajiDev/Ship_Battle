@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-
+using System.Collections;
 
 ///<summary>
 ///
@@ -26,11 +26,13 @@ public class GameManager : MonoBehaviour
     public Camera cam_;
     [SerializeField] private Transform End_Point; // Camera player pos
     public Transform Main_Point;
-
+    
     public Transform PlayerStuff;
     public Level_Data level_Data;
 
     [HideInInspector] public bool isChecking = false;
+    public GameObject FlamesUI;
+    public GameObject ShieldUI;
 
     [Header("Abilities usage")]
     public int Fire_Uses;
@@ -110,11 +112,14 @@ public class GameManager : MonoBehaviour
     public UI_Controller uI_Controller;
     public Upgrades upgrades;
 
+
     int first;
 
     [HideInInspector]
     public string username;
+    [HideInInspector]
     public string imgURL;
+    [HideInInspector]
     public string token;
 
     bool isAvailable;
@@ -122,6 +127,14 @@ public class GameManager : MonoBehaviour
     private bool WatchedRewardAd;
     [HideInInspector] public bool Revived = false;
 
+    [Header("Tutoriols")]
+    public Transform Hand;
+    public Transform Pointer;
+    int tut;
+    public CanvasGroup captain;
+    public TMPro.TMP_Text tutText;
+    public CanvasGroup ReadyTut;
+    public GameObject TutObj;
     
 
     private void Awake()
@@ -134,12 +147,12 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("First", 1);
             setDefaultData();            
         }        
-        LoadData();
-        CrazySDK.User.SyncUnityGameData();
+        LoadData();        
     }
 
     private async void Start()
     {
+        ShowTut();
         var isAvailable = CrazySDK.User.IsUserAccountAvailable;
         if (isAvailable == false)
             UI_Controller.instance.AccountButton.SetActive(false);
@@ -153,7 +166,7 @@ public class GameManager : MonoBehaviour
             imgURL = user.profilePictureUrl;
             UI_Controller.instance.SignInButton.SetActive(false);
         }
-        phase = GamePhase.MainMenu;
+        phase = GamePhase.MainMenu;        
     }
 
     public void Play()
@@ -206,6 +219,8 @@ public class GameManager : MonoBehaviour
         
         Coins_Start = Coins;
         Reset_Ships(false);
+        ResetPowerUpsCurrent();
+        player_2.ResetPowerUpsEnemy();
         Set_Player();
         player_1.GetAllSkins();
         player_2.Get_Stats(Current_Level);
@@ -213,8 +228,6 @@ public class GameManager : MonoBehaviour
         MissShot = false;
         WatchedRewardAd = false;
         Revived = false;
-        ResetPowerUpsCurrent();
-
         UI_Controller.instance.SetPlayerStats();
         CrazySDK.Game.GameplayStart();
     }
@@ -251,6 +264,7 @@ public class GameManager : MonoBehaviour
             player_2.Shoot_Invoked(2);
             cam.Follow = player_2.transform.GetChild(1).GetChild(1).transform;
             phase = GamePhase.EnemyReadyPhase;
+            player_2.ResetShipEnemy();
         }
     }
 
@@ -262,6 +276,11 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.Getting_Ready_Object.DOFade(fade, duration);
             UI_Controller.instance.Getting_Ready_Object.interactable = true;
             UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = true;
+            if (FlamesUI.activeInHierarchy)
+            {
+                UI_Animator infernoAnim = FlamesUI.GetComponent<UI_Animator>();
+                infernoAnim.Func_PlayUIAnim();
+            }            
         }
         else
         {
@@ -291,7 +310,11 @@ public class GameManager : MonoBehaviour
     {
         UI_Controller.instance.All_PowerUps.SetActive(true);
         if (Sheild_count > 0 && current_Usage_Sheild < Sheild_UsagePerGame)
+        {
             UI_Controller.instance.Sheild_Object.SetActive(true);
+            UI_Animator infernoAnim = ShieldUI.GetComponent<UI_Animator>();
+            infernoAnim.Func_PlayUIAnim();
+        }            
         else
             UI_Controller.instance.Sheild_Object.SetActive(false);
 
@@ -337,6 +360,10 @@ public class GameManager : MonoBehaviour
             SaveData("fireUses", Fire_Uses);
             SaveData("coins", Coins);
         }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
     }
     public void Dump_Fire()
     {
@@ -360,6 +387,10 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             SaveData("burstUses", Burst_Uses);
             SaveData("coins", Coins);
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
         }
     }
     public void Dump_Burst()
@@ -485,19 +516,23 @@ public class GameManager : MonoBehaviour
     public void SaveData(string key, int value)
     {        
         CrazySDK.Data.SetInt(key, value);
+        CrazySDK.User.SyncUnityGameData();
     }
     public void SaveData(string key, float value)
     {        
         CrazySDK.Data.SetFloat(key, value);
+        CrazySDK.User.SyncUnityGameData();
     }
     public void SaveData(string key, string value)
     {        
         CrazySDK.Data.SetString(key, value);
+        CrazySDK.User.SyncUnityGameData();
     }
     public void SaveData(string key, List<int> value)
     {        
-        string bulletList = string.Join(",", value.ConvertAll(i => i.ToString()).ToArray());
-        CrazySDK.Data.SetString(key, bulletList);
+        string list = string.Join(",", value.ConvertAll(i => i.ToString()).ToArray());
+        CrazySDK.Data.SetString(key, list);
+        CrazySDK.User.SyncUnityGameData();
     }
 
 
@@ -768,6 +803,10 @@ public class GameManager : MonoBehaviour
         CrazySDK.Data.SetInt("tinyShots", TinyShots_count);
         CrazySDK.Data.SetInt("shield", Sheild_count);
         CrazySDK.Data.SetInt("tinyShip", TinyShip_count);
+
+
+        //tut
+        CrazySDK.Data.SetInt("tut", tut);
     }
 
     void LoadData()
@@ -833,6 +872,9 @@ public class GameManager : MonoBehaviour
         TinyShots_count = CrazySDK.Data.GetInt("tinyShots");
         Sheild_count = CrazySDK.Data.GetInt("shield");
         TinyShip_count = CrazySDK.Data.GetInt("tinyShip");
+
+        //tut
+        tut = CrazySDK.Data.GetInt("tut");
     }
 
     public void SetList(string key, List<int> list)
@@ -938,6 +980,7 @@ public class GameManager : MonoBehaviour
         current_Usage_Sheild++;
         Sheild_count -= 1;
         UI_Controller.instance.SetPowerUpsCount();
+        SaveData("shield", Sheild_count);
     }
 
     public void Freez()
@@ -973,6 +1016,17 @@ public class GameManager : MonoBehaviour
         current_Usage_freeze++;
         Freez_count--;
         UI_Controller.instance.SetPowerUpsCount();
+        SaveData("freeze", Freez_count);
+        Invoke("check_After", 2);
+    }
+
+    void check_After()
+    {
+        if (!isChecking)
+        {
+            isChecking = true;
+            Check_Turn();
+        }
     }
 
     public void TinyShots()
@@ -997,6 +1051,7 @@ public class GameManager : MonoBehaviour
         current_Usage_TinyShots++;
         TinyShots_count--;
         UI_Controller.instance.SetPowerUpsCount();
+        SaveData("tinyShots", TinyShots_count);
     }
 
     public void TinyShip()
@@ -1009,6 +1064,7 @@ public class GameManager : MonoBehaviour
         TinyShip_count--;
         PlayerShip.transform.DOScale(new Vector3(2, 2, 1), 0.3f);
         UI_Controller.instance.SetPowerUpsCount();
+        SaveData("tinyShip", TinyShip_count);
     }
 
     public enum GamePhase
@@ -1020,6 +1076,166 @@ public class GameManager : MonoBehaviour
         EnemyReadyPhase,
         EnemyShootPhase,
         GameOver,
+    }
+
+    public void ShowTut()
+    {
+        if(tut == 0)
+        {
+            Invoke("startTutInvoke", 0.5f);
+        }
+        else
+        {
+            UI_Controller.instance.Main_Menu.DOFade(1, 0.3f);
+            UI_Controller.instance.Main_Menu.interactable = true;
+            UI_Controller.instance.Main_Menu.blocksRaycasts = true;
+            TutObj.SetActive(false);
+        }
+    }
+
+    void startTutInvoke()
+    {
+        UI_Controller.instance.Menu_BG.DOFade(0, 0.3f).OnComplete(() =>
+        {
+            cam_.GetComponent<CameraFollow>().SetTarget(null);
+            cam_.transform.DOMove(End_Point.localPosition, 5).OnComplete(() =>
+            {
+                UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);                
+                phase = GamePhase.ReadyPhase;
+                player_1.enabled = true;
+                player_1.GetComponent<Rotate_Object>().enabled = true;
+                player_2.enabled = false;
+                cam_.GetComponent<CinemachineBrain>().enabled = true;
+                cam.gameObject.SetActive(true);
+                cam.Follow = player_1.transform.parent.transform;
+                captain.DOFade(1, 0.3f);
+                SkipNextDia();
+            });
+        });
+        UI_Controller.instance.Menu_BG.interactable = false;
+        UI_Controller.instance.Menu_BG.blocksRaycasts = false;
+        Set_Player();
+        Reset_Ships(false);
+        player_1.GetAllSkins();
+        player_2.Get_Stats(Current_Level);
+        turn = 2;
+        MissShot = false;
+        WatchedRewardAd = true;
+        Revived = false;
+        UI_Controller.instance.SetPlayerStats();
+        Coins_Start = Coins;
+        CrazySDK.Game.GameplayStart();        
+    }
+
+    void AnimateTut(Transform thing)
+    {
+        thing.gameObject.SetActive(true);
+        var Squence = DOTween.Sequence();
+        CanvasGroup group = thing.gameObject.GetComponent<CanvasGroup>();
+        Squence.Append(thing.DOLocalMove(new Vector2(-185, -30), 1));
+        Squence.Append(group.DOFade(0, 0.3f));
+        Squence.Append(thing.DOScale(0, 0.1f));
+        Squence.Append(thing.DOLocalMove(new Vector2(0, 0), 0.1f));
+        Squence.Append(group.DOFade(1, 0.3f));
+        Squence.Append(thing.DOScale(1, 0.2f));
+        Squence.SetLoops(-1, LoopType.Restart);
+        Squence.Play();
+    }
+    int DiaSkipped;
+    public void SkipNextDia()
+    {
+        if(DiaSkipped == 0)
+            StartCoroutine(TypeSentence("Ahoy there, new recruit! Welcome to the crew of the fiercest pirate ship on the high seas!"));
+        else if(DiaSkipped == 1)
+            StartCoroutine(TypeSentence("You’ve got the spirit of a true pirate, and today we’ll see if you have the skill!"));
+        else if(DiaSkipped == 2)
+        {
+            StartCoroutine(TypeSentence3("The enemy ship approaches! Ready the cannons for battle! (Press 'Ready' to prepare your aim)"));            
+            captain.interactable = false;
+            captain.blocksRaycasts = true;
+        }
+        else if(DiaSkipped == 3)
+        {
+            StartCoroutine(TypeSentence2("Now, hold and drag the screen to aim your cannon..."));
+        }
+        else if (DiaSkipped == 4)
+        {
+            StartCoroutine(TypeSentence2("Perfect! Now, release to shoot and send those scallywags to the depths!"));
+        }
+        else if(DiaSkipped == 5)
+        {
+            StartCoroutine(TypeSentence2("FIRE!!"));
+            
+            SaveData("tut", 1);
+            Invoke("RemoveTut", 2);
+        }
+        else
+        {
+            StartCoroutine(TypeSentence2($"Enjoy playing"));
+        }
+        DiaSkipped++;
+    }
+
+    public void ReadyTutFunc()
+    {        
+        var systemInfo = CrazySDK.User.SystemInfo;
+        if (systemInfo.device.type == "desktop")
+        {
+            AnimateTut(Pointer);
+        }
+        else
+        {
+            AnimateTut(Hand);
+        }
+        ReadyTut.DOFade(0, 0.3f);
+        ReadyTut.interactable = false;
+        ReadyTut.blocksRaycasts = false;
+        SkipNextDia();
+    }
+
+    void RemoveTut()
+    {
+        captain.DOFade(0, 0.3f).OnComplete(() => {
+            TutObj.SetActive(false);
+        });
+        captain.interactable = false;
+    }
+
+    IEnumerator TypeSentence(string sentence)
+    {
+        tutText.text = "";
+        captain.interactable = false;
+        foreach (char letter in sentence.ToCharArray())
+        {
+            tutText.text += letter;
+            yield return new WaitForSeconds(0.02f);
+        }
+        captain.interactable = true;
+    }
+
+    IEnumerator TypeSentence2(string sentence)
+    {
+        tutText.text = "";
+        captain.interactable = false;
+        foreach (char letter in sentence.ToCharArray())
+        {
+            tutText.text += letter;
+            yield return new WaitForSeconds(0.02f);
+        }        
+    }
+
+    IEnumerator TypeSentence3(string sentence)
+    {
+        tutText.text = "";
+        captain.interactable = false;
+        foreach (char letter in sentence.ToCharArray())
+        {
+            tutText.text += letter;
+            yield return new WaitForSeconds(0.02f);
+        }
+        ReadyTut.DOFade(1, 0.3f);
+        ReadyTut.interactable = true;
+        ReadyTut.blocksRaycasts = true;
     }
 }
 
