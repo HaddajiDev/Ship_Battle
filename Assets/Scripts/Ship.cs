@@ -172,6 +172,8 @@ public class Ship : MonoBehaviour
                     fo.Ship = false;
                 }
                 GameManager.Instance.Reset_play();
+                //audio
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.ShipCrash);
             }
         }
         else
@@ -203,6 +205,8 @@ public class Ship : MonoBehaviour
                     fo.Ship = false;
                 }
                 GameManager.Instance.Reset_play();
+                //audio
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.ShipCrash);
             }
         }
         
@@ -267,6 +271,9 @@ public class Ship : MonoBehaviour
         GameManager.Instance.SaveData("totalWins", GameManager.Instance.totalMatchLost);        
         UI_Controller.instance.SetPlayerStats();
 
+        //audio
+        GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Laugh);
+        GameManager.Instance.MusicSource.DOFade(0, 0.5f);
 
         CrazySDK.Game.GameplayStop();
         CrazySDK.Game.HappyTime();
@@ -288,6 +295,11 @@ public class Ship : MonoBehaviour
 
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
+
+
+        //audio
+        //play sad effect
+        GameManager.Instance.MusicSource.DOFade(0, 0.5f);
 
         CrazySDK.Game.GameplayStop();
     }

@@ -348,6 +348,7 @@ public class Set_Skin_Buy : MonoBehaviour
         {
             Time.timeScale = 0;
             UI_Controller.instance.Block.SetActive(true);
+            GameManager.Instance.SetVolume(0);
             //mute audio
             //ad Started
         }, (error) =>
@@ -355,11 +356,13 @@ public class Set_Skin_Buy : MonoBehaviour
             Time.timeScale = 1;            
             UI_Controller.instance.FeedBackPopUp("Someting went wrong try again later", UI_Controller.FeedbackType.failed);
             //unmute audio
+            GameManager.Instance.SetVolume(1);
             //ad Error
         }, () =>
         {
             //unmute audio
-            Time.timeScale = 1;            
+            Time.timeScale = 1;
+            GameManager.Instance.SetVolume(1);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
             if (part == Part.ship)
             {

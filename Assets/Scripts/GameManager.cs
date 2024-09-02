@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 ///<summary>
 ///
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
     [Header("Power Ups Cost")]
     public Cost Sheild_cost = new Cost(1200, 25);
     public Cost Freez_cost = new Cost(1500, 35);
-    public Cost TinyShots_cost = new Cost(1000, 10);
+    public Cost TinyShots_cost = new Cost(1000, 12);
     public Cost TinyShip_cost = new Cost(1100, 15);
 
     [Header("Currency")]
@@ -135,6 +136,16 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text tutText;
     public CanvasGroup ReadyTut;
     public GameObject TutObj;
+
+    [Header("Audio & Music")]
+    public SoundEffects Soundeffects;
+    public float MusicVolume = 0.5f;
+    public float SoundVolume = 0.5f;
+    public AudioSource MusicSource;
+    public Slider MusicSlider;
+    public Slider SoundSlider;
+    public GameObject AudioInstance;
+    public AudioSource OceanBackGround; // sound Effect
     
 
     private void Awake()
@@ -193,6 +204,9 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Main_Menu.blocksRaycasts = false;
         UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
 
+        MusicSource.DOFade(0, 2);
+        
+
         MovePlayerAndCamera();
         phase = GamePhase.Start;
         //get abilites if exited
@@ -211,6 +225,9 @@ public class GameManager : MonoBehaviour
                 cam_.GetComponent<CinemachineBrain>().enabled = true;
                 cam.gameObject.SetActive(true);
                 cam.Follow = player_1.transform.parent.transform;
+                MusicSource.clip = Soundeffects.BattleMusic;
+                MusicSource.DOFade(MusicVolume, 2);
+                MusicSource.Play();
                 //cam_.GetComponent<CameraFollow>().SetTarget(player_1.transform.parent.transform);
             });
         });
@@ -359,6 +376,9 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             SaveData("fireUses", Fire_Uses);
             SaveData("coins", Coins);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -387,6 +407,9 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             SaveData("burstUses", Burst_Uses);
             SaveData("coins", Coins);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -608,18 +631,27 @@ public class GameManager : MonoBehaviour
         currentGifts.Clear();
         HashSet<int> uniqueGifts = new HashSet<int>();
 
-        for (int i = 0; i < 2; i++)
+        System.Random random = new System.Random();
+        
+        int valueTrue;
+        do
         {
-            System.Random random = new System.Random();
-            int value;
-            do
-            {
-                value = random.Next(0, giftsData.Get_Length);
-            } while (uniqueGifts.Contains(value));            
-            uniqueGifts.Add(value);
-            currentGifts.Add(value);
-        }
+            valueTrue = random.Next(0, giftsData.Get_Length);
+        } while (uniqueGifts.Contains(valueTrue) || !giftsData.GetGift(valueTrue).ad);
+
+        uniqueGifts.Add(valueTrue);
+        currentGifts.Add(valueTrue);
+        
+        int valueFalse;
+        do
+        {
+            valueFalse = random.Next(0, giftsData.Get_Length);
+        } while (uniqueGifts.Contains(valueFalse) || giftsData.GetGift(valueFalse).ad);
+
+        uniqueGifts.Add(valueFalse);
+        currentGifts.Add(valueFalse);
     }
+
 
     private void SetQuestsValues()
     {
@@ -807,6 +839,10 @@ public class GameManager : MonoBehaviour
 
         //tut
         CrazySDK.Data.SetInt("tut", tut);
+
+        //Audio
+        CrazySDK.Data.SetFloat("music", MusicVolume);
+        CrazySDK.Data.SetFloat("sound", SoundVolume);
     }
 
     void LoadData()
@@ -875,6 +911,10 @@ public class GameManager : MonoBehaviour
 
         //tut
         tut = CrazySDK.Data.GetInt("tut");
+
+        //Audio
+        MusicVolume = CrazySDK.Data.GetFloat("music");
+        SoundVolume = CrazySDK.Data.GetFloat("sound");
     }
 
     public void SetList(string key, List<int> list)
@@ -941,10 +981,12 @@ public class GameManager : MonoBehaviour
         CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, ()=>
         {
             Time.timeScale = 0;
+            SetVolume(0);
             UI_Controller.instance.Block.SetActive(true);
         }, (error) =>
         {
             Time.timeScale = 1;
+            SetVolume(1);
             UI_Controller.instance.FeedBackPopUp("Someting went wrong", UI_Controller.FeedbackType.failed);
             UI_Controller.instance.Back_Main();
             //ad error
@@ -954,6 +996,7 @@ public class GameManager : MonoBehaviour
             //player Revive
             Time.timeScale = 1;
             Reset_Ships(true);
+            SetVolume(1);
             UI_Controller.instance.Block.SetActive(false);
             UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
             UI_Controller.instance.Win_Tigger(0);            
@@ -1091,6 +1134,7 @@ public class GameManager : MonoBehaviour
             UI_Controller.instance.Main_Menu.blocksRaycasts = true;
             TutObj.SetActive(false);
         }
+        SetVolume(1);
     }
 
     void startTutInvoke()
@@ -1236,6 +1280,56 @@ public class GameManager : MonoBehaviour
         ReadyTut.DOFade(1, 0.3f);
         ReadyTut.interactable = true;
         ReadyTut.blocksRaycasts = true;
+    }
+
+    public void OpenWebsite()
+    {
+        Application.OpenURL("https://haddajidev.vercel.app/");
+    }
+    public void IconFinder()
+    {
+        Application.OpenURL("https://www.iconfinder.com/");
+    }
+
+
+    public void SetVolume(int index)
+    {
+        if(index == 0)
+        {
+            MusicSlider.value = 0;
+            SoundSlider.value = 0;
+            OceanBackGround.volume = 0;
+            MusicSource.volume = 0;
+        }
+        else
+        {
+            MusicSlider.value = MusicVolume;
+            SoundSlider.value = SoundVolume;
+            MusicSource.volume = 0;
+            MusicSource.DOFade(MusicVolume, 1f);
+            OceanBackGround.DOFade(SoundVolume, 1f);
+        }
+    }
+
+    public void SetMusicVolume()
+    {
+        MusicSource.volume = MusicSlider.value;
+        MusicVolume = MusicSlider.value;
+        SaveData("music", MusicSlider.value);
+    }
+    public void SetSoundVolume()
+    {
+        OceanBackGround.volume = SoundSlider.value;
+        SoundVolume = SoundSlider.value;
+        SaveData("sound", SoundSlider.value);
+    }
+
+    public void PlayAudio(AudioClip effect)
+    {
+        AudioSource source = Instantiate(AudioInstance).GetComponent<AudioSource>();
+        source.clip = effect;
+        source.volume = SoundVolume;
+        source.Play();
     }
 }
 

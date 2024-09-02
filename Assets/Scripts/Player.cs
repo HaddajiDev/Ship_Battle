@@ -274,7 +274,6 @@ public class Player : MonoBehaviour
     {
         ready = true;
     }
-
     public void ReadyUp()
     {
         Invoke("ReadyDelay", 0.2f);

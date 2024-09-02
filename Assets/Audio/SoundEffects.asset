@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1e733c5fada3940b2e5b95702c41d3, type: 3}
+  m_Name: SoundEffects
+  m_EditorClassIdentifier: 
+  MainMenu: {fileID: 8300000, guid: ed9c330fed6d4d44dbd0ee9bb0ee7f8e, type: 3}
+  BattleMusic: {fileID: 8300000, guid: ebb2e298d5040d745b91ecf4fb9e1f5f, type: 3}
+  CrackSounds: {fileID: 8300000, guid: 01ca5a3d257b29d4bafa62fcc0906740, type: 3}
+  ShipCrash: {fileID: 8300000, guid: dc1d162fbb9810842974862431becaa9, type: 3}
+  Buy: {fileID: 8300000, guid: 9762b523a13fdcd4e99e8ae25b1a6d62, type: 3}
+  Laugh: {fileID: 8300000, guid: 338a62cc29ef3df46b04f0b25bdb609a, type: 3}

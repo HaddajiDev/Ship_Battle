@@ -18,12 +18,12 @@ public class QuestBanner : MonoBehaviour
     public Button ClaimButton;
 
     public Slider slider;
-
+    public Button infoButton;
     
 
     void Start()
     {
-        UpdateStats();
+        UpdateStats();        
     }
 
     public void UpdateStats()
@@ -60,6 +60,9 @@ public class QuestBanner : MonoBehaviour
                 .SetLoops(-1, LoopType.Yoyo);
                 QuestSpawner.instance.QuestCompleted += 1;
             }
+            infoButton.gameObject.SetActive(true);
+            infoButton.onClick.RemoveAllListeners();
+            infoButton.onClick.AddListener(() => UI_Controller.instance.Show_SelectPowerUps_Controller(1));
         }
         else if (quest.type == Quest.Type.noMissShots)
         {

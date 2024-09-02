@@ -23,8 +23,8 @@ public class Bullet : MonoBehaviour
         Invoke("Destroy_bullet", 10);
 
 
-        if (type == BulletType.Bomb)
-        {            
+        if (type == BulletType.Animated)
+        {
             anim = GetComponent<Animator>();
         }
 
@@ -49,14 +49,14 @@ public class Bullet : MonoBehaviour
     public enum BulletType
     {
         Normal_Bullet,
-        Bomb
+        Animated
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Water"))
         {
-            if (type == BulletType.Bomb)
+            if (type == BulletType.Animated)
             {
                 anim.SetTrigger("off");
             }

@@ -16,24 +16,54 @@ MonoBehaviour:
   - Descrption: Win 3 games
     Goal_Value: 3
     cost:
-      Coins: 1500
-      Diamond: 20
+      Coins: 500
+      Diamond: 10
     type: 0
-  - Descrption: Hit Fire shots 3 times
+  - Descrption: Hit inferno shots 3 times
     Goal_Value: 3
     cost:
-      Coins: 1500
+      Coins: 1000
+      Diamond: 10
+    type: 1
+  - Descrption: Win 5 games
+    Goal_Value: 5
+    cost:
+      Coins: 1000
+      Diamond: 12
+    type: 0
+  - Descrption: Hit inferno shots 7 times
+    Goal_Value: 7
+    cost:
+      Coins: 3000
       Diamond: 20
     type: 1
-  - Descrption: Win 3 games without missing any shots
-    Goal_Value: 3
-    cost:
-      Coins: 1500
-      Diamond: 20
-    type: 2
   - Descrption: Win 5 games without missing any shots
     Goal_Value: 5
     cost:
-      Coins: 1500
+      Coins: 3500
+      Diamond: 30
+    type: 2
+  - Descrption: Win 7 games without missing any shots
+    Goal_Value: 7
+    cost:
+      Coins: 5000
+      Diamond: 50
+    type: 2
+  - Descrption: Win 3 games without missing any shots
+    Goal_Value: 3
+    cost:
+      Coins: 2000
       Diamond: 20
     type: 2
+  - Descrption: Hit inferno shots 5 times
+    Goal_Value: 5
+    cost:
+      Coins: 2000
+      Diamond: 15
+    type: 1
+  - Descrption: Win 7 games
+    Goal_Value: 7
+    cost:
+      Coins: 2000
+      Diamond: 20
+    type: 0

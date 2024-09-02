@@ -65,3 +65,15 @@ MonoBehaviour:
       Coins: 100
       Diamond: 6
     ad: 0
+  - prize:
+      Coins: 150
+      Diamond: 5
+    ad: 0
+  - prize:
+      Coins: 300
+      Diamond: 30
+    ad: 1
+  - prize:
+      Coins: 200
+      Diamond: 20
+    ad: 0

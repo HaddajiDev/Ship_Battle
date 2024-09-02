@@ -28,6 +28,8 @@ public class UI_Controller : MonoBehaviour
     public CanvasGroup Gifts;
     public CanvasGroup SelectBattleStrategies;
     public CanvasGroup Settings;
+    public CanvasGroup Credits;
+    public CanvasGroup Help;
 
     [Header("Select Bullet UI")]
     public Button Select_Bullet_1;
@@ -260,7 +262,11 @@ public class UI_Controller : MonoBehaviour
             Main_Menu.interactable = true;
             Main_Menu.blocksRaycasts = true;
             GameManager.Instance.phase = GameManager.GamePhase.MainMenu;
-            GameManager.Instance.WatchMidGameAd();            
+            GameManager.Instance.WatchMidGameAd();
+            GameManager.Instance.MusicSource.clip = GameManager.Instance.Soundeffects.MainMenu;
+            GameManager.Instance.MusicSource.DOFade(GameManager.Instance.MusicVolume, 1);
+            GameManager.Instance.MusicSource.Play();
+
         });
     }
 
@@ -275,11 +281,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Bullets_Shop.DOFade(0, 0.3f).OnComplete(() => {
-                Bullets_Shop.interactable = false;
-                Bullets_Shop.blocksRaycasts = false;
+            Bullets_Shop.DOFade(0, 0.3f).OnComplete(() => {                
                 Bullets_Shop.gameObject.SetActive(false);
             });
+            Bullets_Shop.interactable = false;
+            Bullets_Shop.blocksRaycasts = false;
         }
     }
 
@@ -294,11 +300,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Select_Bullets.DOFade(0, 0.3f).OnComplete(() => {
-                Select_Bullets.interactable = false;
-                Select_Bullets.blocksRaycasts = false;
+            Select_Bullets.DOFade(0, 0.3f).OnComplete(() => {                
                 Select_Bullets.gameObject.SetActive(false);
             });
+            Select_Bullets.interactable = false;
+            Select_Bullets.blocksRaycasts = false;
         }
     }
 
@@ -313,11 +319,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Extra_Slot_Buy_UI.DOFade(0, 0.3f).OnComplete(() => {
-                Extra_Slot_Buy_UI.interactable = false;
-                Extra_Slot_Buy_UI.blocksRaycasts = false;
+            Extra_Slot_Buy_UI.DOFade(0, 0.3f).OnComplete(() => {                
                 Extra_Slot_Buy_UI.gameObject.SetActive(false);
             });
+            Extra_Slot_Buy_UI.interactable = false;
+            Extra_Slot_Buy_UI.blocksRaycasts = false;
         }        
     }
 
@@ -332,11 +338,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Buy_Upgrades.DOFade(0, 0.3f).OnComplete(() => {
-                Buy_Upgrades.interactable = false;
-                Buy_Upgrades.blocksRaycasts = false;
+            Buy_Upgrades.DOFade(0, 0.3f).OnComplete(() => {                
                 Buy_Upgrades.gameObject.SetActive(false);
             });
+            Buy_Upgrades.interactable = false;
+            Buy_Upgrades.blocksRaycasts = false;
         }
     }
     public void Open_Account(int index)
@@ -350,11 +356,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            account.DOFade(0, 0.3f).OnComplete(() => {
-                account.interactable = false;
-                account.blocksRaycasts = false;
+            account.DOFade(0, 0.3f).OnComplete(() => {                
                 account.gameObject.SetActive(false);
             });
+            account.interactable = false;
+            account.blocksRaycasts = false;
         }
     }
 
@@ -369,11 +375,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Buy_Skins.DOFade(0, 0.3f).OnComplete(() => {
-                Buy_Skins.interactable = false;
-                Buy_Skins.blocksRaycasts = false;
+            Buy_Skins.DOFade(0, 0.3f).OnComplete(() => {                
                 Buy_Skins.gameObject.SetActive(false);
             });
+            Buy_Skins.interactable = false;
+            Buy_Skins.blocksRaycasts = false;
         }
     }
 
@@ -388,11 +394,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Show_Skin.DOFade(0, 0.3f).OnComplete(() => {
-                Show_Skin.interactable = false;
-                Show_Skin.blocksRaycasts = false;
+            Show_Skin.DOFade(0, 0.3f).OnComplete(() => {                
                 Show_Skin.gameObject.SetActive(false);
             });
+            Show_Skin.interactable = false;
+            Show_Skin.blocksRaycasts = false;
         }
     }
 
@@ -410,9 +416,10 @@ public class UI_Controller : MonoBehaviour
         else
         {
             Quests.DOFade(0, 0.3f).OnComplete(() => {
-                Quests.interactable = false;
-                Quests.blocksRaycasts = false;                
+                
             });
+            Quests.interactable = false;
+            Quests.blocksRaycasts = false;
         }
     }
 
@@ -427,11 +434,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Ad_FeedBack.DOFade(0, 0.3f).OnComplete(() => {
-                Ad_FeedBack.interactable = false;
-                Ad_FeedBack.blocksRaycasts = false;
+            Ad_FeedBack.DOFade(0, 0.3f).OnComplete(() => {                
                 Ad_FeedBack.gameObject.SetActive(false);
             });
+            Ad_FeedBack.interactable = false;
+            Ad_FeedBack.blocksRaycasts = false;
         }
     }
 
@@ -450,11 +457,11 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            SelectBattleStrategies.DOFade(0, 0.3f).OnComplete(() => {
-                SelectBattleStrategies.interactable = false;
-                SelectBattleStrategies.blocksRaycasts = false;
+            SelectBattleStrategies.DOFade(0, 0.3f).OnComplete(() => {                
                 SelectBattleStrategies.gameObject.SetActive(false);
             });
+            SelectBattleStrategies.interactable = false;
+            SelectBattleStrategies.blocksRaycasts = false;
         }
     }
 
@@ -487,9 +494,10 @@ public class UI_Controller : MonoBehaviour
         else
         {
             Gifts.DOFade(0, 0.3f).OnComplete(() => {
-                Gifts.interactable = false;
-                Gifts.blocksRaycasts = false;                
+                
             });
+            Gifts.interactable = false;
+            Gifts.blocksRaycasts = false;
         }
     }
 
@@ -504,11 +512,49 @@ public class UI_Controller : MonoBehaviour
         }
         else
         {
-            Settings.DOFade(0, 0.3f).OnComplete(() => {
-                Settings.interactable = false;
-                Settings.blocksRaycasts = false;
+            Settings.DOFade(0, 0.3f).OnComplete(() => {                
                 Settings.gameObject.SetActive(false);
             });
+            Settings.interactable = false;
+            Settings.blocksRaycasts = false;
+        }
+    }
+
+    public void Show_Credits_Controller(int index)
+    {
+        if (index == 1)
+        {
+            Credits.gameObject.SetActive(true);
+            Credits.interactable = true;
+            Credits.blocksRaycasts = true;
+            Credits.DOFade(1, 0.3f);
+        }
+        else
+        {
+            Credits.DOFade(0, 0.3f).OnComplete(() => {                
+                Credits.gameObject.SetActive(false);
+            });
+            Credits.interactable = false;
+            Credits.blocksRaycasts = false;
+        }
+    }
+
+    public void Show_Help_Controller(int index)
+    {
+        if (index == 1)
+        {
+            Help.gameObject.SetActive(true);
+            Help.interactable = true;
+            Help.blocksRaycasts = true;
+            Help.DOFade(1, 0.3f);
+        }
+        else
+        {
+            Help.DOFade(0, 0.3f).OnComplete(() => {                
+                Help.gameObject.SetActive(false);
+            });
+            Help.interactable = false;
+            Help.blocksRaycasts = false;
         }
     }
 
@@ -594,8 +640,9 @@ public class UI_Controller : MonoBehaviour
         {
             if (child.gameObject.activeInHierarchy)
                 child.gameObject.SetActive(false);
-        }
+        }        
     }
+
 
     public enum FeedbackType
     {

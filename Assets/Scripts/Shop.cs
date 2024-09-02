@@ -45,6 +45,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             GameManager.Instance.SaveData("bullets", bullets.data);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -179,7 +182,7 @@ public class Shop : MonoBehaviour
 
     public void Buy_Extra_Bullet()
     {
-        Cost cost = new Cost(30000, 500);
+        Cost cost = new Cost(15000, 250);
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
         {
             GameManager.Instance.Coins -= cost.Coins;
@@ -195,6 +198,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("extraSlot", 1);
             UI_Controller.instance.FeedBackPopUp("New shot slot unlocked", UI_Controller.FeedbackType.succes);
             UI_Controller.instance.Buy_Extra_Bullet_Slot(0);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -216,6 +222,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             return true;
         }
         else
@@ -237,6 +246,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             return true;
         }
         else
@@ -259,6 +271,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             return true;
         }
         else
@@ -281,6 +296,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             return true;
         }
         else
@@ -303,6 +321,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             return true;
         }
         else
@@ -326,6 +347,9 @@ public class Shop : MonoBehaviour
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             return true;
         }
         else
@@ -350,6 +374,9 @@ public class Shop : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -371,6 +398,9 @@ public class Shop : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -392,6 +422,9 @@ public class Shop : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {
@@ -413,6 +446,9 @@ public class Shop : MonoBehaviour
             UI_Controller.instance.SetCurrencyUI();
             GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
+
+            //audio
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
         }
         else
         {

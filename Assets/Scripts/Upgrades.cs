@@ -41,7 +41,7 @@ public class Upgrades : MonoBehaviour
 
     public void Upgrade_Health()
     {
-        Cost cost = new Cost(1000 * lvl_health, 20 + (lvl_health * 2));
+        Cost cost = new Cost(2250 * lvl_health, 25 + (lvl_health * 2));
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
         {
             if(Health_Level <= 7)
@@ -58,13 +58,20 @@ public class Upgrades : MonoBehaviour
                 GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
                 GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
                 GameManager.Instance.SaveData("health", ship.Health);
+
+                //audio
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             }
-        }        
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
+        }
     }
 
     public void Upgrade_Force()
     {
-        Cost cost = new Cost(1000 * lvl_force, 20 + (lvl_force * 2));
+        Cost cost = new Cost(2500 * lvl_force, 30 + (lvl_force * 2));
         if (GameManager.Instance.Coins >= cost.Coins && GameManager.Instance.Diamond >= cost.Diamond)
         {
             if(Force_Level <= 7)
@@ -80,7 +87,14 @@ public class Upgrades : MonoBehaviour
                 GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
                 GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
                 GameManager.Instance.SaveData("force", GameManager.Instance.player_1.maxForce);
+
+                //audio
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Buy);
             }            
+        }
+        else
+        {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
         }
     }
     
@@ -98,7 +112,7 @@ public class Upgrades : MonoBehaviour
 
     private void UpdateUI_Force()
     {
-        Cost cost = new Cost(1000 * Force_Level, 20 + (Force_Level * 2));
+        Cost cost = new Cost(2500 * lvl_force, 30 + (lvl_force * 2));
         UI_Controller.instance.Force_Cost_Upgrade_Coins.text = cost.Coins.ToString();
         UI_Controller.instance.Force_Cost_Upgrade__Diamond.text = cost.Diamond.ToString();
         if (Force_Level == 8)
@@ -109,7 +123,7 @@ public class Upgrades : MonoBehaviour
     }
     private void UpdateUI_Health()
     {
-        Cost cost = new Cost(1000 * Health_Level, 20 + (Health_Level * 2));
+        Cost cost = new Cost(2250 * lvl_health, 25 + (lvl_health * 2));
         UI_Controller.instance.Health_Cost_Upgrade_Coins.text = cost.Coins.ToString();
         UI_Controller.instance.Health_Cost_Upgrade_Diamond.text = cost.Diamond.ToString();
         if (Health_Level == 8)
