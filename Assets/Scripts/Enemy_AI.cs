@@ -100,7 +100,8 @@ public class Enemy_AI : MonoBehaviour
         
         GameManager.Instance.isChecking = false;
         anim.SetTrigger("shoot");
-        Camera_Shake.Instance.Shake(source, 1);
+        Camera_Shake.Instance.Shake(source, 2);
+        GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Shoot);
     }
 
     public void EnemyPowerUps()
@@ -174,6 +175,7 @@ public class Enemy_AI : MonoBehaviour
             Animator anim = SheildObj.GetComponent<Animator>();
             anim.SetTrigger("open");
             current_Usage_Sheild++;
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.SheildSound);
         }        
     }
 
@@ -209,6 +211,7 @@ public class Enemy_AI : MonoBehaviour
                 }
             }
             current_Usage_freeze++;
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.FreezeSound);
             Invoke("check_After", 2);
         }        
     }
@@ -242,6 +245,7 @@ public class Enemy_AI : MonoBehaviour
                     particleSystem.gameObject.transform.DOScale(new Vector3(scalePart.x / 2, scalePart.y / 2, scalePart.z), 0.2f);
                 }
             }
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.ShrinkSound);
             current_Usage_TinyShots++;
         }        
     }
@@ -254,7 +258,7 @@ public class Enemy_AI : MonoBehaviour
             ship.Floating = false;
             transform.DOLocalMove(new Vector3(transform.localPosition.x, -2.5f, transform.localPosition.z), 0.1f);
             current_Usage_TinyShip++;
-
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.ShrinkSound);
             transform.DOScale(new Vector3(-2, 2, 1), 0.3f);
         }
     }

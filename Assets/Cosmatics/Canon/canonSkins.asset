@@ -22,3 +22,12 @@ MonoBehaviour:
       Diamond: 0
     Ad_Skin: 0
     Stand: {fileID: 314932610, guid: fe68f66e06bb62b4489f049230dd7c0f, type: 3}
+  - Cover: {fileID: -769061113, guid: 63b0f6c1b9a9947498b8244377b8b91c, type: 3}
+    spriteSheet:
+    - {fileID: -769061113, guid: 63b0f6c1b9a9947498b8244377b8b91c, type: 3}
+    anim: {fileID: 9100000, guid: 09c7f1350e57ae241b25fd26da42e4dd, type: 2}
+    cost:
+      Coins: 2000
+      Diamond: 50
+    Ad_Skin: 0
+    Stand: {fileID: 481385791, guid: 2d60f624b7d107a4980640684c83e6f4, type: 3}

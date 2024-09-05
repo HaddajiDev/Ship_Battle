@@ -37,3 +37,11 @@ MonoBehaviour:
     cost:
       Coins: 1235
       Diamond: 12
+  - Name: BaseBall
+    sr: {fileID: 21300000, guid: ef8d8aa957a17aa4baf47e1d823b28bf, type: 3}
+    Bullet_Prefab: {fileID: 1090405724521865872, guid: b1743338db33bc143a28375d72040cf8, type: 3}
+    Damage: 2
+    Limit: 5
+    cost:
+      Coins: 1500
+      Diamond: 15

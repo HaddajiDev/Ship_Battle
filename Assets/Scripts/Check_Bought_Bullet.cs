@@ -23,6 +23,7 @@ public class Check_Bought_Bullet : MonoBehaviour
     {
         _Mybutton = GetComponent<Button>();
         _Mybutton.onClick.AddListener(() => Shop.Instance.Buy_Bullet(index));
+        _Mybutton.onClick.AddListener(() => SetOwned());
         Bullets bullet = GameManager.Instance.player_1.bulletsData.Get_Bullet(index);
 
         BulletName.text = bullet.Name;
@@ -45,6 +46,12 @@ public class Check_Bought_Bullet : MonoBehaviour
     }
 
     private bool isFlipped = false;
+
+    private void SetOwned()
+    {
+        OwnedObject.SetActive(true);
+        CostObject.SetActive(false);
+    }
 
     public void flip(Transform img)
     {

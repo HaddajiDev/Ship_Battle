@@ -232,7 +232,7 @@ public class UI_Controller : MonoBehaviour
                 {
                     float randomValue = Random.Range(0.0f, 1.0f);
 
-                    if (randomValue <= 0.3f)
+                    if (randomValue <= 0.4f)
                     {
                         ReviveButton.SetActive(true);
                     }
@@ -266,7 +266,8 @@ public class UI_Controller : MonoBehaviour
             GameManager.Instance.MusicSource.clip = GameManager.Instance.Soundeffects.MainMenu;
             GameManager.Instance.MusicSource.DOFade(GameManager.Instance.MusicVolume, 1);
             GameManager.Instance.MusicSource.Play();
-
+            Crab.instance.Escaped = false;
+            GameManager.Instance.Play();
         });
     }
 
@@ -369,6 +370,7 @@ public class UI_Controller : MonoBehaviour
         if (index == 1)
         {
             Buy_Skins.gameObject.SetActive(true);
+            GameManager.Instance.SkinCoverAnimation();
             Buy_Skins.interactable = true;
             Buy_Skins.blocksRaycasts = true;
             Buy_Skins.DOFade(1, 0.3f);
@@ -629,9 +631,19 @@ public class UI_Controller : MonoBehaviour
     {
         UI_Animator[] _animator = parent.GetComponentsInChildren<UI_Animator>();
         for (int i = 0; i < parent.transform.childCount; i++)
-        {            
-            _animator[i].Func_PlayUIAnim();
+        {
+            if (_animator[i].gameObject.activeInHierarchy)
+                _animator[i].Func_PlayUIAnim();
         }        
+    }
+    public void PlaySkinAnimation2(GameObject parent)
+    {
+        UI_Animator[] _animator = parent.GetComponentsInChildren<UI_Animator>();
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            if (_animator[i].gameObject.activeInHierarchy) 
+                _animator[i].Func_PlayUIAnim();
+        }
     }
 
     public void ExitSkin()

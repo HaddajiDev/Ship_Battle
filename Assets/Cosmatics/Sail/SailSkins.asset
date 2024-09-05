@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SailSkins
   m_EditorClassIdentifier: 
   sail_skins:
-  - Cover: {fileID: 21300000, guid: f3e9bd40baca6f04aa0d0121861e89f7, type: 3}
+  - Cover: {fileID: 21300000, guid: 29b29472b155d88468b29a90e0a99536, type: 3}
     spriteSheet:
     - {fileID: 21300000, guid: 29b29472b155d88468b29a90e0a99536, type: 3}
     - {fileID: 21300000, guid: 3a962cf3bc6af3d42805eae557e7144d, type: 3}
@@ -27,4 +27,19 @@ MonoBehaviour:
     cost:
       Coins: 0
       Diamond: 0
+    Ad_Skin: 0
+  - Cover: {fileID: 1716076668, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    spriteSheet:
+    - {fileID: 1716076668, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: -1412657127, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: -1947069512, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: 1339027646, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: 1343969609, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: 1076510319, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: 921158368, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    - {fileID: 1470123390, guid: 628731353e8654f48b5b89cc0d753e90, type: 3}
+    anim: {fileID: 9100000, guid: b522bab50dd476540a8d085c159a09c0, type: 2}
+    cost:
+      Coins: 2000
+      Diamond: 50
     Ad_Skin: 0

@@ -137,7 +137,13 @@ public class Ship : MonoBehaviour
                 GameManager.Instance.Coins += Random.value < 0.85f ? Random.Range(15, 21) : Random.Range(40, 61);
                 GameManager.Instance.TotalShotsHit++;
                 GameManager.Instance.SaveData("totalShotsHit", GameManager.Instance.TotalShotsHit);
-            }            
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.hit[Random.Range(0, GameManager.Instance.Soundeffects.hit.Length)]);                
+            }
+            else
+            {
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.getHit[Random.Range(0, GameManager.Instance.Soundeffects.getHit.Length)]);
+            }
+            GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Explode);
         }
     }
 
@@ -162,6 +168,11 @@ public class Ship : MonoBehaviour
                     fo.Ship = true;
                     UI_Controller.instance.Getting_Ready_Object.interactable = false;
                     UI_Controller.instance.Getting_Ready_Object.blocksRaycasts = false;
+                    int value = Random.Range(0, 3);
+                    if (value == 2)
+                    {
+                        GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.AbondShip);
+                    }
                 }
                 else
                 {
@@ -298,7 +309,7 @@ public class Ship : MonoBehaviour
 
 
         //audio
-        //play sad effect
+        GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Loose);        
         GameManager.Instance.MusicSource.DOFade(0, 0.5f);
 
         CrazySDK.Game.GameplayStop();

@@ -145,20 +145,23 @@ public class GameManager : MonoBehaviour
     public Slider MusicSlider;
     public Slider SoundSlider;
     public GameObject AudioInstance;
-    public AudioSource OceanBackGround; // sound Effect
+    public AudioSource OceanBackGround; // Backgound sound Effect
     
 
     private void Awake()
     {
         Instance = this;
         
-        first = PlayerPrefs.GetInt("First", first);
-        if(PlayerPrefs.GetInt("First") == 0)
+        first = CrazySDK.Data.GetInt("First", first);
+        if(CrazySDK.Data.GetInt("First") == 0)
         {
-            PlayerPrefs.SetInt("First", 1);
-            setDefaultData();            
-        }        
-        LoadData();        
+            CrazySDK.Data.SetInt("First", 1);
+            CrazySDK.User.SyncUnityGameData();
+            setDefaultData();
+        }
+
+        LoadData();
+        CrazySDK.User.SyncUnityGameData();
     }
 
     private async void Start()
@@ -205,7 +208,7 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
 
         MusicSource.DOFade(0, 2);
-        
+        Crab.instance.Escaped = true;
 
         MovePlayerAndCamera();
         phase = GamePhase.Start;
@@ -981,12 +984,14 @@ public class GameManager : MonoBehaviour
         CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, ()=>
         {
             Time.timeScale = 0;
-            SetVolume(0);
+            MusicSource.Pause();
+            OceanBackGround.Pause();
             UI_Controller.instance.Block.SetActive(true);
         }, (error) =>
         {
             Time.timeScale = 1;
-            SetVolume(1);
+            MusicSource.Play();
+            OceanBackGround.Play();
             UI_Controller.instance.FeedBackPopUp("Someting went wrong", UI_Controller.FeedbackType.failed);
             UI_Controller.instance.Back_Main();
             //ad error
@@ -996,7 +1001,8 @@ public class GameManager : MonoBehaviour
             //player Revive
             Time.timeScale = 1;
             Reset_Ships(true);
-            SetVolume(1);
+            MusicSource.Play();
+            OceanBackGround.Play();
             UI_Controller.instance.Block.SetActive(false);
             UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(true);
             UI_Controller.instance.Win_Tigger(0);            
@@ -1024,6 +1030,7 @@ public class GameManager : MonoBehaviour
         Sheild_count -= 1;
         UI_Controller.instance.SetPowerUpsCount();
         SaveData("shield", Sheild_count);
+        PlayAudio(Soundeffects.SheildSound);
     }
 
     public void Freez()
@@ -1060,6 +1067,7 @@ public class GameManager : MonoBehaviour
         Freez_count--;
         UI_Controller.instance.SetPowerUpsCount();
         SaveData("freeze", Freez_count);
+        PlayAudio(Soundeffects.FreezeSound);
         Invoke("check_After", 2);
     }
 
@@ -1095,6 +1103,7 @@ public class GameManager : MonoBehaviour
         TinyShots_count--;
         UI_Controller.instance.SetPowerUpsCount();
         SaveData("tinyShots", TinyShots_count);
+        PlayAudio(Soundeffects.ShrinkSound);
     }
 
     public void TinyShip()
@@ -1108,6 +1117,7 @@ public class GameManager : MonoBehaviour
         PlayerShip.transform.DOScale(new Vector3(2, 2, 1), 0.3f);
         UI_Controller.instance.SetPowerUpsCount();
         SaveData("tinyShip", TinyShip_count);
+        PlayAudio(Soundeffects.ShrinkSound);
     }
 
     public enum GamePhase
@@ -1189,27 +1199,39 @@ public class GameManager : MonoBehaviour
     public void SkipNextDia()
     {
         if(DiaSkipped == 0)
-            StartCoroutine(TypeSentence("Ahoy there, new recruit! Welcome to the crew of the fiercest pirate ship on the high seas!"));
+        {
+            StartCoroutine(TypeSentence("Ahoy matey, new recruit! Welcome to the crew of the fiercest pirate ship on the high seas!"));
+            PlayAudio(Soundeffects.AhoyMatey);
+        }
+
         else if(DiaSkipped == 1)
+        {
             StartCoroutine(TypeSentence("You’ve got the spirit of a true pirate, and today we’ll see if you have the skill!"));
+            PlayAudio(Soundeffects.Ohoy);
+        }            
         else if(DiaSkipped == 2)
         {
             StartCoroutine(TypeSentence3("The enemy ship approaches! Ready the cannons for battle! (Press 'Ready' to prepare your aim)"));            
             captain.interactable = false;
-            captain.blocksRaycasts = true;
+            captain.blocksRaycasts = true;            
         }
         else if(DiaSkipped == 3)
         {
             StartCoroutine(TypeSentence2("Now, hold and drag the screen to aim your cannon..."));
+            MusicSource.clip = Soundeffects.BattleMusic;
+            MusicSource.DOFade(MusicVolume, 2);
+            MusicSource.Play();
         }
         else if (DiaSkipped == 4)
         {
             StartCoroutine(TypeSentence2("Perfect! Now, release to shoot and send those scallywags to the depths!"));
+            PlayAudio(Soundeffects.ScallyWags);
         }
         else if(DiaSkipped == 5)
         {
             StartCoroutine(TypeSentence2("FIRE!!"));
-            
+            PlayAudio(Soundeffects.Fire[0]);
+
             SaveData("tut", 1);
             Invoke("RemoveTut", 2);
         }
@@ -1234,6 +1256,7 @@ public class GameManager : MonoBehaviour
         ReadyTut.DOFade(0, 0.3f);
         ReadyTut.interactable = false;
         ReadyTut.blocksRaycasts = false;
+        MusicSource.DOFade(0, 1);
         SkipNextDia();
     }
 
@@ -1325,11 +1348,31 @@ public class GameManager : MonoBehaviour
     }
 
     public void PlayAudio(AudioClip effect)
-    {
+    {        
         AudioSource source = Instantiate(AudioInstance).GetComponent<AudioSource>();
         source.clip = effect;
         source.volume = SoundVolume;
-        source.Play();
+        source.Play();        
+    }
+
+    [Header("Skins Cover")]
+    public UI_Animator[] SkinsCover;
+    
+    public void SkinCoverAnimation()
+    {
+        for (int i = 0; i < SkinsCover.Length; i++)
+        {
+            SkinsCover[i].Func_PlayUIAnim();
+        }        
+    }
+
+    public GetSelectedSkin[] selectedSkin;
+    public void GetCoverSkin()
+    {         
+        for (int i = 0; i < selectedSkin.Length; i++)
+        {
+            selectedSkin[i].Get_Skin();
+        }
     }
 }
 

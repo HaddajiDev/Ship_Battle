@@ -4,6 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.UI;
+using CrazyGames;
 
 public class Player : MonoBehaviour
 {
@@ -58,6 +60,7 @@ public class Player : MonoBehaviour
     public HelmCosmaticData helmCosmatic;
     [HideInInspector] public int _selectedHelm;
     public Animator helm;
+    public SpriteRenderer helmImage; 
 
     [Space]
     public FlagCosmaticData flagCosmatic;
@@ -170,7 +173,7 @@ public class Player : MonoBehaviour
                 //tut
                 if (CrazyGames.CrazySDK.Data.GetInt("tut") == 0)
                 {
-                    GameManager.Instance.SkipNextDia();                    
+                    GameManager.Instance.SkipNextDia();
                 }
             }
         }
@@ -227,7 +230,17 @@ public class Player : MonoBehaviour
         GetComponent<Rotate_Object>().enabled = false;
         GameManager.Instance.isChecking = false;
         anim.SetTrigger("shoot");
-        Camera_Shake.Instance.Shake(impulseSource, 1);
+        Camera_Shake.Instance.Shake(impulseSource, 2);
+
+        if (CrazyGames.CrazySDK.Data.GetInt("tut") != 0)
+        {
+            int value = Random.Range(0, 3);
+            if (value == 2)
+            {
+                GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Fire[Random.Range(0, GameManager.Instance.Soundeffects.Fire.Length)]);
+            }
+        }
+        GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Shoot);
     }
 
     private void InitializeTrajectoryLineRenderer()
@@ -412,8 +425,9 @@ public class Player : MonoBehaviour
 
     private void GetHelm_skin(int index)
     {
-        Cosmatic cos = helmCosmatic.Get_Skin(index);
+        Cosmatic cos = helmCosmatic.Get_Skin(_selectedHelm);        
         helm.runtimeAnimatorController = cos.anim;
+        helmImage.sprite = cos.Cover;
     }
 
     private void GetCannon_skin(int index)

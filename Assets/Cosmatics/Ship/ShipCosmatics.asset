@@ -28,3 +28,18 @@ MonoBehaviour:
     Ad_Skin: 0
     half_1: {fileID: 21300000, guid: ad4580c3edfb15446b03ef9045f4a824, type: 3}
     half_2: {fileID: 21300000, guid: 0c05bd8ace96c2742bc219fdb254210d, type: 3}
+  - Cover: {fileID: 1108572113, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    spriteSheet:
+    - {fileID: 1108572113, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    - {fileID: -422243872, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    - {fileID: -794497763, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    - {fileID: 1725383479, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    - {fileID: -1917301097, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    - {fileID: 339018803, guid: 61b7e523222422e42a1a4ab58f1d8634, type: 3}
+    anim: {fileID: 9100000, guid: c74b9c46df92eb04497b6415e37c8dd3, type: 2}
+    cost:
+      Coins: 2000
+      Diamond: 50
+    Ad_Skin: 0
+    half_1: {fileID: 1793691663, guid: 27b35ae2470b78c46accdeaf34e7c434, type: 3}
+    half_2: {fileID: -1816711642, guid: 27b35ae2470b78c46accdeaf34e7c434, type: 3}

@@ -10,6 +10,7 @@ TagManager:
   - cloud
   - sheild
   - ice
+  - audio
   layers:
   - Default
   - TransparentFX

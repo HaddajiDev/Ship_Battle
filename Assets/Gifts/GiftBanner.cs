@@ -74,15 +74,21 @@ public class GiftBanner : MonoBehaviour
         {
             Time.timeScale = 0;
             UI_Controller.instance.Block.SetActive(true);
+            GameManager.Instance.MusicSource.Pause();
+            GameManager.Instance.OceanBackGround.Pause();
         }, (error) =>
         {
             Time.timeScale = 1;
             UI_Controller.instance.FeedBackPopUp("Someting went wrong, try again later", UI_Controller.FeedbackType.failed);
+            GameManager.Instance.MusicSource.Play();
+            GameManager.Instance.OceanBackGround.Play();
             //ad error
         }, () =>
         {
             //ad finished            
             Time.timeScale = 1;
+            GameManager.Instance.MusicSource.Play();
+            GameManager.Instance.OceanBackGround.Play();
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've earned a special reward", UI_Controller.FeedbackType.succes);
             GetForFree();
         }
