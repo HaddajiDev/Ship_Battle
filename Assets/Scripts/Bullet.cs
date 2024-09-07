@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
 
     public bool inFire = false;
     
+    
     void Start()
     {
         cam = GameObject.FindWithTag("GameController").GetComponent<CinemachineVirtualCamera>();        
@@ -49,7 +50,8 @@ public class Bullet : MonoBehaviour
     public enum BulletType
     {
         Normal_Bullet,
-        Animated
+        Animated,
+        Chicken
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

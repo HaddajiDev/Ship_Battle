@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6019814541299898752}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.253, y: -0.934, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 0
   type: 0
-  Fire_Partical: {fileID: 8514422480996960545, guid: ad6bb9ca10f18af4f8ad441b55f782e0, type: 3}
+  Fire_Partical: {fileID: 821748811357637068, guid: cb834dfe182b96344a2428ec1ce2bd5c, type: 3}
   Player_Bullet: 0
   inFire: 0
 --- !u!95 &461049137759043113

@@ -64,10 +64,10 @@ public class GameManager : MonoBehaviour
     public int TinyShip_UsagePerGame = 3;
 
     [Header("Power Ups Cost")]
-    public Cost Sheild_cost = new Cost(1200, 25);
-    public Cost Freez_cost = new Cost(1500, 35);
-    public Cost TinyShots_cost = new Cost(1000, 12);
-    public Cost TinyShip_cost = new Cost(1100, 15);
+    public Cost Sheild_cost = new Cost(500, 3);
+    public Cost Freez_cost = new Cost(500, 3);
+    public Cost TinyShots_cost = new Cost(300, 1);
+    public Cost TinyShip_cost = new Cost(300, 1);
 
     [Header("Currency")]
     public int Coins = 50000;
@@ -136,6 +136,7 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text tutText;
     public CanvasGroup ReadyTut;
     public GameObject TutObj;
+    public Button Next;
 
     [Header("Audio & Music")]
     public SoundEffects Soundeffects;
@@ -480,6 +481,7 @@ public class GameManager : MonoBehaviour
 
     public void Set_Player()
     {
+        UI_Controller.instance.ResetChecks();
         if (UI_Controller.instance.bullet_slot_1.GetComponent<Bullet_Slot>().index == 0)
             UI_Controller.instance.Select_Bullet_1.gameObject.SetActive(false);
         else
@@ -1231,8 +1233,7 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(TypeSentence2("FIRE!!"));
             PlayAudio(Soundeffects.Fire[0]);
-
-            SaveData("tut", 1);
+            
             Invoke("RemoveTut", 2);
         }
         else
@@ -1268,7 +1269,7 @@ public class GameManager : MonoBehaviour
         captain.interactable = false;
     }
 
-    IEnumerator TypeSentence(string sentence)
+    public IEnumerator TypeSentence(string sentence)
     {
         tutText.text = "";
         captain.interactable = false;
@@ -1280,7 +1281,7 @@ public class GameManager : MonoBehaviour
         captain.interactable = true;
     }
 
-    IEnumerator TypeSentence2(string sentence)
+    public IEnumerator TypeSentence2(string sentence)
     {
         tutText.text = "";
         captain.interactable = false;
@@ -1303,6 +1304,21 @@ public class GameManager : MonoBehaviour
         ReadyTut.DOFade(1, 0.3f);
         ReadyTut.interactable = true;
         ReadyTut.blocksRaycasts = true;
+    }
+
+    public IEnumerator TypeSentenceEnd(string sentence)
+    {
+        tutText.text = "";
+        Next.GetComponentInChildren<TMPro.TMP_Text>().text = "End";
+        captain.interactable = false;
+        foreach (char letter in sentence.ToCharArray())
+        {
+            tutText.text += letter;
+            yield return new WaitForSeconds(0.02f);
+        }
+        captain.interactable = true;
+        Next.onClick.RemoveAllListeners();
+        Next.onClick.AddListener(() => RemoveTut());
     }
 
     public void OpenWebsite()

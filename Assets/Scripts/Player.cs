@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     public float minSize = 17.0f;
     public float maxSize = 19.0f;
     public float resizeSpeed = 1.0f;
+    public Sprite FriedChicken;
 
     public bool ready = true;
     public int burstCount;
@@ -184,6 +185,10 @@ public class Player : MonoBehaviour
         GameObject bullet = Instantiate(BulletPrefab, shootPoint.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Player_Bullet = true;
         bullet.GetComponent<Bullet>().Damage = damage;
+        if (bullet.GetComponent<Bullet>().type == Bullet.BulletType.Chicken && inFire)
+        {
+            bullet.GetComponent<SpriteRenderer>().sprite = FriedChicken;
+        }
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();        
         rb.AddForce(-swipeDirection.normalized * forceStrength, ForceMode2D.Impulse);
         if (inFire)
@@ -200,6 +205,10 @@ public class Player : MonoBehaviour
         GameObject bullet = Instantiate(BulletPrefab, shootPoint.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Player_Bullet = true;
         bullet.GetComponent<Bullet>().Damage = damage;
+        if(bullet.GetComponent<Bullet>().type == Bullet.BulletType.Chicken && inFire)
+        {
+            bullet.GetComponent<SpriteRenderer>().sprite = FriedChicken;
+        }
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(-swipeDirection.normalized * forceStrength, ForceMode2D.Impulse);
         rb.velocity = (shootPoint.right * forceStrength) + spreadVector;

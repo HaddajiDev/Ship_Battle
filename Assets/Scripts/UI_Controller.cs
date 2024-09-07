@@ -267,7 +267,20 @@ public class UI_Controller : MonoBehaviour
             GameManager.Instance.MusicSource.DOFade(GameManager.Instance.MusicVolume, 1);
             GameManager.Instance.MusicSource.Play();
             Crab.instance.Escaped = false;
-            GameManager.Instance.Play();
+            if(CrazySDK.Data.GetInt("tut") == 1)
+            {
+                GameManager.Instance.player_1.SelectBullet(0);
+                GameManager.Instance.Play();
+            }
+            else
+            {
+                GameManager.Instance.SaveData("tut", 1);
+                GameManager.Instance.TutObj.SetActive(true);
+                GameManager.Instance.captain.DOFade(1, 0.3f);
+                GameManager.Instance.captain.interactable = true;
+                GameManager.Instance.captain.blocksRaycasts = true;
+                StartCoroutine(GameManager.Instance.TypeSentenceEnd("This is just the start! There are 100 battles ahead. Prove yourself, and you'll rule the seas"));
+            }
         });
     }
 

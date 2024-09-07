@@ -15,4 +15,6 @@ public class Bullets
 
     [SerializeField]
     public Cost cost = new Cost(0, 0);
+
+    public bool ad = false;
 }

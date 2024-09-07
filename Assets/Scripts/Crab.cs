@@ -22,7 +22,11 @@ public class Crab : MonoBehaviour
     }
     void Start()
     {
-        anim = GetComponent<Animator>();        
+        anim = GetComponent<Animator>();
+        if(CrazyGames.CrazySDK.Data.GetInt("tut") == 0)
+        {
+            Escaped = true;
+        }
     }
 
     private void Update()

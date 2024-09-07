@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using CrazyGames;
 
 public class Check_Bought_Bullet : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Check_Bought_Bullet : MonoBehaviour
 
     public GameObject CostObject;
     public GameObject OwnedObject;
+    public GameObject Ad_Object;
 
     public TMPro.TMP_Text BulletName;
     public Image BulletSprite;
@@ -35,22 +37,34 @@ public class Check_Bought_Bullet : MonoBehaviour
         {
             _Mybutton.interactable = false;
             OwnedObject.SetActive(true);
-            CostObject.SetActive(false);
+            CostObject.SetActive(false);            
         }
-        else
+        else if (bullet.ad == false)
         {
             CostObject.SetActive(true);            
             Coins_Text.text = bullet.cost.Coins.ToString();
             Diamond_Text.text = bullet.cost.Diamond.ToString();
         }
+        else if (bullet.ad == true)
+        {
+            OwnedObject.SetActive(false);
+            CostObject.SetActive(false);
+            Ad_Object.SetActive(true);
+            _Mybutton.onClick.RemoveAllListeners();
+            _Mybutton.onClick.AddListener(() => WatchAd());
+        }
     }
 
     private bool isFlipped = false;
 
-    private void SetOwned()
+    public void SetOwned()
     {
-        OwnedObject.SetActive(true);
-        CostObject.SetActive(false);
+        if (GameManager.Instance.shop.bullets.data.Contains(index))
+        {
+            _Mybutton.interactable = false;
+            OwnedObject.SetActive(true);
+            CostObject.SetActive(false);
+        }
     }
 
     public void flip(Transform img)
@@ -66,5 +80,39 @@ public class Check_Bought_Bullet : MonoBehaviour
             infos.SetActive(false);
         else
             infos.SetActive(true);
+    }
+
+    public void WatchAd()
+    {
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            Time.timeScale = 0;
+            UI_Controller.instance.Block.SetActive(true);
+            GameManager.Instance.MusicSource.Pause();
+            GameManager.Instance.OceanBackGround.Pause();            
+            //ad Started
+        }, (error) =>
+        {
+            Time.timeScale = 1;
+            UI_Controller.instance.FeedBackPopUp("Someting went wrong try again later", UI_Controller.FeedbackType.failed);
+            
+            GameManager.Instance.MusicSource.Play();
+            GameManager.Instance.OceanBackGround.Play();
+            //ad Error
+        }, () =>
+        {
+            
+            Time.timeScale = 1;
+            GameManager.Instance.MusicSource.Play();
+            GameManager.Instance.OceanBackGround.Play();
+            UI_Controller.instance.FeedBackPopUp("Arrr, matey! Ye’ve unlocked a new cannon shot for yer arsenal!", UI_Controller.FeedbackType.succes);
+
+
+            Shop.Instance.bullets.Add_Bullet(index);
+            GameManager.Instance.SaveData("bullets", Shop.Instance.bullets.data);
+            Ad_Object.SetActive(false);
+            _Mybutton.interactable = false;
+            OwnedObject.SetActive(true);
+        });
     }
 }

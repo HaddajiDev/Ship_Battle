@@ -16,8 +16,47 @@ MonoBehaviour:
   - level: 1
     bullets_prefabs:
     - {fileID: 6019814541299898752, guid: c028e666350cb85429e882a29b55e92d, type: 3}
-    - {fileID: 6481193929099902243, guid: 126697ec1229dcd4a8fe7aa0c6e73d7a, type: 3}
-    Health: 20
+    Health: 1
+    MaxshootForce: 30
+    MinshootForce: 50
+    Min_Angle: 40
+    Max_Angle: 60
+    Fire: 0
+    Burst_Shoots: 1
+    usePowerUps: 0
+    DamageMin: 1
+    DamageMax: 1
+    ship: 0
+    anchor: 0
+    flag: 1
+    sail: 0
+    helm: 0
+    cannon: 0
+    distance: 0
+  - level: 2
+    bullets_prefabs:
+    - {fileID: 6019814541299898752, guid: c028e666350cb85429e882a29b55e92d, type: 3}
+    Health: 5
+    MaxshootForce: 30
+    MinshootForce: 50
+    Min_Angle: 40
+    Max_Angle: 60
+    Fire: 0
+    Burst_Shoots: 1
+    usePowerUps: 0
+    DamageMin: 1
+    DamageMax: 2
+    ship: 0
+    anchor: 0
+    flag: 2
+    sail: 0
+    helm: 0
+    cannon: 0
+    distance: 0
+  - level: 3
+    bullets_prefabs:
+    - {fileID: 6019814541299898752, guid: c028e666350cb85429e882a29b55e92d, type: 3}
+    Health: 7
     MaxshootForce: 30
     MinshootForce: 50
     Min_Angle: 40
@@ -25,31 +64,11 @@ MonoBehaviour:
     Fire: 1
     Burst_Shoots: 3
     usePowerUps: 0
-    DamageMin: 1
-    DamageMax: 2
-    ship: 0
+    DamageMin: 2
+    DamageMax: 3
+    ship: 1
     anchor: 0
     flag: 0
-    sail: 0
-    helm: 0
-    cannon: 0
-    distance: 0
-  - level: 1
-    bullets_prefabs:
-    - {fileID: 6019814541299898752, guid: c028e666350cb85429e882a29b55e92d, type: 3}
-    Health: 10
-    MaxshootForce: 30
-    MinshootForce: 50
-    Min_Angle: 40
-    Max_Angle: 60
-    Fire: 1
-    Burst_Shoots: 3
-    usePowerUps: 1
-    DamageMin: 1
-    DamageMax: 1
-    ship: 0
-    anchor: 2
-    flag: 1
     sail: 0
     helm: 0
     cannon: 0

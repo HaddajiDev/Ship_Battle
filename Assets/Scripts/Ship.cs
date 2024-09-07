@@ -272,6 +272,10 @@ public class Ship : MonoBehaviour
             GameManager.Instance.Diamond += value;
             GameManager.Instance.SaveData("diamond", GameManager.Instance.Diamond);
         }
+        else
+        {
+            UI_Controller.instance.DiammondWinObj.SetActive(false);
+        }
 
         //coins
         UI_Controller.instance.SetCurrencyUI();
@@ -307,6 +311,7 @@ public class Ship : MonoBehaviour
         UI_Controller.instance.SetCurrencyUI();
         GameManager.Instance.SaveData("coins", GameManager.Instance.Coins);
 
+        UI_Controller.instance.DiammondWinObj.SetActive(false);
 
         //audio
         GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.Loose);        
