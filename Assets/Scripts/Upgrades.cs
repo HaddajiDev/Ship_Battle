@@ -76,7 +76,7 @@ public class Upgrades : MonoBehaviour
         {
             if(Force_Level <= 7)
             {
-                GameManager.Instance.player_1.maxForce += 3;
+                GameManager.Instance.player_1.maxForce += 5;
                 addLevels(levels_force, Force_Level);
                 GameManager.Instance.Coins -= cost.Coins;
                 GameManager.Instance.Diamond -= cost.Diamond;

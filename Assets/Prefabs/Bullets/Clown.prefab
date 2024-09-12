@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 0
-  type: 0
+  type: 2
   Fire_Partical: {fileID: 821748811357637068, guid: cb834dfe182b96344a2428ec1ce2bd5c, type: 3}
   Player_Bullet: 0
   inFire: 0

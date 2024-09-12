@@ -14,7 +14,7 @@ public class Cave_Collider : MonoBehaviour
             hit++;
             if (hit == 1)
             {
-                Invoke(nameof(Check_Turns), 1f);
+                Invoke("Check_Turns", 2);
             }
 
             if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)

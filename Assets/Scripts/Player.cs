@@ -189,9 +189,8 @@ public class Player : MonoBehaviour
         {
             bullet.GetComponent<SpriteRenderer>().sprite = FriedChicken;
         }
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();        
         rb.AddForce(-swipeDirection.normalized * forceStrength, ForceMode2D.Impulse);
-        rb.AddTorque(-2, ForceMode2D.Impulse);
         if (inFire)
         {
             bullet.GetComponent<Bullet>().inFire = true;
@@ -212,7 +211,6 @@ public class Player : MonoBehaviour
         }
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(-swipeDirection.normalized * forceStrength, ForceMode2D.Impulse);
-        rb.AddTorque(-2, ForceMode2D.Impulse);
         rb.velocity = (shootPoint.right * forceStrength) + spreadVector;
         if (inFire)
         {
@@ -300,7 +298,7 @@ public class Player : MonoBehaviour
     }
     public void ReadyUp()
     {
-        Invoke(nameof(ReadyDelay), 0.2f);
+        Invoke("ReadyDelay", 0.2f);
         GameManager.Instance.Get_Ready_UI(0, 0.3f);
     }
 

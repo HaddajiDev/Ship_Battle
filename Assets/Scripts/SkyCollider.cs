@@ -13,7 +13,7 @@ public class SkyCollider : MonoBehaviour
             hit++;
             if (hit == 1)
             {
-                Invoke(nameof(Check_Turns), 0.5f);
+                Invoke("Check_Turns", 0.5f);
             }
 
             if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)

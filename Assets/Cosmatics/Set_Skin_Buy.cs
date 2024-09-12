@@ -369,7 +369,7 @@ public class Set_Skin_Buy : MonoBehaviour
         }, () =>
         {
             //unmute audio
-            Time.timeScale = 1;            
+            Time.timeScale = 1;
             GameManager.Instance.MusicSource.Play();
             GameManager.Instance.OceanBackGround.Play();
             UI_Controller.instance.FeedBackPopUp("Congratulations!! You've unlocked a new skin for your ship", UI_Controller.FeedbackType.succes);

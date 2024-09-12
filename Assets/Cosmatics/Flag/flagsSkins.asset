@@ -29,22 +29,6 @@ MonoBehaviour:
       Coins: 0
       Diamond: 0
     Ad_Skin: 0
-  - Cover: {fileID: 1030748239, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    spriteSheet:
-    - {fileID: 1030748239, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: -1991655392, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: 1781115659, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: -214034627, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: -705264809, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: 2001469345, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: -1227616851, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: 1468855010, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    - {fileID: -1670038120, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
-    anim: {fileID: 9100000, guid: 4ff9ba972610a6841a07a8af30f7ecf3, type: 2}
-    cost:
-      Coins: 1500
-      Diamond: 20
-    Ad_Skin: 0
   - Cover: {fileID: 173059716, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
     spriteSheet:
     - {fileID: 173059716, guid: 8df0224e3603d1e40ab7d816892b66f7, type: 3}
@@ -59,7 +43,23 @@ MonoBehaviour:
     anim: {fileID: 9100000, guid: 3dd59309466f5724ebaed592a7448cd9, type: 2}
     cost:
       Coins: 2000
-      Diamond: 35
+      Diamond: 500
+    Ad_Skin: 0
+  - Cover: {fileID: 1030748239, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    spriteSheet:
+    - {fileID: 1030748239, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: -1991655392, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: 1781115659, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: -214034627, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: -705264809, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: 2001469345, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: -1227616851, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: 1468855010, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    - {fileID: -1670038120, guid: 40327666dc4f4c6439b3e51fa920b719, type: 3}
+    anim: {fileID: 9100000, guid: 4ff9ba972610a6841a07a8af30f7ecf3, type: 2}
+    cost:
+      Coins: 2000
+      Diamond: 500
     Ad_Skin: 0
   - Cover: {fileID: 834670117, guid: 20fa10aa17a3c71478f1e8573126c9a3, type: 3}
     spriteSheet:
@@ -74,8 +74,8 @@ MonoBehaviour:
     - {fileID: -1231628526, guid: 20fa10aa17a3c71478f1e8573126c9a3, type: 3}
     anim: {fileID: 9100000, guid: 5d8d6def407e46a4bad3353bd466a6cd, type: 2}
     cost:
-      Coins: 5500
-      Diamond: 40
+      Coins: 2000
+      Diamond: 500
     Ad_Skin: 0
   - Cover: {fileID: -725118068, guid: e851ed48a6da02247ac90e1899b23fbb, type: 3}
     spriteSheet:
@@ -90,24 +90,8 @@ MonoBehaviour:
     - {fileID: 1443365116, guid: e851ed48a6da02247ac90e1899b23fbb, type: 3}
     anim: {fileID: 9100000, guid: 32197afdeb6e4244cb38b9f2ca8cd92a, type: 2}
     cost:
-      Coins: 5500
-      Diamond: 40
-    Ad_Skin: 0
-  - Cover: {fileID: -618780101, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    spriteSheet:
-    - {fileID: -618780101, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: 1464609875, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: -1435388751, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: 1600636649, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: 1497002734, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: -2112657111, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: -1766885958, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: -1251634827, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    - {fileID: -1997517219, guid: a4fd7d2f626206b43b4c6e82c2316e98, type: 3}
-    anim: {fileID: 9100000, guid: d4fc223e1527ca24c84a72ea9544169a, type: 2}
-    cost:
-      Coins: 6500
-      Diamond: 45
+      Coins: 1
+      Diamond: 500
     Ad_Skin: 0
   - Cover: {fileID: -1885246552, guid: 3b0d6a4ad07ceb74cbffba0f0760bfd6, type: 3}
     spriteSheet:

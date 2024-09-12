@@ -100,7 +100,7 @@ public class Ship : MonoBehaviour
             hit++;
             if(hit == 1)
             {
-                Invoke(nameof(Check_Turns), 1);
+                Invoke("Check_Turns", 1);
             }
 
             Take_Damage(collision.gameObject.GetComponent<Bullet>().Damage);
@@ -162,7 +162,7 @@ public class Ship : MonoBehaviour
                 if (player)
                 {
                     UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
-                    Invoke(nameof(Win_Obj_Lose), 3);
+                    Invoke("Win_Obj_Lose", 3);
                     GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
                     Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
                     fo.Ship = true;
@@ -176,7 +176,7 @@ public class Ship : MonoBehaviour
                 }
                 else
                 {
-                    Invoke(nameof(Win_Obj_Win), 3);
+                    Invoke("Win_Obj_Win", 3);
                     GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
                     DestroyedShip.transform.localScale = new Vector3(-1, 1, 0);
                     Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
@@ -200,7 +200,7 @@ public class Ship : MonoBehaviour
                 if (player)
                 {
                     UI_Controller.instance.Getting_Ready_Object.gameObject.SetActive(false);
-                    Invoke(nameof(Win_Obj_Lose), 3);
+                    Invoke("Win_Obj_Lose", 3);
                     GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
                     Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
                     fo.Ship = true;
@@ -209,7 +209,7 @@ public class Ship : MonoBehaviour
                 }
                 else
                 {
-                    Invoke(nameof(Win_Obj_Win), 3);
+                    Invoke("Win_Obj_Win", 3);
                     GameObject DestroyedShip = Instantiate(Destroyed_Ship, Destroy_Point.position, Quaternion.identity);
                     DestroyedShip.transform.localScale = new Vector3(-1, 1, 0);
                     Destroy_Effect fo = DestroyedShip.GetComponent<Destroy_Effect>();
@@ -333,12 +333,12 @@ public class Ship : MonoBehaviour
         if (player)
         {
             if (-transform.position.x >= -Start_Pos.x + 7 || -transform.position.x <= -Start_Pos.x + 7)
-                Invoke(nameof(Move), 0.5f);            
+                Invoke("Move", 0.5f);            
         }
         else
         {
             if (transform.position.x >= Start_Pos.x + 7)
-                Invoke(nameof(Move), 0.5f);
+                Invoke("Move", 0.5f);
         }
         
     }
@@ -351,7 +351,7 @@ public class Ship : MonoBehaviour
             GameManager.Instance.isChecking = true;
             GameManager.Instance.Check_Turn();            
         }
-        Invoke(nameof(Health_Bar_Out), 3);
+        Invoke("Health_Bar_Out", 3);
     }
 
     void Health_Bar_Out()

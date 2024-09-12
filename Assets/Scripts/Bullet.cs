@@ -20,8 +20,9 @@ public class Bullet : MonoBehaviour
     {
         cam = GameObject.FindWithTag("GameController").GetComponent<CinemachineVirtualCamera>();        
         cam.Follow = this.transform;
-        
-        Invoke(nameof(Destroy_bullet), 10);
+
+        Invoke("Destroy_bullet", 10);
+
 
         if (type == BulletType.Animated)
         {

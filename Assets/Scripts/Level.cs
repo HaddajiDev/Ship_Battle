@@ -7,6 +7,8 @@ public class Level
 {
     public int level;
 
+    [Header("Bullets")]
+    public GameObject[] bullets_prefabs;
 
     [Header("Health")]
     public int Health = 20;

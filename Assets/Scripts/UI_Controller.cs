@@ -281,10 +281,6 @@ public class UI_Controller : MonoBehaviour
                 GameManager.Instance.captain.blocksRaycasts = true;
                 StartCoroutine(GameManager.Instance.TypeSentenceEnd("This is just the start! There are 100 battles ahead. Prove yourself, and you'll rule the seas"));
             }
-            if(GameManager.Instance.GetLevel == 100 && CrazySDK.Data.GetInt("end") == 0)
-            {
-                GameManager.Instance.Congrats();
-            }
         });
     }
 
