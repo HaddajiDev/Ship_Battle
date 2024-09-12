@@ -65,6 +65,7 @@ public class Enemy_AI : MonoBehaviour
 
     int current_Usage_TinyShip;
 
+    public GameObject[] EnemyShots;
     private void Start()
     {
         anim = Canon.gameObject.GetComponent<Animator>();
@@ -75,7 +76,7 @@ public class Enemy_AI : MonoBehaviour
     {
         GameManager.Instance.phase = GameManager.GamePhase.EnemyShootPhase;
         GameManager.Instance.Check_PowerUps();
-        getRandomBullet(GameManager.Instance.Current_Level);
+        getRandomBullet();
         if (Can_Fire)
         {            
             Fire = Random.Range(0, 2) == 0 ? true : false;
@@ -89,13 +90,18 @@ public class Enemy_AI : MonoBehaviour
         {            
             GameObject bullet = Instantiate(BulletPrefab, shootPoint.position, shootPoint.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            float random_Force = Random.Range(MaxshootForce, MinshootForce + 1);
+            float random_Force = Random.Range(MinshootForce, MaxshootForce + 1);
             rb.AddForce(Vector2.right * -random_Force, ForceMode2D.Impulse);
-            rb.AddForce(Vector2.down * -random_Force / 3, ForceMode2D.Impulse);            
+            rb.AddForce(Vector2.down * -random_Force / 3, ForceMode2D.Impulse);
+            rb.AddTorque(2, ForceMode2D.Impulse);
             Bullet bull = bullet.GetComponent<Bullet>();
             bull.Damage = Random.Range(DamageMin, DamageMax + 1);
             if (Fire)
                 bull.inFire = true;
+            if (bull.GetComponent<Bullet>().type == Bullet.BulletType.Chicken && Fire)
+            {
+                bull.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.player_1.FriedChicken;
+            }
         }        
         
         GameManager.Instance.isChecking = false;
@@ -106,7 +112,7 @@ public class Enemy_AI : MonoBehaviour
 
     public void EnemyPowerUps()
     {
-        Invoke("EnemyPowerUpsInvoke", 0.5f);
+        Invoke(nameof(EnemyPowerUpsInvoke), 0.5f);
     }
     private void EnemyPowerUpsInvoke()
     {
@@ -212,7 +218,7 @@ public class Enemy_AI : MonoBehaviour
             }
             current_Usage_freeze++;
             GameManager.Instance.PlayAudio(GameManager.Instance.Soundeffects.FreezeSound);
-            Invoke("check_After", 2);
+            Invoke(nameof(check_After), 2);
         }        
     }
 
@@ -282,13 +288,9 @@ public class Enemy_AI : MonoBehaviour
             SheildObj.SetActive(false);
     }
 
-    void getRandomBullet(int index)
+    void getRandomBullet()
     {
-        Level lvl = levels.Get_Level(index);
-        if(lvl.bullets_prefabs.Length > 1)
-            BulletPrefab = lvl.bullets_prefabs[Random.Range(0, lvl.bullets_prefabs.Length)];
-        else
-            BulletPrefab = lvl.bullets_prefabs[0];
+        BulletPrefab = CrazyGames.CrazySDK.Data.GetInt("tut") == 0 ? EnemyShots[0] :  EnemyShots[Random.Range(0, EnemyShots.Length)];        
     }
 
     private void GetShip_Skin(int index)

@@ -230,6 +230,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
+            UI_Controller.instance.FeedBackPopUp("Not enough currency", UI_Controller.FeedbackType.failed);
             return false;
         }
     }

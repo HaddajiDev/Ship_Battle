@@ -24,7 +24,7 @@ public class Water : MonoBehaviour
                 hit++;
                 if(hit == 1)
                 {
-                    Invoke("Check_Turns", 1);
+                    Invoke(nameof(Check_Turns), 1f);
                     if (collision.gameObject.GetComponent<Bullet>().Player_Bullet)
                     {                        
                         GameManager.Instance.TotalShotsMiss++;

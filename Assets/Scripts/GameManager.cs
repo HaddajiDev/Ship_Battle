@@ -147,7 +147,9 @@ public class GameManager : MonoBehaviour
     public Slider SoundSlider;
     public GameObject AudioInstance;
     public AudioSource OceanBackGround; // Backgound sound Effect
-    
+    int end;
+
+
 
     private void Awake()
     {
@@ -189,8 +191,16 @@ public class GameManager : MonoBehaviour
         UI_Controller.instance.Menu_BG.interactable = true;
         UI_Controller.instance.Menu_BG.blocksRaycasts = true;
         UI_Controller.instance.Menu_BG.DOFade(1, 0.5f);
-        UI_Controller.instance.Level_Counter.text = Current_Level.ToString();
+        UI_Controller.instance.Level_Counter.text = $"{GetLevel}";
         UI_Controller.instance.SetAbilitesCount();
+    }
+
+    public int GetLevel
+    {
+        get
+        {
+            return player_2.levels.Get_Level(Current_Level).level;
+        }
     }
     void MovePlayerAndCamera()
     {
@@ -848,6 +858,9 @@ public class GameManager : MonoBehaviour
         //Audio
         CrazySDK.Data.SetFloat("music", MusicVolume);
         CrazySDK.Data.SetFloat("sound", SoundVolume);
+
+        //end
+        CrazySDK.Data.SetInt("end", end);
     }
 
     void LoadData()
@@ -920,6 +933,8 @@ public class GameManager : MonoBehaviour
         //Audio
         MusicVolume = CrazySDK.Data.GetFloat("music");
         SoundVolume = CrazySDK.Data.GetFloat("sound");
+
+        end = CrazySDK.Data.GetInt("end");
     }
 
     public void SetList(string key, List<int> list)
@@ -1069,8 +1084,8 @@ public class GameManager : MonoBehaviour
         Freez_count--;
         UI_Controller.instance.SetPowerUpsCount();
         SaveData("freeze", Freez_count);
-        PlayAudio(Soundeffects.FreezeSound);
-        Invoke("check_After", 2);
+        PlayAudio(Soundeffects.FreezeSound);        
+        Invoke(nameof(check_After), 2);
     }
 
     void check_After()
@@ -1136,8 +1151,8 @@ public class GameManager : MonoBehaviour
     public void ShowTut()
     {
         if(tut == 0)
-        {
-            Invoke("startTutInvoke", 0.5f);
+        {            
+            Invoke(nameof(startTutInvoke), 0.5f);
         }
         else
         {
@@ -1208,17 +1223,20 @@ public class GameManager : MonoBehaviour
 
         else if(DiaSkipped == 1)
         {
+            StopAllCoroutines();
             StartCoroutine(TypeSentence("You’ve got the spirit of a true pirate, and today we’ll see if you have the skill!"));
             PlayAudio(Soundeffects.Ohoy);
         }            
         else if(DiaSkipped == 2)
         {
+            StopAllCoroutines();
             StartCoroutine(TypeSentence3("The enemy ship approaches! Ready the cannons for battle! (Press 'Ready' to prepare your aim)"));            
             captain.interactable = false;
             captain.blocksRaycasts = true;            
         }
         else if(DiaSkipped == 3)
         {
+            StopAllCoroutines();
             StartCoroutine(TypeSentence2("Now, hold and drag the screen to aim your cannon..."));
             MusicSource.clip = Soundeffects.BattleMusic;
             MusicSource.DOFade(MusicVolume, 2);
@@ -1226,18 +1244,21 @@ public class GameManager : MonoBehaviour
         }
         else if (DiaSkipped == 4)
         {
+            StopAllCoroutines();
             StartCoroutine(TypeSentence2("Perfect! Now, release to shoot and send those scallywags to the depths!"));
             PlayAudio(Soundeffects.ScallyWags);
         }
         else if(DiaSkipped == 5)
         {
+            StopAllCoroutines();
             StartCoroutine(TypeSentence2("FIRE!!"));
             PlayAudio(Soundeffects.Fire[0]);
             
-            Invoke("RemoveTut", 2);
+            Invoke(nameof(RemoveTut), 2);
         }
         else
         {
+            StopAllCoroutines();
             StartCoroutine(TypeSentence2($"Enjoy playing"));
         }
         DiaSkipped++;
@@ -1319,6 +1340,20 @@ public class GameManager : MonoBehaviour
         captain.interactable = true;
         Next.onClick.RemoveAllListeners();
         Next.onClick.AddListener(() => RemoveTut());
+    }
+
+    
+    public void Congrats()
+    {
+        Next.GetComponentInChildren<TMPro.TMP_Text>().text = "End";
+        TutObj.SetActive(true);
+        captain.DOFade(1, 0.3f);
+        captain.interactable = true;
+        captain.blocksRaycasts = true;
+        StartCoroutine(TypeSentenceEnd("Congratulations, Captain! You've conquered the seas and completed your pirate adventure!"));
+        Next.onClick.RemoveAllListeners();
+        Next.onClick.AddListener(() => RemoveTut());
+        SaveData("end", 1);
     }
 
     public void OpenWebsite()
